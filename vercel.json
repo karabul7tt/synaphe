@@ -1,0 +1,6 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Synaphe AI // Bilişsel Hafıza",
+  "short_name": "Synaphe",
+  "description": "Kişisel Bilişsel Hafıza ve Yapay Zekâ Asistanı",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#061311",
+  "theme_color": "#fbbf24",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
