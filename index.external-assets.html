@@ -658,19 +658,11 @@
     
     /* SCREEN-BASED MULTI-PAGE SYSTEM ON FIXED 3D BACKGROUND */
     .page-screen {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-      transform: translateY(8px);
-      min-height: calc(100vh - 76px);
+      display: block !important;
+      opacity: 1 !important;
+      transform: none !important;
       position: relative;
       z-index: 2;
-    }
-
-    .page-screen.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .back-link {
@@ -1363,13 +1355,13 @@
     <header class="nav" id="siteNav">
       <div class="wrap">
         <div class="nav-in">
-          <a href="/" onclick="navigateTo('home'); return false;" class="brand" aria-label="Synaphe Ana Sayfa">
+          <a href="#" class="brand" aria-label="Synaphe Ana Sayfa">
             <img src="/static/synaphe-butterfly.png" alt="Synaphe">
             <span>SYNAPHE</span>
           </a>
 
           <nav class="nav-links" aria-label="Ana Menü">
-            <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" class="nav-link">Hakkında</a>
+            <a href="#hakkinda" class="nav-link">Hakkında</a>
 
             <!-- Özellikler (2-Kolonlu ChatGPT Tarzı Dropdown) -->
             <div class="nav-item-dropdown">
@@ -1380,29 +1372,29 @@
               <div class="dropdown-menu">
                 <div class="dropdown-grid">
                   <div class="dropdown-col">
-                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Zamansal Hafıza</span>
                       <span class="item-sub">Değişen fikir ve kararları günceller</span>
                     </a>
-                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Çok Adımlı Çıkarım</span>
                       <span class="item-sub">Farklı günlerdeki ipuçlarını bağlar</span>
                     </a>
-                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Kişisel Tercih &amp; Duygu</span>
                       <span class="item-sub">Neyi sevdiğini ve sınırlarını hatırlar</span>
                     </a>
                   </div>
                   <div class="dropdown-col">
-                    <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#deneyim" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Canlı Karşılaştırma</span>
                       <span class="item-sub">Klasik AI ile farkı interaktif dene</span>
                     </a>
-                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">MCP Entegrasyonu</span>
                       <span class="item-sub">Tüm araçlarını tek belleğe bağla</span>
                     </a>
-                    <a href="/indir" onclick="navigateTo('indir'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#indir" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Tüm Cihazlar</span>
                       <span class="item-sub">macOS, Windows, Linux, Mobil</span>
                     </a>
@@ -1420,7 +1412,7 @@
               <div class="dropdown-menu">
                 <div class="dropdown-grid">
                   <div class="dropdown-col">
-                    <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#hakkinda" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Bilişsel Mimari</span>
                       <span class="item-sub">Eidetis yerel hafıza motoru felsefesi</span>
                     </a>
@@ -1434,7 +1426,7 @@
                       <span class="item-title">Wixted &amp; Hebbian Lab</span>
                       <span class="item-sub">Hafıza unutma ve pekiştirme simülatörü</span>
                     </button>
-                    <a href="/bilgi" onclick="navigateTo('bilgi', 'sss'); return false;" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="#sss" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Sıkça Sorulanlar (SSS)</span>
                       <span class="item-sub">Gizlilik, güvenlik ve kurulum yanıtları</span>
                     </a>
@@ -1443,11 +1435,11 @@
               </div>
             </div>
 
-            <a href="/indir" onclick="navigateTo('indir'); return false;" class="nav-link">İndir</a>
+            <a href="#indir" class="nav-link">İndir</a>
           </nav>
 
           <div class="nav-end">
-            <a href="/indir" onclick="navigateTo('indir'); return false;" class="btn nav-cta">İndir</a>
+            <a href="#indir" class="btn nav-cta">İndir</a>
             <button type="button" class="dots-btn" aria-label="Teknik ve Akademik Veriler" title="Teknik Veriler, Benchmark & Matematik" onclick="openTechModal()">
               <span></span><span></span><span></span>
             </button>
@@ -1460,17 +1452,17 @@
     </header>
 
     <nav id="mobileDrawer" class="mobile-drawer" aria-label="Mobil Menü">
-      <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" onclick="toggleMobileMenu(false)">Hakkında</a>
+      <a href="#hakkinda" onclick="toggleMobileMenu(false)">Hakkında</a>
       <div class="mobile-group-title">Özellikler</div>
-      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Zamansal Hafıza</a>
-      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Çok Adımlı Çıkarım</a>
-      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Kişisel Tercih &amp; Duygu</a>
-      <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Canlı Karşılaştırma</a>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Zamansal Hafıza</a>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Çok Adımlı Çıkarım</a>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Kişisel Tercih &amp; Duygu</a>
+      <a href="#deneyim" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Canlı Karşılaştırma</a>
       <div class="mobile-group-title">Bilgi &amp; Araştırma</div>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(0);" class="mobile-sub-link">✦ Akademik Benchmark (N=132)</button>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(2);" class="mobile-sub-link">✦ Wixted &amp; Hebbian Matematik</button>
-      <a href="/bilgi" onclick="navigateTo('bilgi', 'sss'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ SSS (Sıkça Sorulanlar)</a>
-      <a href="/indir" onclick="navigateTo('indir'); return false;" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600;">İndir (Tüm Cihazlar)</a>
+      <a href="#sss" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ SSS (Sıkça Sorulanlar)</a>
+      <a href="#indir" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600;">İndir (Tüm Cihazlar)</a>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal();" style="color:#fbbf24; border-bottom:none;">••• Teknik &amp; Akademik Dosya</button>
     </nav>
 
@@ -1493,14 +1485,17 @@
             <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width: clamp(74px, 8.5vw, 110px); height: auto; object-fit: contain; filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.55));">
           </div>
 
-          <h1 class="h1" style="margin-bottom: 20px;">Synaphe</h1>
+          <div class="kicker" style="margin-bottom: 12px;"><span class="kicker-line"></span><span>SENİN CİHAZINDA YAŞAYAN İKİNCİ BEYNİN</span></div>
+          <h1 class="h1" style="font-size: clamp(34px, 5.2vw, 68px); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 22px; max-width: 920px; margin-left: auto; margin-right: auto;">
+            Artık <span style="background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 50%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(251,191,36,0.35);">hafızanızı</span>, işlerinizi ve yapay zekâ çalışmalarınızı tek bir yerde yürütebilirsiniz.
+          </h1>
 
           <p class="hero-desc">
             Aylar önce anlattığın bir fikri, taşındığın şehri, değişen kararlarını ve hayatındaki insanları gerçekten hatırlayan; sohbet kapansa bile sıfırlanmayan kişisel zekâ.
           </p>
 
           <div class="hero-actions">
-            <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" class="btn">Farkı Canlı Gör</a>
+            <a href="#deneyim" class="btn">Farkı Canlı Gör</a>
           </div>
 
           <div class="promise-strip reveal">
@@ -1528,10 +1523,7 @@
   <!-- ================================================================== -->
   <div id="screen-hakkinda" class="page-screen">
     <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 70px;">
-      <button type="button" onclick="navigateTo('home')" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Ana Sayfaya Dön</span>
-      </button>
+      
 
       <!-- HAKKINDA SECTION (EDITORIAL & MINIMALIST BİLİŞSEL MİMARİ) -->
     <section class="hakkinda-sec reveal" id="hakkinda">
@@ -1599,10 +1591,7 @@
   <!-- ================================================================== -->
   <div id="screen-ozellikler" class="page-screen">
     <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
-      <button type="button" onclick="navigateTo('home')" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Ana Sayfaya Dön</span>
-      </button>
+      
     </div>
 
     <!-- 4. SPECIFIC TANGIBLE SUPERPOWERS -->
@@ -1692,10 +1681,7 @@
   <!-- ================================================================== -->
   <div id="screen-bilgi" class="page-screen">
     <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
-      <button type="button" onclick="navigateTo('home')" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Ana Sayfaya Dön</span>
-      </button>
+      
 
       <!-- BENCHMARK PANEL -->
       <section class="sec" id="benchmark" style="padding-top: 10px;">
@@ -1820,14 +1806,91 @@
 
 
   <!-- ================================================================== -->
-  <!-- SCREEN: İNDİR (TÜM CİHAZLAR İÇİN KURULUM HUB'I)                     -->
+  
+    <!-- GÜVENLİĞİNİZ İÇİN TASARLANDI (CHATGPT SCREENSHOT 5) -->
+    <section class="sec" id="guvenlik">
+      <div class="wrap reveal">
+        <div class="kicker"><span class="kicker-line"></span><span>GİZLİLİK &amp; VERİ EGEMENLİĞİ</span></div>
+        <h2 class="h2">Güvenliğiniz için tasarlandı</h2>
+        <p style="font-size:15.5px; color:var(--text-soft); max-width:760px; margin-bottom:32px; line-height:1.65;">
+          Kullanıcı verilerinizi korumaya kararlıyız; Synaphe, güvenliğiniz ve gizliliğiniz göz önünde bulundurularak %100 yerel ve cihazınızda yaşayacak şekilde tasarlanmıştır.
+        </p>
+
+        <div class="powers-grid">
+          <div class="power-card">
+            <span class="power-num">01 / %100 YEREL DEPOLAMA</span>
+            <h3>Kullanıcı Gizliliği</h3>
+            <p>Verilerinizin nasıl saklanacağına siz karar verirsiniz. Konuşmalarınız, notlarınız ve bilişsel hafıza grafiğiniz diskinizde şifreli kalır; hiçbir şirketin bulutuna gönderilmez.</p>
+            <div style="margin-top:16px;">
+              <a href="#hakkinda" class="btn" style="padding:8px 18px; font-size:12.5px; background:rgba(255,255,255,0.06); border:1px solid var(--border-strong);">Daha fazla bilgi edin</a>
+            </div>
+          </div>
+
+          <div class="power-card">
+            <span class="power-num">02 / MODEL EGEMENLİĞİ</span>
+            <h3>Açık Mimari &amp; Bağımsızlık</h3>
+            <p>Hafızanız tek bir yapay zekâ şirketine veya modeline kilitlenmez. Modelinizi dilediğiniz zaman değiştirebilir, verilerinizi dışa aktarabilir ya da tamamen silebilirsiniz.</p>
+            <div style="margin-top:16px;">
+              <a href="#indir" class="btn" style="padding:8px 18px; font-size:12.5px; background:rgba(255,255,255,0.06); border:1px solid var(--border-strong);">Daha fazla bilgi edin</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- İLHAM ALIN (CHATGPT SCREENSHOT 6) -->
+    <section class="sec" id="ilham">
+      <div class="wrap reveal">
+        <div class="kicker"><span class="kicker-line"></span><span>GERÇEK DÜNYA HİKAYELERİ</span></div>
+        <h2 class="h2">İlham alın</h2>
+        <p style="font-size:15.5px; color:var(--text-soft); max-width:760px; margin-bottom:32px; line-height:1.65;">
+          İnsanların Synaphe bilişsel hafızası ile neler başardığını görün.
+        </p>
+
+        <div class="powers-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+          <div class="power-card" style="padding: 24px;">
+            <div style="font-size: 32px; margin-bottom: 14px;">💡</div>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Unutulan Fikirlerin Hatırlanması ↗</h3>
+            <p style="font-size: 13.5px; line-height: 1.55; margin-bottom: 0;">Aylar önceki bir startup veya mimari kararının, tek cümlelik bir soruyla tam bağlamıyla geri çağrılması.</p>
+          </div>
+
+          <div class="power-card" style="padding: 24px;">
+            <div style="font-size: 32px; margin-bottom: 14px;">🧩</div>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Dağınık İpuçlarından Sentez ↗</h3>
+            <p style="font-size: 13.5px; line-height: 1.55; margin-bottom: 0;">3 farklı oturumda parça parça bahsedilen sorun, araç ve amaçların tek bir eksiksiz yol haritasına dönüşmesi.</p>
+          </div>
+
+          <div class="power-card" style="padding: 24px;">
+            <div style="font-size: 32px; margin-bottom: 14px;">🛡️</div>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Çevrimdışı &amp; Gizli Zekâ ↗</h3>
+            <p style="font-size: 13.5px; line-height: 1.55; margin-bottom: 0;">İnternet bağlantısını keserek şirket sırlarını veya kişisel notları tamamen yerel ve sıfır sızıntıyla yönetme.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SYNAPHE'Yİ HEMEN DENEYİN BANNER (CHATGPT SCREENSHOT 7) -->
+    <section class="sec" style="padding-top: 20px; padding-bottom: 40px;">
+      <div class="wrap reveal">
+        <div style="background: linear-gradient(180deg, rgba(16, 19, 28, 0.85) 0%, rgba(9, 11, 17, 0.95) 100%); border: 1px solid var(--gold-border); border-radius: 28px; padding: clamp(36px, 5vw, 64px) clamp(28px, 4.5vw, 56px); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+          <div>
+            <div class="kicker" style="margin-bottom: 8px;"><span class="kicker-line"></span><span>HEMEN BAŞLAYIN</span></div>
+            <h2 style="font-size: clamp(26px, 3.8vw, 44px); font-weight: 700; color: #ffffff; letter-spacing: -0.02em;">Synaphe'yi hemen deneyin</h2>
+          </div>
+          <a href="#indir" class="btn" style="padding: 14px 32px; font-size: 15px; border-radius: 999px;">
+            <span>Uygulamayı indir</span>
+            <span style="font-size: 18px; margin-left: 4px;">›</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SCREEN: İNDİR (TÜM CİHAZLAR İÇİN KURULUM HUB'I)                     -->
   <!-- ================================================================== -->
   <div id="screen-indir" class="page-screen">
     <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
-      <button type="button" onclick="navigateTo('home')" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Ana Sayfaya Dön</span>
-      </button>
+      
     </div>
 
     <!-- 5. UNIVERSAL MULTI-DEVICE DOWNLOAD & SETUP HUB -->
@@ -1986,7 +2049,7 @@ python3 telegram_bot.py
       <div class="wrap">
         <div class="foot-top">
           <div>
-            <a href="/" onclick="navigateTo('home'); return false;" class="brand" style="display:inline-flex; align-items:center; gap:9px;">
+            <a href="#" class="brand" style="display:inline-flex; align-items:center; gap:9px;">
             <img src="/static/synaphe-butterfly.png" alt="Synaphe Kelebek" style="width:22px; height:auto; object-fit:contain; vertical-align:middle; filter:drop-shadow(0 0 10px rgba(251,191,36,0.6));">
             <span>SYNAPHE</span>
           </a>
@@ -2001,7 +2064,7 @@ python3 telegram_bot.py
           <div>© 2026 Synaphe · Eidetis Cognitive Memory</div>
           <div style="display:flex; gap:18px;">
             <a href="https://github.com/karabul7tt/synaphe" target="_blank" rel="noopener">GitHub</a>
-            <a href="/indir" onclick="navigateTo('indir'); return false;">Tüm Cihazlar</a>
+            <a href="#indir">Tüm Cihazlar</a>
             <button type="button" onclick="openTechModal()" style="color:var(--text-soft);">Teknik Veriler</button>
           </div>
         </div>
