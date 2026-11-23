@@ -315,41 +315,193 @@
     }
 
     /* ------------------------------------------------------------------ */
-    /* 1. STICKY NAVBAR WITH 3-DOT TECHNICAL MENU                         */
     /* ------------------------------------------------------------------ */
+    /* 1. CHATGPT-INSPIRED STICKY NAVBAR WITH 2-COLUMN DROPDOWNS           */
+    /* ------------------------------------------------------------------ */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 76px;
+    }
+
     .nav {
       position: sticky;
       top: 0;
       z-index: 160;
-      padding: 16px 0;
+      padding: 14px 0;
       transition: background 0.3s ease, border-color 0.3s ease, padding 0.3s ease;
       border-bottom: 1px solid transparent;
     }
 
     .nav[data-scrolled="true"] {
-      padding: 12px 0;
-      background: rgba(5, 6, 8, 0.84);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      padding: 11px 0;
+      background: rgba(5, 6, 8, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom-color: var(--border);
     }
 
-    .nav-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-
-    .brand {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #ffffff;
+    .nav-in {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .nav-links { display: flex; align-items: center; gap: 28px; }
-    .nav-link { font-size: 13.5px; color: var(--text-soft); transition: color 0.2s; }
-    .nav-link:hover { color: #ffffff; }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
 
-    .nav-end { display: flex; align-items: center; gap: 10px; }
-    .nav-cta { padding: 9px 20px; font-size: 13px; }
+    .brand img {
+      width: 22px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(251,191,36,0.6));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-soft);
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      text-decoration: none;
+    }
+
+    .nav-link:hover,
+    .nav-item-dropdown:hover > .nav-link,
+    .nav-item-dropdown.is-open > .nav-link {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .chevron-icon {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0.55;
+    }
+
+    .nav-item-dropdown:hover .chevron-icon,
+    .nav-item-dropdown.is-open .chevron-icon {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+
+    .nav-item-dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      min-width: 460px;
+      background: rgba(12, 14, 20, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      padding: 14px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+      z-index: 170;
+    }
+
+    .nav-item-dropdown:hover .dropdown-menu,
+    .nav-item-dropdown.is-open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 10px;
+    }
+
+    .dropdown-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .dropdown-item {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 14px;
+      border-radius: 12px;
+      transition: background 0.18s ease;
+      text-align: left;
+      background: transparent;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .dropdown-item .item-title {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dropdown-item .item-sub {
+      font-size: 11.5px;
+      color: var(--text-faint);
+      margin-top: 2px;
+      line-height: 1.4;
+      font-family: var(--sans);
+    }
+
+    .dropdown-item:hover .item-sub {
+      color: var(--text-soft);
+    }
+
+    .nav-end {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-cta {
+      padding: 8px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      border-radius: 999px;
+    }
 
     /* 3-DOT BUTTON (OPENS TECHNICAL & BENCHMARK DOSSIER) */
     .dots-btn {
@@ -403,23 +555,110 @@
       left: 0;
       right: 0;
       z-index: 155;
-      background: rgba(8, 10, 16, 0.96);
-      backdrop-filter: blur(20px);
+      background: rgba(8, 10, 16, 0.98);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      padding: 18px 24px 24px;
+      padding: 20px 24px 28px;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
+      max-height: calc(100vh - 61px);
+      overflow-y: auto;
     }
     .mobile-drawer.open { display: flex; }
     .mobile-drawer a, .mobile-drawer button {
       text-align: left;
       color: #e4e4e7;
-      font-size: 15px;
-      padding: 6px 0;
+      font-size: 14.5px;
+      padding: 8px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+    }
+    .mobile-group-title {
+      font-size: 11px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-top: 10px;
+      margin-bottom: 2px;
+    }
+    .mobile-sub-link {
+      padding-left: 12px !important;
+      font-size: 13.5px !important;
+      color: var(--text-soft) !important;
     }
 
-    /* ------------------------------------------------------------------ */
+    /* HAKKINDA SECTION (MINIMALIST & EDITORIAL) */
+    .hakkinda-sec {
+      padding: clamp(60px, 8vw, 100px) 0 clamp(40px, 5vw, 70px);
+      position: relative;
+      z-index: 2;
+      scroll-margin-top: 76px;
+    }
+
+    .hakkinda-box {
+      background: linear-gradient(180deg, rgba(16, 19, 28, 0.72) 0%, rgba(9, 11, 17, 0.88) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: 28px;
+      padding: clamp(28px, 5vw, 54px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .hakkinda-title {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.18;
+      color: #ffffff;
+      margin-top: 14px;
+      margin-bottom: 18px;
+    }
+
+    .hakkinda-text {
+      font-size: clamp(15px, 1.7vw, 17.5px);
+      line-height: 1.7;
+      color: #d4d4d8;
+      max-width: 840px;
+      margin-bottom: 30px;
+    }
+
+    .hakkinda-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hakkinda-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-strong);
+      font-size: 12.5px;
+      font-family: var(--mono);
+      color: #f4f4f5;
+    }
+
+    .hakkinda-pill .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+    }
+
+    section.sec {
+      scroll-margin-top: 76px;
+    }
+
     /* 2. HUMAN-FIRST HERO                                                */
     /* ------------------------------------------------------------------ */
     .hero {
@@ -1074,20 +1313,91 @@
 
   <div class="site-content">
 
-    <!-- 1. CLEAN NAVBAR + 3-DOT TECHNICAL MENU -->
+    <!-- 1. CHATGPT-INSPIRED DROPDOWN NAVBAR + 3-DOT TECHNICAL MENU -->
     <header class="nav" id="siteNav">
       <div class="wrap">
         <div class="nav-in">
-          <a href="#" class="brand" style="display:inline-flex; align-items:center; gap:9px;">
-            <img src="/static/synaphe-butterfly.png" alt="Synaphe Kelebek" style="width:22px; height:auto; object-fit:contain; vertical-align:middle; filter:drop-shadow(0 0 10px rgba(251,191,36,0.6));">
+          <a href="#" class="brand" aria-label="Synaphe Ana Sayfa">
+            <img src="/static/synaphe-butterfly.png" alt="Synaphe">
             <span>SYNAPHE</span>
           </a>
 
           <nav class="nav-links" aria-label="Ana Menü">
-            <a href="#deneyim" class="nav-link">Canlı Fark</a>
-            <a href="#ozellikler" class="nav-link">Neler Yapar?</a>
-            <a href="#indir" class="nav-link">Tüm Cihazlar</a>
-            <a href="#sss" class="nav-link">SSS</a>
+            <a href="#hakkinda" class="nav-link">Hakkında</a>
+
+            <!-- Özellikler (2-Kolonlu ChatGPT Tarzı Dropdown) -->
+            <div class="nav-item-dropdown">
+              <button type="button" class="nav-link dropdown-toggle" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
+                <span>Özellikler</span>
+                <svg class="chevron-icon" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="dropdown-menu">
+                <div class="dropdown-grid">
+                  <div class="dropdown-col">
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Zamansal Hafıza</span>
+                      <span class="item-sub">Değişen fikir ve kararları günceller</span>
+                    </a>
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Çok Adımlı Çıkarım</span>
+                      <span class="item-sub">Farklı günlerdeki ipuçlarını bağlar</span>
+                    </a>
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Kişisel Tercih &amp; Duygu</span>
+                      <span class="item-sub">Neyi sevdiğini ve sınırlarını hatırlar</span>
+                    </a>
+                  </div>
+                  <div class="dropdown-col">
+                    <a href="#deneyim" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Canlı Karşılaştırma</span>
+                      <span class="item-sub">Klasik AI ile farkı interaktif dene</span>
+                    </a>
+                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">MCP Entegrasyonu</span>
+                      <span class="item-sub">Tüm araçlarını tek belleğe bağla</span>
+                    </a>
+                    <a href="#indir" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Tüm Cihazlar</span>
+                      <span class="item-sub">macOS, Windows, Linux, Mobil</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bilgi & Araştırma (2-Kolonlu ChatGPT Tarzı Dropdown) -->
+            <div class="nav-item-dropdown">
+              <button type="button" class="nav-link dropdown-toggle" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
+                <span>Bilgi</span>
+                <svg class="chevron-icon" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="dropdown-menu">
+                <div class="dropdown-grid">
+                  <div class="dropdown-col">
+                    <a href="#hakkinda" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Bilişsel Mimari</span>
+                      <span class="item-sub">Eidetis yerel hafıza motoru felsefesi</span>
+                    </a>
+                    <button type="button" class="dropdown-item" onclick="openTechModal(); setModalTab(0); closeDropdowns();">
+                      <span class="item-title">Akademik Benchmark</span>
+                      <span class="item-sub">N=132 doğrulama &amp; canlı skorlar</span>
+                    </button>
+                  </div>
+                  <div class="dropdown-col">
+                    <button type="button" class="dropdown-item" onclick="openTechModal(); setModalTab(2); closeDropdowns();">
+                      <span class="item-title">Wixted &amp; Hebbian Lab</span>
+                      <span class="item-sub">Hafıza unutma ve pekiştirme simülatörü</span>
+                    </button>
+                    <a href="#sss" class="dropdown-item" onclick="closeDropdowns()">
+                      <span class="item-title">Sıkça Sorulanlar (SSS)</span>
+                      <span class="item-sub">Gizlilik, güvenlik ve kurulum yanıtları</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a href="#indir" class="nav-link">İndir</a>
           </nav>
 
           <div class="nav-end">
@@ -1104,11 +1414,18 @@
     </header>
 
     <nav id="mobileDrawer" class="mobile-drawer" aria-label="Mobil Menü">
-      <a href="#deneyim" onclick="toggleMobileMenu(false)">Canlı Fark</a>
-      <a href="#ozellikler" onclick="toggleMobileMenu(false)">Neler Yapar?</a>
-      <a href="#indir" onclick="toggleMobileMenu(false)">Tüm Cihazlar İçin İndir</a>
-      <a href="#sss" onclick="toggleMobileMenu(false)">SSS</a>
-      <button type="button" onclick="toggleMobileMenu(false); openTechModal();" style="color:#fbbf24; border-bottom:none;">••• Teknik &amp; Akademik Veriler</button>
+      <a href="#hakkinda" onclick="toggleMobileMenu(false)">Hakkında</a>
+      <div class="mobile-group-title">Özellikler</div>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Zamansal Hafıza</a>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Çok Adımlı Çıkarım</a>
+      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Kişisel Tercih &amp; Duygu</a>
+      <a href="#deneyim" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Canlı Karşılaştırma</a>
+      <div class="mobile-group-title">Bilgi &amp; Araştırma</div>
+      <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(0);" class="mobile-sub-link">✦ Akademik Benchmark (N=132)</button>
+      <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(2);" class="mobile-sub-link">✦ Wixted &amp; Hebbian Matematik</button>
+      <a href="#sss" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ SSS (Sıkça Sorulanlar)</a>
+      <a href="#indir" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600;">İndir (Tüm Cihazlar)</a>
+      <button type="button" onclick="toggleMobileMenu(false); openTechModal();" style="color:#fbbf24; border-bottom:none;">••• Teknik &amp; Akademik Dosya</button>
     </nav>
 
     <!-- 2. HERO (HUMAN-FIRST, ZERO JARGON, ZERO DUPLICATE BUTTONS) -->
@@ -1146,6 +1463,33 @@
             <div class="promise-cell">
               <div class="promise-title">Sadece Senin Cihazında</div>
               <div class="promise-desc">Konuşmaların hiçbir şirketin bulutuna gitmez. İnterneti kessen bile çalışmaya devam eder.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HAKKINDA SECTION (EDITORIAL & MINIMALIST BİLİŞSEL MİMARİ) -->
+    <section class="hakkinda-sec reveal" id="hakkinda">
+      <div class="wrap">
+        <div class="hakkinda-box">
+          <div class="kicker"><span class="kicker-line"></span><span>BİLİŞSEL MİMARİ</span></div>
+          <h2 class="hakkinda-title">Yapay zekâ her sohbette sıfırdan başlamamalı.</h2>
+          <p class="hakkinda-text">
+            Klasik modeller her oturumda seni unutan bir yabancıya dönüşür. Synaphe; aylar önceki fikirlerini, değişen kararlarını ve hayatındaki bağlamı zamansal bir bilişsel hafızada biriktirir. Tamamen senin cihazında yaşar; sıfır bulut bağımlılığı, mutlak veri egemenliği.
+          </p>
+          <div class="hakkinda-pills">
+            <div class="hakkinda-pill">
+              <span class="pill-dot"></span>
+              <span>%100 Yerel Veri Tabanı</span>
+            </div>
+            <div class="hakkinda-pill">
+              <span class="pill-dot"></span>
+              <span>Wixted Güç Kanunu Unutma Eğrisi</span>
+            </div>
+            <div class="hakkinda-pill">
+              <span class="pill-dot"></span>
+              <span>3-Hop Zamansal Çıkarım</span>
             </div>
           </div>
         </div>
@@ -1920,6 +2264,36 @@ python3 telegram_bot.py
         btn.closest('.qa').querySelector('.qa-ans').setAttribute('data-open', 'true');
       }
     }
+
+    // CHATGPT-STYLE DROPDOWN CONTROLS
+    function toggleNavDropdown(btn, ev) {
+      if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+      const parent = btn.closest('.nav-item-dropdown');
+      const wasOpen = parent.classList.contains('is-open');
+      closeDropdowns();
+      if (!wasOpen) {
+        parent.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    function closeDropdowns() {
+      document.querySelectorAll('.nav-item-dropdown').forEach(d => {
+        d.classList.remove('is-open');
+        const toggle = d.querySelector('.dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-item-dropdown')) {
+        closeDropdowns();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDropdowns();
+    });
 
     // 3-DOT TECHNICAL MODAL
     function openTechModal() {
