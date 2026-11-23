@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Özellikler — Synaphe AI Yetenekleri ve Canlı Karşılaştırma</title>
-  <meta name="description" content="Synaphe (Eidetis Engine): Zamansal MultiDiGraph, ACT-R Yayılan Aktivasyon ve AGM İnanç Revizyonu ile çalışan yerel bilişsel bellek mimarisi.">
+  <title>Özellikler — Synaphe Eidetis Engine & MCP</title>
+  <meta name="description" content="Synaphe (Eidetis Engine): Zamansal MultiDiGraph, ACT-R Yayılan Aktivasyon, AGM İnanç Revizyonu ve Wixted-Ebbinghaus bellek dinamikleriyle çalışan yerel kişisel yapay zekâ.">
   <link rel="canonical" href="https://www.synapheai.com.tr/ozellikler">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Synaphe AI">
-  <meta property="og:title" content="Özellikler — Synaphe AI Yetenekleri ve Canlı Karşılaştırma">
-  <meta property="og:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan yerel bilişsel hafıza motoru.">
+  <meta property="og:title" content="Özellikler — Synaphe Eidetis Engine & MCP">
+  <meta property="og:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen cihazında yaşayan yerel bilişsel hafıza mimarisi.">
   <meta property="og:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
   <meta property="og:url" content="https://www.synapheai.com.tr/ozellikler">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Özellikler — Synaphe AI Yetenekleri ve Canlı Karşılaştırma">
-  <meta name="twitter:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan yerel bilişsel hafıza motoru.">
+  <meta name="twitter:title" content="Özellikler — Synaphe Eidetis Engine & MCP">
+  <meta name="twitter:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen cihazında yaşayan yerel bilişsel hafıza mimarisi.">
   <meta name="twitter:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
 
-  <!-- Favicons for Google & All Browsers -->
+  <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="48x48" href="/static/favicon-48x48.png">
@@ -42,29 +42,22 @@
         "name": "Synaphe AI",
         "url": "https://www.synapheai.com.tr/",
         "logo": "https://www.synapheai.com.tr/static/synaphe-butterfly.png",
-        "sameAs": [
-          "https://github.com/karabul7tt/synaphe"
-        ]
+        "sameAs": ["https://github.com/karabul7tt/synaphe"]
       },
       {
         "@type": "WebSite",
         "@id": "https://www.synapheai.com.tr/#website",
         "url": "https://www.synapheai.com.tr/",
         "name": "Synaphe AI",
-        "publisher": {"@id": "https://www.synapheai.com.tr/#organization"},
-        "description": "Seni Unutmayan Kişisel Yapay Zekâ & Eidetis Bilişsel Hafıza Mimarisi"
+        "publisher": {"@id": "https://www.synapheai.com.tr/#organization"}
       },
       {
         "@type": "SoftwareApplication",
         "name": "Synaphe AI",
         "applicationCategory": "Artificial Intelligence Software",
-        "operatingSystem": "macOS, Windows, Linux, iOS, Android",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Aylar önce konuştuğun fikirleri, değişen kararlarını ve hayatındaki bağlantıları gerçekten hatırlayan yerel kişisel yapay zekâ."
+        "operatingSystem": "macOS, Windows, Linux, Web",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "description": "Eidetis Engine üzerinde çalışan zamansal bilgi grafiği ve yerel kişisel yapay zekâ."
       }
     ]
   }
@@ -73,8 +66,8 @@
   <style>
     :root {
       --bg: #050608;
-      --surface: rgba(13, 16, 24, 0.76);
-      --surface-solid: #090b10;
+      --surface: rgba(12, 14, 21, 0.72);
+      --surface-hover: rgba(18, 21, 32, 0.85);
       --border: rgba(255, 255, 255, 0.08);
       --border-strong: rgba(255, 255, 255, 0.16);
       --text: #fafafa;
@@ -82,55 +75,54 @@
       --text-faint: #71717a;
       --gold: #fbbf24;
       --gold-deep: #f59e0b;
-      --gold-dim: rgba(251, 191, 36, 0.12);
-      --gold-border: rgba(251, 191, 36, 0.35);
+      --gold-dim: rgba(251, 191, 36, 0.11);
+      --gold-border: rgba(251, 191, 36, 0.30);
       --emerald: #34d399;
+      --rose: #f87171;
       --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", sans-serif;
       --mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
     html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: var(--sans); }
-    body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); }
+    body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); line-height: 1.5; }
 
-    /* BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL BEAUTY) */
+    /* BACKGROUND LAYERS */
     .bloom-art-layer {
       position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
     }
     .bg-bloom-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center 30%;
-      opacity: 0.55;
-      filter: contrast(1.18) brightness(0.92) saturate(1.12);
+      opacity: 0.52;
+      filter: contrast(1.18) brightness(0.90) saturate(1.12);
       transform: scale(1.02);
-      transition: opacity 0.5s ease;
     }
     .bloom-vignette {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.35) 60%, rgba(5, 6, 8, 0.65) 100%);
+      background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.04) 0%, rgba(5, 6, 8, 0.38) 62%, rgba(5, 6, 8, 0.72) 100%);
     }
 
-    /* SYNAPSE PARTICLES CANVAS */
     #synapseCanvas {
-      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.95;
+      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.92;
     }
 
-    /* 3D LIVING BIOLOGICAL BUTTERFLY RIG */
+    /* 3D LIVING BUTTERFLY — CLEANLY POSITIONED ABOVE HERO TITLE, PINNED IN VIEWPORT */
     .butterfly-stage {
       position: fixed; inset: 0; z-index: 3; pointer-events: none;
-      display: flex; align-items: center; justify-content: center;
       perspective: 1200px;
     }
     .golden-butterfly-3d-rig {
       position: absolute;
-      top: 24%;
+      top: 23%;
       left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: clamp(200px, 25vw, 340px);
-      height: clamp(140px, 18vw, 240px);
+      width: clamp(170px, 19vw, 260px);
+      height: clamp(115px, 13vw, 180px);
       transform-style: preserve-3d;
       will-change: transform;
-      filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.45)) drop-shadow(0 0 60px rgba(245, 158, 11, 0.25));
+      opacity: 0.92;
+      filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.42)) drop-shadow(0 0 56px rgba(245, 158, 11, 0.20));
     }
     .wing-3d-wrap {
       position: absolute; top: 0; width: 50%; height: 100%;
@@ -143,313 +135,225 @@
       display: flex; align-items: center; justify-content: center;
       z-index: 10; pointer-events: none;
     }
-    .wing-img, .body-img {
-      width: 100%; height: 100%; object-fit: contain; pointer-events: none;
-    }
+    .wing-img, .body-img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
     /* FOREGROUND CONTENT */
     .site-content { position: relative; z-index: 10; }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-    /* NAVBAR & CHATGPT-STYLE DROPDOWN */
+    /* STICKY GLASS NAVBAR */
     .nav {
       position: sticky; top: 0; z-index: 100;
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      background: rgba(5, 6, 8, 0.82);
+      background: rgba(5, 6, 8, 0.78);
       border-bottom: 1px solid var(--border);
     }
-    .nav-inner {
-      height: 68px; display: flex; align-items: center; justify-content: space-between;
-    }
+    .nav-inner { height: 68px; display: flex; align-items: center; justify-content: space-between; }
     .nav-brand {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: #fff; font-weight: 700; font-size: 20px;
-      letter-spacing: -0.02em;
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none; color: #fff; font-weight: 600; font-size: 18px; letter-spacing: -0.02em;
     }
     .nav-brand img {
-      width: 30px; height: 30px; object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+      width: 28px; height: 28px; object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
     }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-link {
-      color: var(--text-soft); font-size: 14.5px; font-weight: 500;
+      color: var(--text-soft); font-size: 14px; font-weight: 500;
       text-decoration: none; transition: color 0.2s ease;
       display: inline-flex; align-items: center; gap: 5px;
     }
     .nav-link:hover, .nav-link.active { color: #ffffff; }
 
-    /* 2-COLUMN LUXURY DROPDOWN UNDER ÖZELLİKLER */
-    .nav-dropdown-wrapper {
-      position: relative; display: inline-flex; align-items: center;
-    }
+    /* 2-COLUMN DROPDOWN */
+    .nav-dropdown-wrapper { position: relative; display: inline-flex; align-items: center; }
     .nav-dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 50%;
+      position: absolute; top: 100%; left: 50%;
       transform: translateX(-50%) translateY(14px);
-      width: 560px;
-      background: rgba(11, 14, 22, 0.96);
+      width: 540px;
+      background: rgba(10, 12, 19, 0.96);
       backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-      border: 1px solid rgba(251, 191, 36, 0.28);
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 35px rgba(251, 191, 36, 0.12);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1000;
+      border: 1px solid var(--gold-border);
+      border-radius: 18px; padding: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000;
     }
     .nav-dropdown-wrapper:hover .nav-dropdown-menu,
     .nav-dropdown-wrapper:focus-within .nav-dropdown-menu {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
+      opacity: 1; visibility: visible; pointer-events: auto;
       transform: translateX(-50%) translateY(6px);
     }
-    .dropdown-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px;
-    }
+    .dropdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
     .dropdown-item {
       display: flex; align-items: flex-start; gap: 10px;
-      padding: 10px 12px; border-radius: 10px; text-decoration: none;
-      transition: all 0.15s ease;
+      padding: 9px 11px; border-radius: 10px; text-decoration: none; transition: all 0.15s ease;
     }
-    .dropdown-item:hover {
-      background: rgba(251, 191, 36, 0.1);
-      transform: translateX(2px);
-    }
-    .dropdown-item-icon {
-      color: var(--gold); margin-top: 1px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .dropdown-item-title {
-      font-size: 13.5px; font-weight: 600; color: #fff;
-    }
-    .dropdown-item-desc {
-      font-size: 11.5px; color: var(--text-soft); margin-top: 2px; line-height: 1.35;
-    }
+    .dropdown-item:hover { background: rgba(251, 191, 36, 0.09); }
+    .dropdown-item-icon { color: var(--gold); margin-top: 2px; flex-shrink: 0; }
+    .dropdown-item-title { font-size: 13.5px; font-weight: 600; color: #fff; }
+    .dropdown-item-desc { font-size: 11.5px; color: var(--text-soft); margin-top: 2px; line-height: 1.35; }
     .dropdown-footer {
-      margin-top: 16px; padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .dropdown-footer a {
-      font-size: 13px; font-weight: 600; color: var(--gold);
-      text-decoration: none; display: flex; align-items: center; gap: 4px;
-    }
-    .dropdown-footer a:hover { text-decoration: underline; }
+    .dropdown-footer a { font-size: 12.5px; font-weight: 600; color: var(--gold); text-decoration: none; }
 
     /* BUTTONS */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 10px 20px; border-radius: 999px; font-size: 14px; font-weight: 600;
+      padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;
       text-decoration: none; cursor: pointer; border: none; transition: all 0.2s ease;
     }
     .btn-gold {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #000; box-shadow: 0 4px 18px rgba(251, 191, 36, 0.35);
+      color: #050608; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.30);
     }
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.55);
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(251, 191, 36, 0.48); }
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.06); color: #fff;
+      border: 1px solid var(--border-strong); backdrop-filter: blur(12px);
     }
+    .btn-glass:hover { background: rgba(255, 255, 255, 0.11); transform: translateY(-2px); }
 
-    /* SECTIONS */
-    .sec { padding: clamp(60px, 8vw, 100px) 0; scroll-margin-top: 76px; }
-    .h2 { font-size: clamp(28px, 4.2vw, 48px); font-weight: 700; letter-spacing: -0.03em; color: #ffffff; margin-bottom: 14px; }
+    /* FULL-VIEWPORT EDITORIAL HERO (NOTHING CRAMPED ABOVE THE FOLD) */
+    .hero-full {
+      min-height: calc(100vh - 68px);
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+      text-align: center;
+      padding: clamp(185px, 27vh, 250px) 24px 36px;
+    }
+    .hero-core { max-width: 760px; margin: 0 auto; }
     .kicker {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+      font-family: var(--mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
     }
-    .kicker-line { width: 20px; height: 1.5px; background: var(--gold); }
+    .kicker-line { width: 18px; height: 1px; background: var(--gold); }
+    .hero-h1 {
+      font-size: clamp(54px, 8vw, 96px); font-weight: 700; letter-spacing: -0.045em; line-height: 0.96;
+      background: linear-gradient(180deg, #ffffff 30%, #d4d4d8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 22px;
+    }
+    .hero-lead {
+      font-size: clamp(16px, 1.8vw, 19.5px); color: var(--text-soft);
+      line-height: 1.65; max-width: 640px; margin: 0 auto 36px; font-weight: 400;
+    }
+    .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .scroll-cue {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--text-faint); font-size: 12px; font-family: var(--mono);
+      letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+      margin-top: 48px; transition: color 0.2s;
+    }
+    .scroll-cue:hover { color: var(--gold); }
 
-    /* HERO & VIBRANT RAINBOW TYPOGRAPHY */
-    .hero {
-      min-height: 82vh; display: flex; flex-direction: column; justify-content: center;
-      text-align: center; padding: clamp(50px, 8vw, 90px) 0 40px;
+    /* EDITORIAL SECTIONS BELOW THE FOLD */
+    .sec { padding: clamp(72px, 9vw, 116px) 0; border-top: 1px solid var(--border); }
+    .h2 {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em;
+      color: #ffffff; line-height: 1.15; margin-bottom: 14px;
     }
-    .chatgpt-title {
-      font-size: clamp(38px, 6vw, 80px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
-      color: #ffffff; margin: 0 auto 24px; max-width: 980px;
-    }
-    .rainbow-letters {
-      display: inline-block; position: relative; font-weight: 800; letter-spacing: -0.01em;
-    }
-    .rainbow-letters span {
-      display: inline-block; transition: transform 0.2s ease;
-    }
-    .rainbow-letters:hover span {
-      transform: translateY(-4px);
-    }
-    .rainbow-bar {
-      position: absolute; left: 0; right: 0; bottom: -4px; height: 4px; border-radius: 2px;
-      background: linear-gradient(90deg, #38bdf8, #fb923c, #60a5fa, #f472b6, #34d399, #fbbf24, #f87171, #a78bfa);
-      box-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
-    }
+    .sec-lead { font-size: 16px; color: var(--text-soft); max-width: 680px; line-height: 1.65; margin-bottom: 44px; }
 
-    /* APP MOCKUP WINDOW (CLEAN, NO CARTOON STICKERS) */
-    .mockup-wrap {
-      position: relative; max-width: 960px; margin: 48px auto 0; text-align: left;
-    }
-    .app-window {
-      background: rgba(12, 14, 20, 0.88); border: 1px solid var(--gold-border);
-      border-radius: 20px; overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(251, 191, 36, 0.12);
-      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-      display: grid; grid-template-columns: 240px 1fr; min-height: 440px;
-    }
-    .app-sidebar {
-      background: rgba(8, 10, 15, 0.92); border-right: 1px solid var(--border);
-      padding: 18px 14px; display: flex; flex-direction: column; gap: 8px;
-    }
-    .window-dots { display: flex; gap: 6px; margin-bottom: 14px; padding-left: 6px; }
-    .window-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
-    .sidebar-item {
-      padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--text-soft);
-      cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 8px;
-    }
-    .sidebar-item:hover, .sidebar-item.active { background: rgba(255,255,255,0.06); color: #fff; }
-    .app-main {
-      padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .chat-bubble-user {
-      align-self: flex-end; background: rgba(251, 191, 36, 0.14); border: 1px solid var(--gold-border);
-      border-radius: 16px 16px 4px 16px; padding: 14px 18px; max-width: 80%;
-      font-size: 14.5px; color: #fff; margin-bottom: 16px; line-height: 1.5;
-    }
-    .chat-bubble-synaphe {
-      align-self: flex-start; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      border-radius: 16px 16px 16px 4px; padding: 16px 20px; max-width: 88%;
-      font-size: 14.5px; color: #e4e4e7; line-height: 1.6;
-    }
-    .chat-input-bar {
-      margin-top: 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between;
-      align-items: center; font-size: 13.5px; color: var(--text-faint);
-    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 
-    /* 3-TAB SWITCHER */
-    .tab-grid {
-      display: grid; grid-template-columns: 340px 1fr; gap: 40px; align-items: center;
-    }
-    .v-tab-btn {
-      font-size: 21px; font-weight: 700; color: var(--text-faint);
-      padding: 16px 0; border-bottom: 1px solid var(--border);
-      cursor: pointer; transition: all 0.25s ease;
-    }
-    .v-tab-btn.active {
-      color: #ffffff; border-bottom: 2px solid var(--gold);
-    }
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-
-    /* 3-COLUMN FEATURE CARDS */
-    .powers-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    }
-    .power-card {
+    .card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 32px 28px; backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: all 0.25s ease; display: flex; flex-direction: column; justify-content: space-between;
+      border-radius: 18px; padding: 28px 26px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
-    .power-card:hover {
-      border-color: var(--gold-border); transform: translateY(-4px);
-      box-shadow: 0 16px 36px rgba(0,0,0,0.5), 0 0 20px rgba(251, 191, 36, 0.08);
-    }
-    .power-card h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .power-card p { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+    .card:hover { border-color: var(--gold-border); transform: translateY(-2px); }
+    .card-num { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 12px; display: block; }
+    .card h3 { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 9px; }
+    .card p { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
 
-    /* SECURITY & PRIVACY */
-    .security-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    /* REAL BENCHMARK BARS */
+    .bench-box {
+      background: var(--surface); border: 1px solid var(--gold-border);
+      border-radius: 22px; padding: clamp(26px, 4vw, 42px);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
     }
+    .bench-row { margin-bottom: 22px; }
+    .bench-row:last-child { margin-bottom: 0; }
+    .bench-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; }
+    .bench-label { font-size: 14.5px; font-weight: 600; color: #fff; }
+    .bench-nums { font-family: var(--mono); font-size: 12.5px; color: var(--text-soft); }
+    .bar-track { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; margin-bottom: 6px; }
+    .bar-syn { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .bar-rag { height: 100%; border-radius: 999px; background: rgba(255,255,255,0.28); }
+    .bar-rag-zero { height: 100%; width: 3px; border-radius: 999px; background: var(--rose); }
 
-    /* INSPIRATION STORIES */
-    .story-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
-      overflow: hidden; text-decoration: none; color: inherit; display: block;
-      transition: all 0.25s ease;
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
     }
-    .story-card:hover {
-      border-color: var(--gold-border); transform: translateY(-4px);
+    .stat-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px;
     }
-    .story-visual {
-      height: 140px; width: 100%; position: relative; overflow: hidden;
-      background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .story-body { padding: 24px; }
-    .story-title {
-      font-size: 16px; font-weight: 600; color: #fff; line-height: 1.45;
-      display: flex; align-items: center; justify-content: space-between;
+    .stat-box .st-k { font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-box .st-v { font-family: var(--mono); font-size: 22px; font-weight: 700; color: #fff; margin-top: 4px; }
+
+    /* CODE BLOCKS (ONLY REAL COMMANDS) */
+    .code-block {
+      background: rgba(0, 0, 0, 0.58); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; font-family: var(--mono);
+      font-size: 12px; color: #34d399; overflow-x: auto; line-height: 1.6;
     }
 
     /* CTA BANNER */
-    .cta-banner-box {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(13, 16, 24, 0.72));
-      border: 1px solid var(--gold-border); border-radius: 28px;
-      padding: clamp(36px, 5vw, 64px); display: flex; align-items: center;
-      justify-content: space-between; gap: 32px; backdrop-filter: blur(24px);
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.11), rgba(12, 14, 21, 0.76));
+      border: 1px solid var(--gold-border); border-radius: 24px;
+      padding: clamp(32px, 5vw, 56px); display: flex; align-items: center;
+      justify-content: space-between; gap: 28px; backdrop-filter: blur(22px);
     }
 
-    /* RESTORED GIANT SYNAPHE WORDMARK */
+    /* GIANT FOOTER WORDMARK */
     .lml-wordmark {
-      font-size: clamp(64px, 15vw, 190px);
-      font-weight: 700;
-      letter-spacing: -0.05em;
-      line-height: 0.85;
-      text-align: center;
+      font-size: clamp(64px, 15vw, 188px); font-weight: 700; letter-spacing: -0.05em;
+      line-height: 0.85; text-align: center;
       background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, transparent 90%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      user-select: none;
-      margin: 48px 0 24px;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      user-select: none; margin: 48px 0 24px;
     }
 
     /* FOOTER */
     .footer {
       border-top: 1px solid var(--border); padding: 48px 0 32px;
-      background: rgba(5,6,8,0.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: rgba(5, 6, 8, 0.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       color: var(--text-soft); font-size: 13.5px;
     }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px;
-    }
-    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { color: var(--text-soft); text-decoration: none; transition: color 0.15s ease; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 36px; }
+    .footer-col h4 { color: #fff; font-size: 13.5px; font-weight: 600; margin-bottom: 14px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { color: var(--text-soft); text-decoration: none; transition: color 0.15s; }
     .footer-col a:hover { color: var(--gold); }
 
-    @media (max-width: 868px) {
-      .app-window { grid-template-columns: 1fr; }
-      .app-sidebar { display: none; }
-      .tab-grid { grid-template-columns: 1fr; }
-      .powers-grid, .security-grid { grid-template-columns: 1fr; }
-      .cta-banner-box { flex-direction: column; text-align: center; }
+    /* SUBPAGE HEADER */
+    .sub-hero { padding: clamp(130px, 18vh, 175px) 0 48px; }
+
+    @media (max-width: 900px) {
+      .grid-3, .grid-2, .grid-4, .stat-strip { grid-template-columns: 1fr; }
+      .cta-banner { flex-direction: column; text-align: center; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
-      .nav-dropdown-menu { width: 90vw; left: 0; transform: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL) -->
+  <!-- BACKGROUND ART + SYNAPSE NETWORK + PINNED 3D BUTTERFLY -->
   <div class="bloom-art-layer" aria-hidden="true">
     <img src="/static/bloom_bg_blended.jpg" alt="" class="bg-bloom-img">
     <div class="bloom-vignette"></div>
   </div>
-
-  <!-- GOLDEN SYNAPSE PARTICLES CANVAS -->
   <canvas id="synapseCanvas" aria-hidden="true"></canvas>
-
-  <!-- 3D LIVING BIOLOGICAL BUTTERFLY RIG -->
   <div class="butterfly-stage" aria-hidden="true">
     <div class="golden-butterfly-3d-rig" id="goldenButterflyRig" aria-hidden="true">
       <div class="wing-3d-wrap wing-left-wrap" id="wingLeft">
@@ -465,8 +369,6 @@
   </div>
 
   <div class="site-content">
-
-    <!-- NAVBAR WITH 2-COLUMN LUXURY DROPDOWN (REAL VECTORS, ZERO EMOJIS) -->
     <header class="nav">
       <div class="wrap">
         <div class="nav-inner">
@@ -478,7 +380,6 @@
           <nav class="nav-links">
             <a href="/hakkinda" class="nav-link ">Hakkında</a>
 
-            <!-- 2-COLUMN DROPDOWN UNDER ÖZELLİKLER -->
             <div class="nav-dropdown-wrapper">
               <a href="/ozellikler" class="nav-link active">
                 Özellikler
@@ -486,105 +387,58 @@
                   <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </a>
-
               <div class="nav-dropdown-menu">
                 <div class="dropdown-grid">
-                  <!-- Left Column: Core Architecture -->
                   <div>
-                    <a href="/ozellikler#hafiza" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span>
+                    <a href="/ozellikler#eidetis" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Eidetis Engine</div>
-                        <div class="dropdown-item-desc">Zamansal MultiDiGraph bellek çekirdeği</div>
+                        <div class="dropdown-item-title">Eidetis MultiDiGraph</div>
+                        <div class="dropdown-item-desc">NetworkX tabanlı zamansal bilgi grafiği</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#muhakeme" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">3-Hop Çıkarım</div>
-                        <div class="dropdown-item-desc">Kronolojik zamansal akıl yürütme motoru</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#inanc" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+                    <a href="/ozellikler#agm" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
                       <div>
                         <div class="dropdown-item-title">AGM İnanç Revizyonu</div>
-                        <div class="dropdown-item-desc">Değişen kararları dinamik güncelleme</div>
+                        <div class="dropdown-item-desc">Otomatik çelişki çözümü ve arşivleme</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#aktivasyon" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                    <a href="/ozellikler#actr" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
                       <div>
                         <div class="dropdown-item-title">ACT-R Yayılan Aktivasyon</div>
-                        <div class="dropdown-item-desc">Çağrışımsal nöral bağlam uyarımı</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#mcp" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">Model Context Protocol</div>
-                        <div class="dropdown-item-desc">Claude Desktop &amp; Cursor köprüsü</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#yerel" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">SQLite Yerel Depolama</div>
-                        <div class="dropdown-item-desc">Cihazınızda %100 şifreli ve çevrimdışı</div>
+                        <div class="dropdown-item-desc">Collins-Loftus çağrışımsal bellek ağı</div>
                       </div>
                     </a>
                   </div>
-
-                  <!-- Right Column: Ecosystem & Interfaces -->
                   <div>
-                    <a href="/ozellikler#cli" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
+                    <a href="/ozellikler#mcp" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Geliştirici CLI</div>
-                        <div class="dropdown-item-desc">Terminal üzerinden doğrudan sorgulama</div>
+                        <div class="dropdown-item-title">MCP Stdio Sunucusu</div>
+                        <div class="dropdown-item-desc">Claude Desktop, Cursor ve Zed bağlantısı</div>
                       </div>
                     </a>
-                    <a href="/bilgi#benchmark" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+                    <a href="/ozellikler#telegram" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">N=132 Benchmark</div>
-                        <div class="dropdown-item-desc">%94.8 doğruluk ve 18ms sorgu süresi</div>
+                        <div class="dropdown-item-title">Telegram Mobil Köprüsü</div>
+                        <div class="dropdown-item-desc">Sahibine kilitli sesli ve yazılı erişim</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#unutma" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                    <a href="/bilgi" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Wixted-Ebbinghaus Yasası</div>
-                        <div class="dropdown-item-desc">Bilişsel pekişme ve sönümlenme</div>
-                      </div>
-                    </a>
-                    <a href="/hakkinda#guvenlik" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">Sıfır Telemetri</div>
-                        <div class="dropdown-item-desc">Hiçbir veri harici sunucuya iletilmez</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#modeller" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">Model Bağımsızlığı</div>
-                        <div class="dropdown-item-desc">Ollama, DeepSeek, Claude ile uyumlu</div>
-                      </div>
-                    </a>
-                    <a href="/indir" class="dropdown-item">
-                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
-                      <div>
-                        <div class="dropdown-item-title">Çoklu Platform</div>
-                        <div class="dropdown-item-desc">macOS, Windows, Linux tek tıkla kurulum</div>
+                        <div class="dropdown-item-title">24 Senaryo Benchmark</div>
+                        <div class="dropdown-item-desc">TF-IDF RAG vs Synaphe canlı ölçümleri</div>
                       </div>
                     </a>
                   </div>
                 </div>
-
                 <div class="dropdown-footer">
-                  <span style="font-size:12px; color:var(--text-faint);">Tüm mimari açık standartlara dayanır</span>
-                  <a href="/ozellikler">Tüm Yetenekleri Keşfet &rarr;</a>
+                  <span style="font-size:12px; color:var(--text-faint);">%100 yerel Python &amp; FastAPI çekirdeği</span>
+                  <a href="/ozellikler">Tüm Özellikler &rarr;</a>
                 </div>
               </div>
             </div>
@@ -593,115 +447,109 @@
             <a href="/indir" class="nav-link ">İndir</a>
           </nav>
 
-          <div style="display:flex; align-items:center; gap:12px;">
-            <a href="/indir" class="btn btn-gold">Synaphe'yi Dene</a>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <a href="/app" class="btn btn-gold" style="padding:9px 20px; font-size:13.5px;">Web'de Kullan</a>
           </div>
         </div>
       </div>
     </header>
 
-    <section class="hero" style="min-height:50vh; text-align:left; padding:80px 0 40px;">
+    <section class="sub-hero">
       <div class="wrap">
-        <div class="kicker"><span class="kicker-line"></span><span>SOMUT YETENEKLER VE FARKLAR</span></div>
-        <h1 class="chatgpt-title" style="margin:0 0 20px 0; text-align:left;">
-          Standart Yapay Zekâ ile<br>
-          <span style="color:var(--gold);">Synaphe Arasındaki Fark.</span>
+        <div class="kicker"><span class="kicker-line"></span><span>ÖZELLİKLER &amp; MİMARİ KATMANLAR</span></div>
+        <h1 class="h2" style="font-size:clamp(36px, 5.5vw, 60px); margin-bottom:20px;">
+          Kod tabanında çalışan<br><span style="color:var(--gold);">gerçek modüller.</span>
         </h1>
-        <p style="font-size:18px; color:var(--text-soft); max-width:820px; line-height:1.7; margin-bottom:40px;">
-          Standart yapay zekâlar yalnızca içinde bulunduğunuz pencereyi görür. Synaphe ise aylar süren konuşmalarınızı tek bir sinaptik graf üzerinde organize eder.
+        <p class="sec-lead">
+          FastAPI çekirdeği, NetworkX bilgi grafiği, bilişsel matematik motoru ve açık protokol entegrasyonları.
         </p>
 
-        <div style="background:var(--surface); border:1px solid var(--gold-border); border-radius:24px; padding:clamp(24px, 4vw, 40px); backdrop-filter:blur(24px); margin-bottom:48px;">
-          <h2 style="font-size:24px; font-weight:700; color:#fff; margin-bottom:24px;">Canlı Karşılaştırma</h2>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-            <div style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); border-radius:16px; padding:24px;">
-              <div style="font-size:18px; font-weight:700; color:#ef4444; margin-bottom:12px;">Geleneksel LLM &amp; RAG</div>
-              <ul style="list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14px; color:var(--text-soft);">
-                <li>• Her yeni sohbette kendinizi baştan tanıtırsınız.</li>
-                <li>• 2 hafta önce aldığınız bir kararı asla hatırlamaz.</li>
-                <li>• Fikrinizi değiştirdiğinizde eski ve yeni bilgiyi karıştırır.</li>
-                <li>• Tüm özel konuşmalarınız şirket sunucularında depolanır.</li>
-              </ul>
-            </div>
-            <div style="background:rgba(52,211,153,0.06); border:1px solid rgba(52,211,153,0.3); border-radius:16px; padding:24px;">
-              <div style="font-size:18px; font-weight:700; color:#34d399; margin-bottom:12px;">Synaphe Bilişsel Hafıza</div>
-              <ul style="list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14px; color:var(--text-soft);">
-                <li>• Sizi, projelerinizi ve alışkanlıklarınızı tanır.</li>
-                <li>• Aylar önceki kararları zamansal sırasıyla anında bulur.</li>
-                <li>• Değişen fikirlerinizi günceller, eskiyi arşive kaldırır.</li>
-                <li>• %100 yereldir; hiçbir şirket verilerinize erişemez.</li>
-              </ul>
-            </div>
+        <div class="grid-2" style="margin-bottom:28px;">
+          <div class="card" id="eidetis">
+            <span class="card-num">GRAPH_STORE.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span>Eidetis MultiDiGraph</span></h3>
+            <p>Her varlık bir düğüm, her ilişki zaman damgalı bir kenar olarak saklanır. Alt-graf arama motoru ve çoklu oturum ayrımı ile hafıza kalıcı olarak diske yazılır.</p>
+          </div>
+          <div class="card" id="agm">
+            <span class="card-num">COGNITIVE_MATH.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg><span>AGM İnanç Revizyonu</span></h3>
+            <p>Yeni bir olgu mevcut aktif kenarla çeliştiğinde eski kenar <code>passive/archived</code> durumuna alınır, geçmiş sorgulandığında tarihçe korunur.</p>
+          </div>
+          <div class="card" id="actr">
+            <span class="card-num">COGNITIVE_MATH.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>ACT-R &amp; Wixted-Ebbinghaus</span></h3>
+            <p>Yayılan aktivasyon (λ = 0.65) ve yarılanma ömrü (48 saat temel sabiti) ile anıların güncelliği ve çağrışım gücü dinamik olarak hesaplanır.</p>
+          </div>
+          <div class="card" id="mcp">
+            <span class="card-num">MCP_SERVER.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span>Model Context Protocol (MCP)</span></h3>
+            <p>Claude Desktop, Cursor, Zed ve Claude Code için resmi stdio MCP sunucusu. <code>synaphe_remember</code> ve <code>synaphe_recall</code> araçlarını doğrudan sunar.</p>
+          </div>
+          <div class="card" id="telegram">
+            <span class="card-num">TELEGRAM_BOT.PY &amp; STT.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg><span>Telegram Sesli &amp; Yazılı Köprü</span></h3>
+            <p>Token koda gömülü değildir (<code>TELEGRAM_BOT_TOKEN</code> veya <code>.telegram_token</code>). İlk <code>/start</code> gönderen kullanıcıya kilitlenerek güvenli mobil erişim verir.</p>
+          </div>
+          <div class="card">
+            <span class="card-num">SERVER.PY &amp; D1_DATABASE.PY</span>
+            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>REST API &amp; SQLite / D1</span></h3>
+            <p><code>/api/chat</code>, <code>/api/graph</code>, <code>/api/v1/memory/remember</code>, <code>/api/v1/memory/recall</code>, <code>/api/cognitive/benchmark</code> ve yerel SQLite + Cloudflare D1 desteği.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MINIMAL LUXURY FOOTER WITH RESTORED WORDMARK -->
     <footer class="footer">
       <div class="wrap">
         <div class="footer-grid">
           <div>
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
               <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width:24px; height:24px;">
-              <span style="font-weight:700; color:#fff; font-size:17px;">Synaphe AI</span>
+              <span style="font-weight:600; color:#fff; font-size:16px;">Synaphe</span>
             </div>
             <p style="line-height:1.6; max-width:320px; font-size:13px; color:var(--text-soft);">
-              Eidetis nöro-sembolik bilişsel bellek motoru. Sohbeti kapatsan bile hafızasını kaybetmeyen, tamamen senin cihazında yaşayan yerel yapay zekâ.
+              Eidetis bilişsel bilgi grafiği motoru üzerinde çalışan, zamansal akıl yürütme ve otomatik çelişki çözümüne sahip yerel kişisel yapay zekâ.
             </p>
           </div>
           <div class="footer-col">
-            <h4>Ürün</h4>
+            <h4>Keşfet</h4>
             <ul>
+              <li><a href="/app">Web'de Kullan</a></li>
               <li><a href="/hakkinda">Hakkında</a></li>
               <li><a href="/ozellikler">Özellikler</a></li>
-              <li><a href="/indir">İndir</a></li>
-              <li><a href="/bilgi">Bilişsel Graf Mimarisi</a></li>
+              <li><a href="/bilgi">Benchmark &amp; Bilgi</a></li>
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Güvenlik</h4>
+            <h4>Mimari</h4>
             <ul>
-              <li><a href="/hakkinda#gizlilik">Kullanıcı Gizliliği</a></li>
-              <li><a href="/hakkinda#mimari">%100 Yerel Depolama</a></li>
-              <li><a href="/hakkinda#guvenlik">Açık Standartlar</a></li>
+              <li><a href="/ozellikler#eidetis">Eidetis MultiDiGraph</a></li>
+              <li><a href="/ozellikler#agm">AGM İnanç Revizyonu</a></li>
+              <li><a href="/ozellikler#mcp">MCP Sunucusu</a></li>
+              <li><a href="/indir">Kurulum &amp; İndir</a></li>
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Ekosistem</h4>
+            <h4>Kaynaklar</h4>
             <ul>
               <li><a href="https://github.com/karabul7tt/synaphe" target="_blank">GitHub</a></li>
-              <li><a href="/bilgi#sss">Sık Sorulan Sorular</a></li>
-              <li><a href="mailto:destek@synapheai.com.tr">İletişim</a></li>
+              <li><a href="/bilgi#referanslar">Akademik Referanslar</a></li>
+              <li><a href="/bilgi#sss">Sıkça Sorulanlar</a></li>
             </ul>
           </div>
         </div>
 
-        <!-- RESTORED HISTORIC SYNAPHE WORDMARK -->
         <div class="lml-wordmark" aria-hidden="true">SYNAPHE</div>
 
-        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:24px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--text-faint); flex-wrap:wrap; gap:12px;">
-          <span>&copy; 2026 Synaphe AI. Bilişsel Bellek Mimarisi. Tüm hakları saklıdır.</span>
-          <span style="font-family:var(--mono);">Eidetis Engine v1.4.2 • Pure Edge AI</span>
+        <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--text-faint); flex-wrap:wrap; gap:12px;">
+          <span>&copy; 2026 Synaphe AI. Eidetis Bilişsel Bellek Mimarisi.</span>
+          <span style="font-family:var(--mono);">FastAPI • NetworkX • Ollama • MCP</span>
         </div>
       </div>
     </footer>
+  </div>
 
-  </div><!-- /site-content -->
-
-  <!-- INTERACTIVE TAB SWITCHER SCRIPT -->
-  <script>
-    function switchTab(mode) {
-      document.querySelectorAll('.v-tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-tab') === mode);
-      });
-      document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.toggle('active', pane.id === 'tab-pane-' + mode);
-      });
-    }
-  </script>
-
-  <!-- LIVING 3D BIOLOGICAL BUTTERFLY KINEMATICS -->
+  <!-- LIVING 3D BUTTERFLY (PINNED IN VIEWPORT) + SYNAPSE CANVAS -->
   <script>
     (function initLivingButterfly() {
       const rig = document.getElementById('goldenButterflyRig');
@@ -709,9 +557,8 @@
       const wingRight = document.getElementById('wingRight');
       if (!rig || !wingLeft || !wingRight) return;
 
-      let scrollY = window.scrollY || 0;
-      let targetScrollY = scrollY;
-      let lastScrollY = scrollY;
+      let targetScrollY = window.scrollY || 0;
+      let lastScrollY = targetScrollY;
       let scrollSpeed = 0;
       let flapPhase = 0;
 
@@ -720,166 +567,114 @@
       }, { passive: true });
 
       function animate() {
-        scrollY += (targetScrollY - scrollY) * 0.1;
         scrollSpeed = Math.abs(targetScrollY - lastScrollY);
         lastScrollY = targetScrollY;
 
-        const baseFrequency = 0.055;
-        const speedBoost = Math.min(scrollSpeed * 0.008, 0.12);
+        const baseFrequency = 0.052;
+        const speedBoost = Math.min(scrollSpeed * 0.007, 0.11);
         flapPhase += (baseFrequency + speedBoost);
 
         const primaryFlap = Math.sin(flapPhase);
-        const flutterHarmonic = Math.sin(flapPhase * 2.3) * 0.18;
+        const flutterHarmonic = Math.sin(flapPhase * 2.3) * 0.16;
         const combinedFlap = primaryFlap + flutterHarmonic;
 
-        const leftAngle = -10 + combinedFlap * 62;
-        const rightAngle = 10 - combinedFlap * 62;
+        const leftAngle = -10 + combinedFlap * 60;
+        const rightAngle = 10 - combinedFlap * 60;
 
-        wingLeft.style.transform = `rotateY(${leftAngle}deg) rotateZ(${combinedFlap * 6}deg)`;
-        wingRight.style.transform = `rotateY(${rightAngle}deg) rotateZ(${-combinedFlap * 6}deg)`;
+        wingLeft.style.transform = `rotateY(${leftAngle}deg) rotateZ(${combinedFlap * 5}deg)`;
+        wingRight.style.transform = `rotateY(${rightAngle}deg) rotateZ(${-combinedFlap * 5}deg)`;
 
-        const hoverY = Math.sin(flapPhase * 0.5) * 14;
-        const hoverX = Math.cos(flapPhase * 0.3) * 8;
-        const tiltPitch = Math.sin(flapPhase * 0.5) * 5;
-        const rollYaw = Math.cos(flapPhase * 0.35) * 4;
+        const hoverY = Math.sin(flapPhase * 0.5) * 12;
+        const hoverX = Math.cos(flapPhase * 0.3) * 7;
+        const tiltPitch = Math.sin(flapPhase * 0.5) * 4;
+        const rollYaw = Math.cos(flapPhase * 0.35) * 3.5;
 
         rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
-
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
     })();
 
-    // DENSE LIVING SYNAPSE NETWORK (Sinaptik Nöral Ağ & İletim Kıvılcımları)
     (function initSynapseCanvas() {
       const canvas = document.getElementById('synapseCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
-
-      let mouseX = -1000;
-      let mouseY = -1000;
+      let mouseX = -1000, mouseY = -1000;
 
       window.addEventListener('resize', () => {
         w = canvas.width = window.innerWidth;
         h = canvas.height = window.innerHeight;
       });
+      window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
 
-      window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      }, { passive: true });
-
-      // Synaptic Nodes
-      const count = Math.min(Math.floor((w * h) / 7500), 140);
+      const count = Math.min(Math.floor((w * h) / 7800), 135);
       const particles = [];
       for (let i = 0; i < count; i++) {
-        const isPrincipal = Math.random() < 0.28;
+        const isPrincipal = Math.random() < 0.26;
         particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          radius: isPrincipal ? Math.random() * 1.5 + 2.2 : Math.random() * 1.2 + 0.9,
-          isPrincipal: isPrincipal,
-          baseAlpha: isPrincipal ? 0.7 : 0.42,
-          pulse: Math.random() * Math.PI * 2
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.38, vy: (Math.random() - 0.5) * 0.38,
+          radius: isPrincipal ? Math.random() * 1.4 + 2.1 : Math.random() * 1.1 + 0.9,
+          isPrincipal, baseAlpha: isPrincipal ? 0.68 : 0.40, pulse: Math.random() * Math.PI * 2
         });
       }
 
-      // Traveling Synaptic Pulses
       const pulses = [];
       function spawnPulse(fromP, toP) {
-        if (pulses.length > 20) return;
-        pulses.push({
-          from: fromP,
-          to: toP,
-          progress: 0,
-          speed: Math.random() * 0.025 + 0.015
-        });
+        if (pulses.length > 18) return;
+        pulses.push({ from: fromP, to: toP, progress: 0, speed: Math.random() * 0.022 + 0.014 });
       }
 
       function draw() {
         ctx.clearRect(0, 0, w, h);
-
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          p.pulse += 0.035;
+          p.x += p.vx; p.y += p.vy; p.pulse += 0.032;
+          if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
 
-          if (p.x < 0) p.x = w;
-          if (p.x > w) p.x = 0;
-          if (p.y < 0) p.y = h;
-          if (p.y > h) p.y = 0;
-
-          const mdx = mouseX - p.x;
-          const mdy = mouseY - p.y;
-          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-          let extraAlpha = 0;
-          if (mdist < 180) {
-            extraAlpha = (1 - mdist / 180) * 0.45;
-          }
-
-          const currentAlpha = Math.min(p.baseAlpha + Math.sin(p.pulse) * 0.18 + extraAlpha, 1.0);
+          const mdist = Math.hypot(mouseX - p.x, mouseY - p.y);
+          const extra = mdist < 170 ? (1 - mdist / 170) * 0.42 : 0;
+          const alpha = Math.min(p.baseAlpha + Math.sin(p.pulse) * 0.16 + extra, 1.0);
 
           if (p.isPrincipal) {
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius * 2.8, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha * 0.18})`;
+            ctx.arc(p.x, p.y, p.radius * 2.6, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(251, 191, 36, ${alpha * 0.16})`;
             ctx.fill();
           }
-
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha})`;
+          ctx.fillStyle = `rgba(251, 191, 36, ${alpha})`;
           ctx.fill();
 
           for (let j = i + 1; j < particles.length; j++) {
             const p2 = particles[j];
-            const dx = p.x - p2.x;
-            const dy = p.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const maxDist = 135;
-
-            if (dist < maxDist) {
-              const lineAlpha = (1 - dist / maxDist) * 0.22;
+            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 130) {
               ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(251, 191, 36, ${lineAlpha})`;
-              ctx.lineWidth = p.isPrincipal || p2.isPrincipal ? 1.0 : 0.65;
+              ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(251, 191, 36, ${(1 - dist / 130) * 0.21})`;
+              ctx.lineWidth = (p.isPrincipal || p2.isPrincipal) ? 0.95 : 0.6;
               ctx.stroke();
-
-              if (Math.random() < 0.00045) {
-                spawnPulse(p, p2);
-              }
+              if (Math.random() < 0.0004) spawnPulse(p, p2);
             }
           }
         }
-
         for (let k = pulses.length - 1; k >= 0; k--) {
-          const pulse = pulses[k];
-          pulse.progress += pulse.speed;
-
-          if (pulse.progress >= 1) {
-            pulses.splice(k, 1);
-            continue;
-          }
-
-          const curX = pulse.from.x + (pulse.to.x - pulse.from.x) * pulse.progress;
-          const curY = pulse.from.y + (pulse.to.y - pulse.from.y) * pulse.progress;
-
+          const pl = pulses[k];
+          pl.progress += pl.speed;
+          if (pl.progress >= 1) { pulses.splice(k, 1); continue; }
+          const cx = pl.from.x + (pl.to.x - pl.from.x) * pl.progress;
+          const cy = pl.from.y + (pl.to.y - pl.from.y) * pl.progress;
           ctx.beginPath();
-          ctx.arc(curX, curY, 2.0, 0, Math.PI * 2);
+          ctx.arc(cx, cy, 1.9, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-          ctx.shadowColor = '#fbbf24';
-          ctx.shadowBlur = 8;
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          ctx.shadowColor = '#fbbf24'; ctx.shadowBlur = 7;
+          ctx.fill(); ctx.shadowBlur = 0;
         }
-
         requestAnimationFrame(draw);
       }
       requestAnimationFrame(draw);

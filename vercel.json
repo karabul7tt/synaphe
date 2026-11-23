@@ -1,10 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" },
-    { "source": "/hakkinda", "destination": "/index.html" },
-    { "source": "/ozellikler", "destination": "/index.html" },
-    { "source": "/bilgi", "destination": "/index.html" },
-    { "source": "/indir", "destination": "/index.html" }
+    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" }
   ]
 }

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Synaphe Web Stüdyosu — Bilişsel Hafıza &amp; Yapay Zekâ</title>
+  <meta name="description" content="Synaphe Web Stüdyosu: Eidetis bilişsel hafıza grafiği ile doğrudan tarayıcıda sohbet edin.">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="/static/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+  <meta name="theme-color" content="#07080d">
+
+  <style>
+    :root {
+      --bg: #07080d;
+      --surface: #0e1017;
+      --surface-2: #141722;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-soft: #94a3b8;
+      --text-faint: #64748b;
+      --gold: #fbbf24;
+      --gold-dim: rgba(251, 191, 36, 0.12);
+      --gold-border: rgba(251, 191, 36, 0.32);
+      --emerald: #34d399;
+      --emerald-dim: rgba(52, 211, 153, 0.12);
+      --sky: #38bdf8;
+      --rose: #f87171;
+      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+      --mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
+
+    .studio {
+      display: grid;
+      grid-template-columns: 260px 1fr 340px;
+      height: 100vh;
+      width: 100vw;
+    }
+    .studio.hide-graph { grid-template-columns: 260px 1fr; }
+    .studio.hide-graph .graph-panel { display: none; }
+
+    /* LEFT SIDEBAR */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      height: 100vh; overflow: hidden;
+    }
+    .sb-head {
+      height: 60px; padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-brand {
+      display: inline-flex; align-items: center; gap: 9px;
+      text-decoration: none; color: #fff; font-weight: 600; font-size: 16px;
+    }
+    .sb-brand img { width: 24px; height: 24px; object-fit: contain; }
+    .sb-home { font-size: 12px; color: var(--text-soft); text-decoration: none; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); }
+    .sb-home:hover { color: #fff; border-color: var(--border-strong); }
+
+    .sb-body { flex: 1; overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 16px; }
+    .btn-new {
+      width: 100%; padding: 10px 14px; border-radius: 10px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #050608; font-weight: 600; font-size: 13.5px; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: opacity 0.15s;
+    }
+    .btn-new:hover { opacity: 0.92; }
+
+    .sb-label {
+      font-family: var(--mono); font-size: 10.5px; color: var(--text-faint);
+      text-transform: uppercase; letter-spacing: 0.08em; padding: 0 8px; margin-bottom: 6px;
+    }
+    .sb-list { display: flex; flex-direction: column; gap: 4px; }
+    .sb-item {
+      padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--text-soft);
+      cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sb-item:hover, .sb-item.active { background: rgba(255,255,255,0.06); color: #fff; }
+    .sb-item-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .sb-del { background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 13px; padding: 0 4px; opacity: 0.6; }
+    .sb-del:hover { color: var(--rose); opacity: 1; }
+
+    .prompt-chip {
+      text-align: left; width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 9px; padding: 8px 10px;
+      color: var(--text-soft); font-size: 12px; line-height: 1.4; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .prompt-chip:hover { border-color: var(--gold-border); color: #fff; background: var(--gold-dim); }
+
+    .sb-foot {
+      padding: 12px; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .mode-btn {
+      width: 100%; padding: 9px 12px; border-radius: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: #fff; font-size: 12.5px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mode-btn:hover { border-color: var(--gold-border); }
+    .dot-live { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 8px var(--emerald); display: inline-block; margin-right: 6px; }
+
+    /* CENTER CHAT */
+    .chat-panel {
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+      background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.05), transparent 45%), var(--bg);
+    }
+    .topbar {
+      height: 60px; padding: 0 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: rgba(7, 8, 13, 0.85); backdrop-filter: blur(16px);
+    }
+    .tb-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .mode-pill {
+      font-family: var(--mono); font-size: 11px; color: var(--gold);
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      padding: 3px 9px; border-radius: 999px;
+    }
+    .tb-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: var(--text-soft); padding: 6px 12px; border-radius: 8px;
+      font-size: 12.5px; cursor: pointer;
+    }
+    .tb-btn:hover { color: #fff; border-color: var(--border-strong); }
+
+    .messages {
+      flex: 1; overflow-y: auto; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 18px;
+      max-width: 820px; width: 100%; margin: 0 auto;
+    }
+    .msg { display: flex; flex-direction: column; max-width: 86%; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.user { align-self: flex-end; }
+    .msg.ai { align-self: flex-start; }
+
+    .bubble {
+      padding: 13px 17px; border-radius: 16px; font-size: 14.5px; line-height: 1.62;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .msg.user .bubble {
+      background: rgba(251, 191, 36, 0.14); border: 1px solid var(--gold-border);
+      color: #fff; border-bottom-right-radius: 4px;
+    }
+    .msg.ai .bubble {
+      background: var(--surface); border: 1px solid var(--border);
+      color: #e2e8f0; border-bottom-left-radius: 4px;
+    }
+    .ai-meta {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+      font-size: 12px; font-weight: 600; color: var(--gold);
+    }
+    .ai-meta img { width: 15px; height: 15px; }
+    .trace-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .trace-tag {
+      font-family: var(--mono); font-size: 10.5px; padding: 3px 8px; border-radius: 999px;
+      background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.28);
+    }
+    .trace-tag.conflict {
+      background: var(--gold-dim); color: var(--gold); border-color: var(--gold-border);
+    }
+
+    .composer-wrap {
+      padding: 14px 20px 20px; max-width: 820px; width: 100%; margin: 0 auto;
+    }
+    .composer {
+      display: flex; align-items: flex-end; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 16px; padding: 10px 12px;
+      transition: border-color 0.2s;
+    }
+    .composer:focus-within { border-color: var(--gold-border); }
+    .composer textarea {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: #fff; font-family: var(--sans); font-size: 14.5px; line-height: 1.5;
+      resize: none; max-height: 140px; padding: 4px 6px;
+    }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--text-soft); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .icon-btn:hover { color: #fff; border-color: var(--border-strong); }
+    .icon-btn.recording { border-color: var(--rose); color: var(--rose); background: rgba(248, 113, 113, 0.12); }
+    .send-btn {
+      height: 36px; padding: 0 16px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #050608;
+      font-weight: 600; font-size: 13.5px; cursor: pointer; flex-shrink: 0;
+    }
+    .send-btn:hover { opacity: 0.92; }
+    .composer-hint {
+      font-size: 11.5px; color: var(--text-faint); text-align: center; margin-top: 8px;
+    }
+
+    /* RIGHT PANEL: LIVE EIDETIS GRAPH & MEMORY CARDS */
+    .graph-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+    }
+    .gp-head {
+      height: 60px; padding: 0 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .gp-head h3 { font-size: 13.5px; font-weight: 600; color: #fff; }
+    .gp-canvas-wrap {
+      height: 270px; position: relative; border-bottom: 1px solid var(--border);
+      background: radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.06), #08090e 80%);
+    }
+    #graphCanvas { width: 100%; height: 100%; display: block; }
+    .gp-stats {
+      position: absolute; bottom: 8px; left: 10px; right: 10px;
+      display: flex; justify-content: space-between;
+      font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); pointer-events: none;
+    }
+    .gp-facts { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .fact-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px; font-size: 12.5px;
+    }
+    .fact-card.archived { opacity: 0.52; border-style: dashed; }
+    .fact-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .fact-rel { font-family: var(--mono); font-size: 10.5px; color: var(--gold); text-transform: uppercase; }
+    .fact-card.archived .fact-rel { color: var(--text-faint); text-decoration: line-through; }
+    .fact-val { color: #fff; font-weight: 500; }
+    .fact-time { font-family: var(--mono); font-size: 10px; color: var(--text-faint); margin-top: 4px; }
+
+    .gp-foot {
+      padding: 10px 14px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px;
+    }
+    .gp-foot button {
+      flex: 1; padding: 7px 10px; border-radius: 8px; font-size: 12px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      color: var(--text-soft); cursor: pointer;
+    }
+    .gp-foot button:hover { color: #fff; border-color: var(--border-strong); }
+
+    /* SETTINGS MODAL */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; z-index: 500; padding: 20px;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--gold-border);
+      border-radius: 18px; max-width: 480px; width: 100%; padding: 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+    }
+    .modal h2 { font-size: 18px; color: #fff; margin-bottom: 6px; }
+    .modal p { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; line-height: 1.5; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--text-soft); margin-bottom: 6px; font-weight: 500; }
+    .field select, .field input {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      background: #07080d; border: 1px solid var(--border-strong);
+      color: #fff; font-size: 13.5px; outline: none;
+    }
+    .field input:focus, .field select:focus { border-color: var(--gold); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+    @media (max-width: 1024px) {
+      .studio { grid-template-columns: 1fr; }
+      .sidebar, .graph-panel { display: none; }
+      .sidebar.mobile-open { display: flex; position: fixed; inset: 0; width: 280px; z-index: 300; }
+      .graph-panel.mobile-open { display: flex; position: fixed; inset: 0; width: 100%; z-index: 300; }
+    }
+  </style>
+</head>
+<body>
+  <div class="studio" id="studio">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-head">
+        <a href="/" class="sb-brand">
+          <img src="/static/synaphe-butterfly.png" alt="Synaphe">
+          <span>Synaphe</span>
+        </a>
+        <a href="/" class="sb-home">Ana Sayfa</a>
+      </div>
+
+      <div class="sb-body">
+        <button class="btn-new" onclick="createNewSession()">
+          <span>+ Yeni Sohbet</span>
+          <span style="font-family:var(--mono); font-size:11px; opacity:0.75;">⌘K</span>
+        </button>
+
+        <div>
+          <div class="sb-label">Sohbetler</div>
+          <div class="sb-list" id="sessionList"></div>
+        </div>
+
+        <div>
+          <div class="sb-label">Hızlı Test (Hafızayı Dene)</div>
+          <div class="sb-list" style="gap:6px;">
+            <button class="prompt-chip" onclick="quickSend('Adım Mehmet, İstanbul\'da yaşıyorum.')">Adım Mehmet, İstanbul'da yaşıyorum.</button>
+            <button class="prompt-chip" onclick="quickSend('Gelecek ay İzmir\'e taşınıyorum.')">Gelecek ay İzmir'e taşınıyorum.</button>
+            <button class="prompt-chip" onclick="quickSend('Kahvemi hep sade içerim ve hedefim yapay zekâ mühendisi olmak.')">Kahve tercihim &amp; hedefimi kaydet</button>
+            <button class="prompt-chip" onclick="quickSend('Şu an neredeyim ve eskiden neredeydim?')">Şu an neredeyim, eskiden neredeydim?</button>
+            <button class="prompt-chip" onclick="quickSend('Hafızamda benimle ilgili neler var?')">Hafızamda neler var?</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-foot">
+        <button class="mode-btn" onclick="openSettings()">
+          <span><span class="dot-live"></span><span id="sidebarModeLabel">Eidetis Web Motoru</span></span>
+          <span style="color:var(--gold); font-size:11px;">Ayarlar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CENTER CHAT -->
+    <main class="chat-panel">
+      <header class="topbar">
+        <div class="tb-title">
+          <button class="tb-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')" style="display:inline-flex;">Menü</button>
+          <span id="activeSessionTitle">Yeni Sohbet</span>
+          <span class="mode-pill" id="topModePill">Eidetis Tarayıcı</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="tb-btn" onclick="toggleGraphPanel()">Bilişsel Graf</button>
+          <button class="tb-btn" onclick="openSettings()">Model / API</button>
+        </div>
+      </header>
+
+      <div class="messages" id="messages"></div>
+
+      <div class="composer-wrap">
+        <div class="composer">
+          <textarea id="inputBox" rows="1" placeholder="Synaphe'ye bir şey anlat veya hafızandan sor..."></textarea>
+          <button class="icon-btn" id="micBtn" title="Sesli Giriş (Türkçe)" onclick="toggleVoice()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <button class="send-btn" onclick="handleSend()">Gönder</button>
+        </div>
+        <div class="composer-hint">Tüm hafıza düğümleri yalnızca kendi tarayıcınızda (<code>localStorage</code>) saklanır. Gerçek LLM için sağ üstten Model / API bağlayabilirsiniz.</div>
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL: LIVE EIDETIS GRAPH -->
+    <aside class="graph-panel" id="graphPanel">
+      <div class="gp-head">
+        <h3>Canlı Eidetis Bilişsel Grafı</h3>
+        <button class="tb-btn" onclick="toggleGraphPanel()" style="padding:4px 9px; font-size:11.5px;">Kapat</button>
+      </div>
+      <div class="gp-canvas-wrap">
+        <canvas id="graphCanvas"></canvas>
+        <div class="gp-stats">
+          <span id="statNodes">Düğüm: 1</span>
+          <span id="statEdges">Aktif: 0 • Arşiv: 0</span>
+        </div>
+      </div>
+      <div class="gp-facts" id="factsList"></div>
+      <div class="gp-foot">
+        <button onclick="exportMemory()">JSON İndir</button>
+        <button onclick="resetMemory()" style="color:var(--rose);">Belleği Sıfırla</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-bg" id="settingsModal">
+    <div class="modal">
+      <h2>Synaphe Motor &amp; Model Ayarları</h2>
+      <p>Varsayılan olarak Eidetis Bilişsel Hafıza Motoru doğrudan tarayıcınızda çalışır. İsterseniz kendi yerel Synaphe sunucunuza veya Gemini / OpenAI API anahtarınıza bağlayabilirsiniz.</p>
+
+      <div class="field">
+        <label>Çalışma Modu</label>
+        <select id="modeSelect" onchange="updateModalFields()">
+          <option value="builtin">Yerleşik Eidetis Bilişsel Motoru (Kurulumsuz)</option>
+          <option value="local">Yerel Synaphe FastAPI Sunucusu (http://127.0.0.1:8000)</option>
+          <option value="gemini">Eidetis Hafıza + Google Gemini API</option>
+          <option value="openai">Eidetis Hafıza + OpenAI API</option>
+        </select>
+      </div>
+
+      <div class="field" id="localUrlField" style="display:none;">
+        <label>Yerel Sunucu Adresi</label>
+        <input type="text" id="localUrlInput" value="http://127.0.0.1:8000">
+      </div>
+
+      <div class="field" id="apiKeyField" style="display:none;">
+        <label>API Anahtarı (Yalnızca tarayıcınızda saklanır)</label>
+        <input type="password" id="apiKeyInput" placeholder="AIza... veya sk-...">
+      </div>
+
+      <div class="modal-actions">
+        <button class="tb-btn" onclick="closeSettings()">İptal</button>
+        <button class="send-btn" onclick="saveSettings()">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // SYNAPHE CLIENT-SIDE EIDETIS COGNITIVE ENGINE (MultiDiGraph + AGM Revision)
+    // =========================================================================
+    const STORE_KEY = 'synaphe_web_state_v1';
+
+    let state = JSON.parse(localStorage.getItem(STORE_KEY) || 'null') || {
+      settings: { mode: 'builtin', localUrl: 'http://127.0.0.1:8000', apiKey: '' },
+      activeSessionId: 's1',
+      sessions: [
+        {
+          id: 's1',
+          title: 'İlk Bilişsel Oturum',
+          messages: [
+            {
+              role: 'ai',
+              text: 'Merhaba, ben Synaphe. Eidetis bilişsel bellek motorum şu an tarayıcında aktif.\n\nBana kendinle, yaşadığın şehirle, hedeflerinle veya kararlarınla ilgili bir şeyler anlatabilirsin. Fikrini değiştirdiğinde eski bilgiyi silmeden arşive alır, güncel gerçeği sağdaki canlı grafta anında güncellerim.',
+              traces: ['Eidetis MultiDiGraph Hazır', 'AGM İnanç Revizyonu Aktif']
+            }
+          ]
+        }
+      ],
+      facts: [] // { id, relation, value, status: 'active'|'archived', ts, detail }
+    };
+
+    function persist() {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    }
+
+    function trLower(s) {
+      return s.replace(/İ/g, 'i').replace(/I/g, 'ı').toLowerCase();
+    }
+
+    function capitalize(s) {
+      if (!s) return s;
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function cleanSuffix(word) {
+      return word.replace(/['’](da|de|ta|te|ya|ye|a|e|dan|den|tan|ten|ım|im|um|üm)$/i, '')
+                 .replace(/(da|de|ta|te|ya|ye)$/i, (m, p1, off, str) => str.length > 5 ? '' : m)
+                 .trim();
+    }
+
+    // Add fact with AGM Belief Revision (single-valued relations archive previous active fact)
+    const SINGLE_RELATIONS = new Set(['isim', 'konum', 'gelecek_konum']);
+    function upsertFact(relation, value, detail) {
+      const cleanVal = value.trim().replace(/[.,!?]+$/, '');
+      if (!cleanVal) return null;
+      let conflictResolved = false;
+
+      if (SINGLE_RELATIONS.has(relation)) {
+        state.facts.forEach(f => {
+          if (f.relation === relation && f.status === 'active' && trLower(f.value) !== trLower(cleanVal)) {
+            f.status = 'archived';
+            conflictResolved = true;
+          }
+        });
+      }
+
+      // Avoid exact active duplicate
+      const exists = state.facts.find(f => f.relation === relation && f.status === 'active' && trLower(f.value) === trLower(cleanVal));
+      if (!exists) {
+        state.facts.unshift({
+          id: 'f_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          relation,
+          value: cleanVal,
+          status: 'active',
+          ts: new Date().toLocaleString('tr-TR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' }),
+          detail: detail || ''
+        });
+      }
+      return { relation, value: cleanVal, conflictResolved };
+    }
+
+    // Real Turkish fact extractor
+    function extractAndUpdateGraph(text) {
+      const traces = [];
+      const learned = [];
+      const low = trLower(text);
+
+      // 1. İsim
+      const nameM = text.match(/(?:adım|ismim|benim adım)\s+([A-ZÇĞİÖŞÜa-zçğıöşü]+)/i);
+      if (nameM) {
+        const res = upsertFact('isim', capitalize(nameM[1]), 'Kullanıcı kimliği');
+        if (res) { learned.push(`İsim: ${res.value}`); traces.push('✓ İsim Kaydedildi'); }
+      }
+
+      // 2. Taşınma / Konum Değişikliği (AGM Çelişki Çözümü)
+      const moveFutureM = text.match(/([A-ZÇĞİÖŞÜa-zçğıöşü]+)['’]?(?:ya|ye|a|e)\s+(?:taşınıyorum|taşınacağım|gideceğim)/i);
+      const movePastM = text.match(/([A-ZÇĞİÖŞÜa-zçğıöşü]+)['’]?(?:ya|ye|a|e)\s+taşındım/i);
+      const liveM = text.match(/([A-ZÇĞİÖŞÜa-zçğıöşü]+)['’]?(?:da|de|ta|te)\s+(?:yaşıyorum|oturuyorum|kalıyorum|bulunuyorum)/i);
+
+      if (movePastM) {
+        const city = capitalize(cleanSuffix(movePastM[1]));
+        const res = upsertFact('konum', city, 'Güncel konum (taşınma)');
+        if (res) {
+          learned.push(`Yeni Konum: ${res.value}`);
+          traces.push(res.conflictResolved ? '↻ AGM Çelişki Çözüldü (Eski Konum Arşivlendi)' : '✓ Konum Kaydedildi');
+        }
+      } else if (moveFutureM) {
+        const city = capitalize(cleanSuffix(moveFutureM[1]));
+        const res = upsertFact('gelecek_konum', city, 'Planlanan taşınma');
+        if (res) {
+          learned.push(`Planlanan Taşınma: ${res.value}`);
+          traces.push('✓ Zamansal Gelecek Planı (T > 0)');
+        }
+      }
+
+      if (liveM) {
+        const city = capitalize(cleanSuffix(liveM[1]));
+        const res = upsertFact('konum', city, 'Aktif ikamet');
+        if (res) {
+          learned.push(`Konum: ${res.value}`);
+          traces.push(res.conflictResolved ? '↻ AGM Çelişki Çözüldü' : '✓ Konum Kaydedildi');
+        }
+      }
+
+      // 3. Hedef
+      const goalM = text.match(/(?:hedefim|amacım|planım)\s+([^.,!?\n]+)/i);
+      if (goalM) {
+        const res = upsertFact('hedef', goalM[1].trim(), 'Kariyer / Yaşam hedefi');
+        if (res) { learned.push(`Hedef: ${res.value}`); traces.push('✓ Hedef Düğümü Eklendi'); }
+      }
+
+      // 4. Tercih / Kahve / Sevdiği şeyler
+      const coffeeM = text.match(/kahvemi\s+([^.,!?\n]+?)\s+(?:içerim|severim|tercih)/i);
+      if (coffeeM) {
+        const res = upsertFact('tercih', 'Kahve: ' + coffeeM[1].trim(), 'Kişisel tercih');
+        if (res) { learned.push(`Tercih: ${res.value}`); traces.push('✓ Tercih Kaydedildi'); }
+      } else {
+        const likeM = text.match(/(?:en sevdiğim|çok seviyorum|severim)\s*[:\-]?\s*([^.,!?\n]+)/i);
+        if (likeM && !low.includes('?')) {
+          const res = upsertFact('tercih', likeM[1].trim(), 'Kişisel tercih');
+          if (res) { learned.push(`Tercih: ${res.value}`); traces.push('✓ Tercih Kaydedildi'); }
+        }
+      }
+
+      // 5. Proje
+      const projM = text.match(/(?:projem|üzerinde çalıştığım proje)\s+([^.,!?\n]+)/i);
+      if (projM) {
+        const res = upsertFact('proje', projM[1].trim(), 'Aktif proje');
+        if (res) { learned.push(`Proje: ${res.value}`); traces.push('✓ Proje Bağlandı'); }
+      }
+
+      // 6. Açıkça kaydet / unutma
+      const noteM = text.match(/(?:unutma|kaydet|not al)[:,\s]+([^.\n]+)/i);
+      if (noteM) {
+        const res = upsertFact('not', noteM[1].trim(), 'Kullanıcı notu');
+        if (res) { learned.push(`Not: ${res.value}`); traces.push('✓ Kalıcı Not Eklendi'); }
+      }
+
+      return { learned, traces };
+    }
+
+    // Build ground-truth context for LLM or built-in answer
+    function buildMemoryContext() {
+      const active = state.facts.filter(f => f.status === 'active');
+      const archived = state.facts.filter(f => f.status === 'archived');
+      if (!active.length && !archived.length) return 'Henüz kayıtlı bir hafıza düğümü yok.';
+      let out = 'AKTİF HAFIZA DÜĞÜMLERİ:\n';
+      active.forEach(f => out += `- [${f.relation}] ${f.value} (${f.ts})\n`);
+      if (archived.length) {
+        out += '\nARŞİVLENMİŞ / ESKİ HAFIZA DÜĞÜMLERİ (AGM Tarihçesi):\n';
+        archived.forEach(f => out += `- [${f.relation}] ${f.value} (${f.ts})\n`);
+      }
+      return out;
+    }
+
+    function builtinAnswer(text, extracted) {
+      const low = trLower(text);
+      const active = state.facts.filter(f => f.status === 'active');
+      const archived = state.facts.filter(f => f.status === 'archived');
+      const traces = [...extracted.traces];
+
+      const isQuestion = text.includes('?') || /(nerede|neredeyim|kimim|adım ne|neler var|hedef|tercih|kahve|proje|eskiden|özetle|hatırlıyor)/i.test(low);
+
+      if (isQuestion) {
+        traces.push('⟁ MultiDiGraph Sorgusu');
+
+        if (/hafızamda|neler var|beni ne kadar|özetle|her şeyi/i.test(low)) {
+          if (!active.length && !archived.length) {
+            return { text: 'Hafıza grafiğinde henüz kayıtlı bir bilgi yok. Bana yaşadığın şehri, hedeflerini veya tercihlerini söyleyerek başlayabilirsin.', traces };
+          }
+          let reply = 'Eidetis bilişsel grafiğinde seninle ilgili tuttuğum doğrulanmış kayıtlar:\n\n';
+          active.forEach(f => reply += `• ${f.relation.toUpperCase()}: ${f.value}\n`);
+          if (archived.length) {
+            reply += '\nArşivlenen (değişmiş) geçmiş kayıtlar:\n';
+            archived.forEach(f => reply += `• [Arşiv] ${f.relation.toUpperCase()}: ${f.value}\n`);
+          }
+          return { text: reply.trim(), traces };
+        }
+
+        if (/neredeyim|nerede|konum|şehir|taşın|eskiden/i.test(low)) {
+          const cur = active.find(f => f.relation === 'konum');
+          const fut = active.find(f => f.relation === 'gelecek_konum');
+          const old = archived.filter(f => f.relation === 'konum');
+          if (!cur && !fut && !old.length) {
+            return { text: 'Hafızamda konumunla ilgili henüz bir kayıt bulunmuyor. Örneğin "İstanbul\'da yaşıyorum" diyebilirsin.', traces };
+          }
+          let parts = [];
+          if (cur) parts.push(`Aktif konumun: ${cur.value}.`);
+          if (fut) parts.push(`Yaklaşan taşınma planın (T > 0): ${fut.value}.`);
+          if (old.length) parts.push(`Eski (arşivlenmiş) konumun: ${old.map(o => o.value).join(', ')}.`);
+          return { text: parts.join('\n'), traces };
+        }
+
+        if (/adım|ismim|kimim/i.test(low)) {
+          const nm = active.find(f => f.relation === 'isim');
+          return { text: nm ? `Adın ${nm.value}.` : 'Henüz adını paylaşmadın. "Adım ..." diyerek kaydedebilirsin.', traces };
+        }
+
+        if (/hedef|amaç|plan/i.test(low)) {
+          const goals = active.filter(f => f.relation === 'hedef');
+          return { text: goals.length ? 'Kayıtlı hedeflerin:\n' + goals.map(g => `• ${g.value}`).join('\n') : 'Henüz kayıtlı bir hedefin yok.', traces };
+        }
+
+        if (/tercih|kahve|severim/i.test(low)) {
+          const prefs = active.filter(f => f.relation === 'tercih');
+          return { text: prefs.length ? 'Kayıtlı tercihlerin:\n' + prefs.map(p => `• ${p.value}`).join('\n') : 'Henüz kayıtlı bir tercihin yok.', traces };
+        }
+
+        if (/proje/i.test(low)) {
+          const projs = active.filter(f => f.relation === 'proje');
+          return { text: projs.length ? 'Üzerinde çalıştığın projeler:\n' + projs.map(p => `• ${p.value}`).join('\n') : 'Henüz kayıtlı bir projen yok.', traces };
+        }
+      }
+
+      if (extracted.learned.length) {
+        return {
+          text: `Anladım ve bilişsel grafiğe işledim:\n• ${extracted.learned.join('\n• ')}\n\nSağdaki canlı grafta yeni düğümleri görebilir, istediğin zaman geçmişi ve günceli sorgulayabilirsin.`,
+          traces
+        };
+      }
+
+      return {
+        text: 'Mesajını aldım. Bilişsel hafızaya işlenebilir bir bilgi ("İstanbul\'da yaşıyorum", "İzmir\'e taşındım", "Hedefim ...", "Unutma ...") paylaştığında graf otomatik güncellenir.\n\nGenel sohbet ve açık uçlu yapay zekâ yanıtları için sağ üstteki "Model / API" menüsünden yerel Ollama sunucunu veya Gemini / OpenAI anahtarını bağlayabilirsin.',
+        traces: ['Eidetis Tarayıcı Motoru']
+      };
+    }
+
+    async function generateReply(userText, extracted) {
+      const mode = state.settings.mode;
+
+      // 1. Yerel FastAPI Sunucusu
+      if (mode === 'local') {
+        try {
+          const base = (state.settings.localUrl || 'http://127.0.0.1:8000').replace(/\/$/, '');
+          const res = await fetch(`${base}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userText })
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          return {
+            text: data.response || data.reply || data.answer || JSON.stringify(data),
+            traces: ['Yerel FastAPI Sunucusu (:8000)', ...extracted.traces]
+          };
+        } catch (err) {
+          return {
+            text: `Yerel Synaphe sunucusuna (${state.settings.localUrl}) ulaşılamadı. Terminalde "python3 -m uvicorn server:app --port 8000" komutunun çalıştığından emin olun.\n\nTarayıcı içi Eidetis yanıtı:\n` + builtinAnswer(userText, extracted).text,
+            traces: ['Yerel Sunucu Çevrimdışı → Yedek Motor']
+          };
+        }
+      }
+
+      // 2. Gemini API + Eidetis Context
+      if (mode === 'gemini' && state.settings.apiKey) {
+        try {
+          const sys = `Sen Synaphe'sin (Eidetis Bilişsel Bellek Mimarisi). Kullanıcının doğrulanmış hafıza grafiği aşağıdadır. Sadece gerçek kayıtlara dayan, halüsinasyon üretme, Türkçe ve net yanıt ver.\n\n${buildMemoryContext()}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(state.settings.apiKey)}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: sys }] },
+              contents: [{ role: 'user', parts: [{ text: userText }] }]
+            })
+          });
+          const data = await res.json();
+          const out = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!out) throw new Error(data?.error?.message || 'Boş yanıt');
+          return { text: out, traces: ['Eidetis + Gemini API', ...extracted.traces] };
+        } catch (err) {
+          return { text: `Gemini API hatası: ${err.message}`, traces: ['API Hatası'] };
+        }
+      }
+
+      // 3. OpenAI API + Eidetis Context
+      if (mode === 'openai' && state.settings.apiKey) {
+        try {
+          const sys = `Sen Synaphe'sin (Eidetis Bilişsel Bellek Mimarisi). Kullanıcının doğrulanmış hafıza grafiği:\n${buildMemoryContext()}\nTürkçe, doğal ve tutarlı yanıt ver.`;
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${state.settings.apiKey}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: sys },
+                { role: 'user', content: userText }
+              ]
+            })
+          });
+          const data = await res.json();
+          const out = data?.choices?.[0]?.message?.content;
+          if (!out) throw new Error(data?.error?.message || 'Boş yanıt');
+          return { text: out, traces: ['Eidetis + OpenAI API', ...extracted.traces] };
+        } catch (err) {
+          return { text: `OpenAI API hatası: ${err.message}`, traces: ['API Hatası'] };
+        }
+      }
+
+      // Default: Built-in Eidetis Engine
+      return builtinAnswer(userText, extracted);
+    }
+
+    // =========================================================================
+    // UI RENDERING & LIVE GRAPH CANVAS
+    // =========================================================================
+    function getActiveSession() {
+      let s = state.sessions.find(x => x.id === state.activeSessionId);
+      if (!s) { s = state.sessions[0]; state.activeSessionId = s.id; }
+      return s;
+    }
+
+    function renderSessions() {
+      const list = document.getElementById('sessionList');
+      list.innerHTML = '';
+      state.sessions.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'sb-item' + (s.id === state.activeSessionId ? ' active' : '');
+        div.innerHTML = `<span class="sb-item-title">${escapeHtml(s.title)}</span>`;
+        div.onclick = () => {
+          state.activeSessionId = s.id;
+          persist(); renderAll();
+          document.getElementById('sidebar').classList.remove('mobile-open');
+        };
+        if (state.sessions.length > 1) {
+          const del = document.createElement('button');
+          del.className = 'sb-del';
+          del.textContent = '×';
+          del.onclick = (e) => {
+            e.stopPropagation();
+            state.sessions = state.sessions.filter(x => x.id !== s.id);
+            if (state.activeSessionId === s.id) state.activeSessionId = state.sessions[0].id;
+            persist(); renderAll();
+          };
+          div.appendChild(del);
+        }
+        list.appendChild(div);
+      });
+    }
+
+    function renderMessages() {
+      const sess = getActiveSession();
+      document.getElementById('activeSessionTitle').textContent = sess.title;
+      const box = document.getElementById('messages');
+      box.innerHTML = '';
+      sess.messages.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'msg ' + m.role;
+        if (m.role === 'ai') {
+          let traceHtml = '';
+          if (m.traces && m.traces.length) {
+            traceHtml = '<div class="trace-row">' + m.traces.map(t =>
+              `<span class="trace-tag ${t.includes('AGM') ? 'conflict' : ''}">${escapeHtml(t)}</span>`
+            ).join('') + '</div>';
+          }
+          el.innerHTML = `<div class="bubble"><div class="ai-meta"><img src="/static/synaphe-butterfly.png" alt=""><span>Synaphe</span></div>${escapeHtml(m.text)}${traceHtml}</div>`;
+        } else {
+          el.innerHTML = `<div class="bubble">${escapeHtml(m.text)}</div>`;
+        }
+        box.appendChild(el);
+      });
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function renderFacts() {
+      const list = document.getElementById('factsList');
+      const activeCount = state.facts.filter(f => f.status === 'active').length;
+      const archCount = state.facts.filter(f => f.status === 'archived').length;
+      document.getElementById('statNodes').textContent = `Düğüm: ${state.facts.length + 1}`;
+      document.getElementById('statEdges').textContent = `Aktif: ${activeCount} • Arşiv: ${archCount}`;
+
+      if (!state.facts.length) {
+        list.innerHTML = '<div style="font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 10px;">Henüz bellek düğümü yok. Sol menüdeki hızlı testlerden birine tıklayarak grafın nasıl oluştuğunu görebilirsin.</div>';
+        return;
+      }
+      list.innerHTML = '';
+      state.facts.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'fact-card' + (f.status === 'archived' ? ' archived' : '');
+        card.innerHTML = `
+          <div class="fact-top">
+            <span class="fact-rel">${escapeHtml(f.relation)} ${f.status === 'archived' ? '(ARŞİV)' : ''}</span>
+            <button class="sb-del" onclick="deleteFact('${f.id}')" title="Sil">×</button>
+          </div>
+          <div class="fact-val">${escapeHtml(f.value)}</div>
+          <div class="fact-time">${escapeHtml(f.ts)}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function drawGraph() {
+      const canvas = document.getElementById('graphCanvas');
+      if (!canvas) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      const items = state.facts.slice(0, 12);
+      const radius = Math.min(rect.width, rect.height) * 0.36;
+
+      // Edges + Child Nodes
+      items.forEach((f, idx) => {
+        const angle = (idx / Math.max(items.length, 1)) * Math.PI * 2 - Math.PI / 2;
+        const nx = cx + Math.cos(angle) * radius;
+        const ny = cy + Math.sin(angle) * radius;
+        const isArch = f.status === 'archived';
+
+        ctx.beginPath();
+        ctx.setLineDash(isArch ? [4, 4] : []);
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(nx, ny);
+        ctx.strokeStyle = isArch ? 'rgba(148, 163, 184, 0.25)' : 'rgba(251, 191, 36, 0.45)';
+        ctx.lineWidth = isArch ? 1 : 1.5;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Node circle
+        ctx.beginPath();
+        ctx.arc(nx, ny, isArch ? 5 : 6.5, 0, Math.PI * 2);
+        ctx.fillStyle = isArch ? '#475569' : '#fbbf24';
+        ctx.fill();
+
+        // Label
+        ctx.font = '11px -apple-system, sans-serif';
+        ctx.fillStyle = isArch ? '#64748b' : '#e2e8f0';
+        ctx.textAlign = 'center';
+        const lbl = f.value.length > 14 ? f.value.slice(0, 13) + '…' : f.value;
+        ctx.fillText(lbl, nx, ny + 18);
+      });
+
+      // Center User Node
+      ctx.beginPath();
+      ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.18)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fill();
+      ctx.font = '600 10px -apple-system, sans-serif';
+      ctx.fillStyle = '#050608';
+      ctx.textAlign = 'center';
+      ctx.fillText('SEN', cx, cy + 3.5);
+    }
+
+    function updateModeLabels() {
+      const map = {
+        builtin: ['Eidetis Web Motoru', 'Eidetis Tarayıcı'],
+        local: ['Yerel Sunucu :8000', 'FastAPI :8000'],
+        gemini: ['Eidetis + Gemini', 'Gemini API'],
+        openai: ['Eidetis + OpenAI', 'OpenAI API']
+      };
+      const pair = map[state.settings.mode] || map.builtin;
+      document.getElementById('sidebarModeLabel').textContent = pair[0];
+      document.getElementById('topModePill').textContent = pair[1];
+    }
+
+    function renderAll() {
+      renderSessions();
+      renderMessages();
+      renderFacts();
+      updateModeLabels();
+      requestAnimationFrame(drawGraph);
+    }
+
+    async function handleSend() {
+      const box = document.getElementById('inputBox');
+      const text = box.value.trim();
+      if (!text) return;
+      box.value = '';
+      box.style.height = 'auto';
+
+      const sess = getActiveSession();
+      if (sess.messages.length <= 1) {
+        sess.title = text.slice(0, 28) + (text.length > 28 ? '…' : '');
+      }
+      sess.messages.push({ role: 'user', text });
+      const extracted = extractAndUpdateGraph(text);
+      persist(); renderAll();
+
+      const reply = await generateReply(text, extracted);
+      sess.messages.push({ role: 'ai', text: reply.text, traces: reply.traces });
+      persist(); renderAll();
+    }
+
+    function quickSend(txt) {
+      document.getElementById('inputBox').value = txt;
+      handleSend();
+      document.getElementById('sidebar').classList.remove('mobile-open');
+    }
+
+    function createNewSession() {
+      const id = 's_' + Date.now();
+      state.sessions.unshift({
+        id,
+        title: 'Yeni Sohbet',
+        messages: [{ role: 'ai', text: 'Yeni oturum açıldı. Önceki oturumlardan öğrendiğim tüm bilişsel graf düğümleri hâlâ aktif.', traces: ['Kalıcı Hafıza Aktarıldı'] }]
+      });
+      state.activeSessionId = id;
+      persist(); renderAll();
+    }
+
+    function deleteFact(id) {
+      state.facts = state.facts.filter(f => f.id !== id);
+      persist(); renderAll();
+    }
+
+    function exportMemory() {
+      const blob = new Blob([JSON.stringify({ exported_at: new Date().toISOString(), facts: state.facts }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'synaphe_memory_export.json';
+      a.click();
+    }
+
+    function resetMemory() {
+      if (!confirm('Tüm bilişsel hafıza düğümlerini silmek istiyor musun?')) return;
+      state.facts = [];
+      persist(); renderAll();
+    }
+
+    function toggleGraphPanel() {
+      if (window.innerWidth <= 1024) {
+        document.getElementById('graphPanel').classList.toggle('mobile-open');
+      } else {
+        document.getElementById('studio').classList.toggle('hide-graph');
+      }
+      setTimeout(drawGraph, 50);
+    }
+
+    // Settings modal
+    function openSettings() {
+      document.getElementById('modeSelect').value = state.settings.mode;
+      document.getElementById('localUrlInput').value = state.settings.localUrl || 'http://127.0.0.1:8000';
+      document.getElementById('apiKeyInput').value = state.settings.apiKey || '';
+      updateModalFields();
+      document.getElementById('settingsModal').classList.add('open');
+    }
+    function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
+    function updateModalFields() {
+      const m = document.getElementById('modeSelect').value;
+      document.getElementById('localUrlField').style.display = m === 'local' ? 'block' : 'none';
+      document.getElementById('apiKeyField').style.display = (m === 'gemini' || m === 'openai') ? 'block' : 'none';
+    }
+    function saveSettings() {
+      state.settings.mode = document.getElementById('modeSelect').value;
+      state.settings.localUrl = document.getElementById('localUrlInput').value.trim();
+      state.settings.apiKey = document.getElementById('apiKeyInput').value.trim();
+      persist(); updateModeLabels(); closeSettings();
+    }
+
+    // Turkish Voice Input (Web Speech API)
+    let recognition = null;
+    function toggleVoice() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { alert('Tarayıcınız sesli girişi desteklemiyor.'); return; }
+      const btn = document.getElementById('micBtn');
+      if (recognition) { recognition.stop(); recognition = null; btn.classList.remove('recording'); return; }
+      recognition = new SR();
+      recognition.lang = 'tr-TR';
+      recognition.interimResults = false;
+      btn.classList.add('recording');
+      recognition.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        document.getElementById('inputBox').value = transcript;
+        handleSend();
+      };
+      recognition.onend = () => { recognition = null; btn.classList.remove('recording'); };
+      recognition.start();
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Keyboard shortcuts
+    const inputBox = document.getElementById('inputBox');
+    inputBox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+    });
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); createNewSession(); }
+    });
+    window.addEventListener('resize', drawGraph);
+
+    renderAll();
+  </script>
+</body>
+</html>
