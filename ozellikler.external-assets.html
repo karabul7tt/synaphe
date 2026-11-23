@@ -93,21 +93,21 @@
     html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: var(--sans); }
     body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); }
 
-    /* BACKGROUND GLOWING HUMAN NEURAL NERVES ART */
+    /* BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL) */
     .bloom-art-layer {
       position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
     }
     .bg-bloom-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center 30%;
-      opacity: 0.94;
-      filter: contrast(1.28) brightness(1.18) saturate(1.35);
-      transform: scale(1.03);
+      opacity: 0.55;
+      filter: contrast(1.18) brightness(0.92) saturate(1.12);
+      transform: scale(1.02);
       transition: opacity 0.5s ease;
     }
     .bloom-vignette {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 32%, transparent 30%, rgba(5,6,8,0.45) 65%, var(--bg) 95%);
+      background: radial-gradient(circle at 50% 36%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.55) 50%, var(--bg) 92%);
     }
 
     /* SYNAPSE PARTICLES CANVAS */
@@ -782,7 +782,7 @@
       requestAnimationFrame(animate);
     })();
 
-    // SYNAPSE PARTICLES CANVAS
+    // DENSE LIVING SYNAPSE NETWORK (Sinaptik Nöral Ağ & İletim Kıvılcımları)
     (function initSynapseCanvas() {
       const canvas = document.getElementById('synapseCanvas');
       if (!canvas) return;
@@ -790,55 +790,135 @@
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
 
+      let mouseX = -1000;
+      let mouseY = -1000;
+
       window.addEventListener('resize', () => {
         w = canvas.width = window.innerWidth;
         h = canvas.height = window.innerHeight;
       });
 
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
+      // Synaptic Nodes (Increased density to emphasize the neural synapse network)
+      const count = Math.min(Math.floor((w * h) / 7500), 140);
       const particles = [];
-      const count = Math.min(Math.floor((w * h) / 18000), 75);
       for (let i = 0; i < count; i++) {
+        const isPrincipal = Math.random() < 0.28; // 28% major synaptic soma nodes
         particles.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
-          radius: Math.random() * 1.8 + 0.8,
-          alpha: Math.random() * 0.5 + 0.2
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: isPrincipal ? Math.random() * 1.5 + 2.2 : Math.random() * 1.2 + 0.9,
+          isPrincipal: isPrincipal,
+          baseAlpha: isPrincipal ? 0.7 : 0.42,
+          pulse: Math.random() * Math.PI * 2
+        });
+      }
+
+      // Action Potentials / Traveling Synaptic Signal Pulses
+      const pulses = [];
+      function spawnPulse(fromP, toP) {
+        if (pulses.length > 20) return;
+        pulses.push({
+          from: fromP,
+          to: toP,
+          progress: 0,
+          speed: Math.random() * 0.025 + 0.015
         });
       }
 
       function draw() {
         ctx.clearRect(0, 0, w, h);
+
+        // Update & Draw Synaptic Nodes & Axons
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
           p.x += p.vx;
           p.y += p.vy;
+          p.pulse += 0.035;
+
           if (p.x < 0) p.x = w;
           if (p.x > w) p.x = 0;
           if (p.y < 0) p.y = h;
           if (p.y > h) p.y = 0;
 
+          // Mouse proximity attraction & illumination
+          const mdx = mouseX - p.x;
+          const mdy = mouseY - p.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          let extraAlpha = 0;
+          if (mdist < 180) {
+            extraAlpha = (1 - mdist / 180) * 0.45;
+          }
+
+          const currentAlpha = Math.min(p.baseAlpha + Math.sin(p.pulse) * 0.18 + extraAlpha, 1.0);
+
+          // Glowing Halo for Principal Nodes
+          if (p.isPrincipal) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius * 2.8, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha * 0.18})`;
+            ctx.fill();
+          }
+
+          // Node core
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(251, 191, 36, ${p.alpha})`;
+          ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha})`;
           ctx.fill();
 
+          // Connect nearby synaptic nodes (Axons & Dendrites)
           for (let j = i + 1; j < particles.length; j++) {
             const p2 = particles[j];
             const dx = p.x - p2.x;
             const dy = p.y - p2.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 120) {
+            const maxDist = 135;
+
+            if (dist < maxDist) {
+              const lineAlpha = (1 - dist / maxDist) * 0.22;
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(251, 191, 36, ${(1 - dist / 120) * 0.16})`;
-              ctx.lineWidth = 0.8;
+              ctx.strokeStyle = `rgba(251, 191, 36, ${lineAlpha})`;
+              ctx.lineWidth = p.isPrincipal || p2.isPrincipal ? 1.0 : 0.65;
               ctx.stroke();
+
+              // Spontaneous synaptic impulse firing
+              if (Math.random() < 0.00045) {
+                spawnPulse(p, p2);
+              }
             }
           }
         }
+
+        // Draw and update traveling Synaptic Impulses
+        for (let k = pulses.length - 1; k >= 0; k--) {
+          const pulse = pulses[k];
+          pulse.progress += pulse.speed;
+
+          if (pulse.progress >= 1) {
+            pulses.splice(k, 1);
+            continue;
+          }
+
+          const curX = pulse.from.x + (pulse.to.x - pulse.from.x) * pulse.progress;
+          const curY = pulse.from.y + (pulse.to.y - pulse.from.y) * pulse.progress;
+
+          ctx.beginPath();
+          ctx.arc(curX, curY, 2.0, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          ctx.shadowColor = '#fbbf24';
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
         requestAnimationFrame(draw);
       }
       requestAnimationFrame(draw);
