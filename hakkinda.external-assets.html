@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hakkında — Synaphe AI Bilişsel Bellek Mimarisi</title>
-  <meta name="description" content="Synaphe AI: Aylar önce konuştuğun fikirleri, değişen kararlarını ve hayatındaki bağlantıları gerçekten hatırlayan yerel kişisel yapay zekâ.">
+  <meta name="description" content="Synaphe (Eidetis Engine): Zamansal MultiDiGraph, ACT-R Yayılan Aktivasyon ve AGM İnanç Revizyonu ile çalışan yerel bilişsel bellek mimarisi.">
   <link rel="canonical" href="https://www.synapheai.com.tr/hakkinda">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Synaphe AI">
   <meta property="og:title" content="Hakkında — Synaphe AI Bilişsel Bellek Mimarisi">
-  <meta property="og:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan bilişsel hafıza motoru.">
+  <meta property="og:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan yerel bilişsel hafıza motoru.">
   <meta property="og:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
   <meta property="og:url" content="https://www.synapheai.com.tr/hakkinda">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Hakkında — Synaphe AI Bilişsel Bellek Mimarisi">
-  <meta name="twitter:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan bilişsel hafıza motoru.">
+  <meta name="twitter:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen senin cihazında yaşayan yerel bilişsel hafıza motoru.">
   <meta name="twitter:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
 
   <!-- Favicons for Google & All Browsers -->
@@ -31,7 +31,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <meta name="theme-color" content="#050608">
 
-  <!-- Schema.org Structured Data for Google Knowledge Graph & AI Overview -->
+  <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -52,7 +52,7 @@
         "url": "https://www.synapheai.com.tr/",
         "name": "Synaphe AI",
         "publisher": {"@id": "https://www.synapheai.com.tr/#organization"},
-        "description": "Seni Unutmayan Kişisel Yapay Zekâ & Bilişsel Hafıza Motoru"
+        "description": "Seni Unutmayan Kişisel Yapay Zekâ & Eidetis Bilişsel Hafıza Mimarisi"
       },
       {
         "@type": "SoftwareApplication",
@@ -93,7 +93,7 @@
     html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: var(--sans); }
     body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); }
 
-    /* BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL) */
+    /* BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL BEAUTY) */
     .bloom-art-layer {
       position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
     }
@@ -112,7 +112,7 @@
 
     /* SYNAPSE PARTICLES CANVAS */
     #synapseCanvas {
-      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.85;
+      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.95;
     }
 
     /* 3D LIVING BIOLOGICAL BUTTERFLY RIG */
@@ -187,7 +187,7 @@
       top: 100%;
       left: 50%;
       transform: translateX(-50%) translateY(14px);
-      width: 540px;
+      width: 560px;
       background: rgba(11, 14, 22, 0.96);
       backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
       border: 1px solid rgba(251, 191, 36, 0.28);
@@ -212,7 +212,7 @@
     }
     .dropdown-item {
       display: flex; align-items: flex-start; gap: 10px;
-      padding: 9px 12px; border-radius: 10px; text-decoration: none;
+      padding: 10px 12px; border-radius: 10px; text-decoration: none;
       transition: all 0.15s ease;
     }
     .dropdown-item:hover {
@@ -220,7 +220,8 @@
       transform: translateX(2px);
     }
     .dropdown-item-icon {
-      font-size: 16px; margin-top: 1px; flex-shrink: 0;
+      color: var(--gold); margin-top: 1px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
     }
     .dropdown-item-title {
       font-size: 13.5px; font-weight: 600; color: #fff;
@@ -264,7 +265,7 @@
     }
     .kicker-line { width: 20px; height: 1.5px; background: var(--gold); }
 
-    /* HERO & VIBRANT RAINBOW TYPOGRAPHY (SCREENSHOT 5) */
+    /* HERO & VIBRANT RAINBOW TYPOGRAPHY */
     .hero {
       min-height: 82vh; display: flex; flex-direction: column; justify-content: center;
       text-align: center; padding: clamp(50px, 8vw, 90px) 0 40px;
@@ -288,26 +289,10 @@
       box-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
     }
 
-    /* MOCKUP WINDOW & PLAYFUL FLOATING STICKERS (SCREENSHOT 6) */
+    /* APP MOCKUP WINDOW (CLEAN, NO CARTOON STICKERS) */
     .mockup-wrap {
       position: relative; max-width: 960px; margin: 48px auto 0; text-align: left;
     }
-    .floating-sticker {
-      position: absolute; pointer-events: none; z-index: 15;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
-      animation: floatSticker 6s ease-in-out infinite;
-    }
-    @keyframes floatSticker {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(3deg); }
-    }
-    .sticker-tomato { top: -32px; left: -36px; animation-delay: 0s; }
-    .sticker-star-left { top: 38%; left: -44px; animation-delay: 1.2s; }
-    .sticker-blob-left { bottom: -28px; left: -36px; animation-delay: 2.4s; }
-    .sticker-star-right { top: -28px; right: -32px; animation-delay: 0.8s; }
-    .sticker-flower { top: 34%; right: -42px; animation-delay: 1.8s; }
-    .sticker-wave { bottom: -22px; right: -40px; animation-delay: 2.8s; }
-
     .app-window {
       background: rgba(12, 14, 20, 0.88); border: 1px solid var(--gold-border);
       border-radius: 20px; overflow: hidden;
@@ -326,7 +311,7 @@
     .dot-green { background: #10b981; }
     .sidebar-item {
       padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--text-soft);
-      cursor: pointer; transition: all 0.15s ease;
+      cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 8px;
     }
     .sidebar-item:hover, .sidebar-item.active { background: rgba(255,255,255,0.06); color: #fff; }
     .app-main {
@@ -339,7 +324,7 @@
     }
     .chat-bubble-synaphe {
       align-self: flex-start; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-      border-radius: 16px 16px 16px 4px; padding: 16px 20px; max-width: 86%;
+      border-radius: 16px 16px 16px 4px; padding: 16px 20px; max-width: 88%;
       font-size: 14.5px; color: #e4e4e7; line-height: 1.6;
     }
     .chat-input-bar {
@@ -348,25 +333,22 @@
       align-items: center; font-size: 13.5px; color: var(--text-faint);
     }
 
-    /* 3-TAB SWITCHER (SCREENSHOT 7) */
+    /* 3-TAB SWITCHER */
     .tab-grid {
       display: grid; grid-template-columns: 340px 1fr; gap: 40px; align-items: center;
     }
     .v-tab-btn {
-      font-size: 22px; font-weight: 700; color: var(--text-faint);
+      font-size: 21px; font-weight: 700; color: var(--text-faint);
       padding: 16px 0; border-bottom: 1px solid var(--border);
       cursor: pointer; transition: all 0.25s ease;
     }
     .v-tab-btn.active {
       color: #ffffff; border-bottom: 2px solid var(--gold);
     }
-    .v-tab-desc {
-      font-size: 14.5px; color: var(--text-soft); line-height: 1.6; margin-top: 10px; margin-bottom: 20px;
-    }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
 
-    /* 3-COLUMN FEATURE CARDS (SCREENSHOT 8) */
+    /* 3-COLUMN FEATURE CARDS */
     .powers-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
     }
@@ -380,33 +362,15 @@
       border-color: var(--gold-border); transform: translateY(-4px);
       box-shadow: 0 16px 36px rgba(0,0,0,0.5), 0 0 20px rgba(251, 191, 36, 0.08);
     }
-    .power-card h3 { font-size: 21px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .power-card h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     .power-card p { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
 
-    /* PREVIEW COMPONENTS INSIDE CARDS (SCREENSHOT 8) */
-    .card-preview-doc {
-      background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px;
-      padding: 12px 14px; display: flex; align-items: center; gap: 10px; margin-top: 24px;
-    }
-    .card-preview-doc-icon {
-      width: 32px; height: 32px; border-radius: 8px; background: #2563eb;
-      display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 12px;
-    }
-    .card-preview-integrations {
-      display: flex; gap: 8px; margin-top: 24px; flex-wrap: wrap;
-    }
-    .integration-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border); font-size: 12px; color: #e4e4e7;
-    }
-
-    /* SECURITY & PRIVACY (SCREENSHOT 9) */
+    /* SECURITY & PRIVACY */
     .security-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
     }
 
-    /* INSPIRATION STORIES (SCREENSHOT 9) */
+    /* INSPIRATION STORIES */
     .story-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
       overflow: hidden; text-decoration: none; color: inherit; display: block;
@@ -416,12 +380,13 @@
       border-color: var(--gold-border); transform: translateY(-4px);
     }
     .story-visual {
-      height: 180px; width: 100%; position: relative; overflow: hidden;
-      background: #11141c; display: flex; align-items: center; justify-content: center;
+      height: 140px; width: 100%; position: relative; overflow: hidden;
+      background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--border);
     }
     .story-body { padding: 24px; }
     .story-title {
-      font-size: 16.5px; font-weight: 600; color: #fff; line-height: 1.45;
+      font-size: 16px; font-weight: 600; color: #fff; line-height: 1.45;
       display: flex; align-items: center; justify-content: space-between;
     }
 
@@ -433,9 +398,23 @@
       justify-content: space-between; gap: 32px; backdrop-filter: blur(24px);
     }
 
+    /* RESTORED GIANT SYNAPHE WORDMARK */
+    .lml-wordmark {
+      font-size: clamp(64px, 15vw, 190px);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.16) 0%, transparent 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      user-select: none;
+      margin: 48px 0 24px;
+    }
+
     /* FOOTER */
     .footer {
-      border-top: 1px solid var(--border); padding: 48px 0;
+      border-top: 1px solid var(--border); padding: 48px 0 32px;
       background: rgba(5,6,8,0.92); color: var(--text-soft); font-size: 13.5px;
     }
     .footer-grid {
@@ -455,13 +434,12 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
       .nav-dropdown-menu { width: 90vw; left: 0; transform: none; }
-      .floating-sticker { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND GLOWING HUMAN NEURAL NERVES ART -->
+  <!-- BACKGROUND GLOWING HUMAN NEURAL NERVES ART (RESTORED SUBTLE ORIGINAL) -->
   <div class="bloom-art-layer" aria-hidden="true">
     <img src="/static/bloom_bg_blended.jpg" alt="" class="bg-bloom-img">
     <div class="bloom-vignette"></div>
@@ -487,7 +465,7 @@
 
   <div class="site-content">
 
-    <!-- NAVBAR WITH 2-COLUMN LUXURY DROPDOWN -->
+    <!-- NAVBAR WITH 2-COLUMN LUXURY DROPDOWN (REAL VECTORS, ZERO EMOJIS) -->
     <header class="nav">
       <div class="wrap">
         <div class="nav-inner">
@@ -499,7 +477,7 @@
           <nav class="nav-links">
             <a href="/hakkinda" class="nav-link active">Hakkında</a>
 
-            <!-- 2-COLUMN DROPDOWN UNDER ÖZELLİKLER (SCREENSHOT 4) -->
+            <!-- 2-COLUMN DROPDOWN UNDER ÖZELLİKLER -->
             <div class="nav-dropdown-wrapper">
               <a href="/ozellikler" class="nav-link ">
                 Özellikler
@@ -510,115 +488,101 @@
 
               <div class="nav-dropdown-menu">
                 <div class="dropdown-grid">
-                  <!-- Left Column -->
+                  <!-- Left Column: Core Architecture -->
                   <div>
                     <a href="/ozellikler#hafiza" class="dropdown-item">
-                      <span class="dropdown-item-icon">🧠</span>
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Synaphe Hafıza</div>
-                        <div class="dropdown-item-desc">Sıfırlanmayan bilişsel çekirdek</div>
+                        <div class="dropdown-item-title">Eidetis Engine</div>
+                        <div class="dropdown-item-desc">Zamansal MultiDiGraph bellek çekirdeği</div>
                       </div>
                     </a>
                     <a href="/ozellikler#muhakeme" class="dropdown-item">
-                      <span class="dropdown-item-icon">🔍</span>
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Derin Muhakeme</div>
-                        <div class="dropdown-item-desc">Zamansal 3-hop çıkarım motoru</div>
+                        <div class="dropdown-item-title">3-Hop Çıkarım</div>
+                        <div class="dropdown-item-desc">Kronolojik zamansal akıl yürütme motoru</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#graf" class="dropdown-item">
-                      <span class="dropdown-item-icon">🕸️</span>
+                    <a href="/ozellikler#inanc" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Sinaptik Graf</div>
-                        <div class="dropdown-item-desc">Kişisel varlık ve ilişki ağı</div>
+                        <div class="dropdown-item-title">AGM İnanç Revizyonu</div>
+                        <div class="dropdown-item-desc">Değişen kararları dinamik güncelleme</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#karar" class="dropdown-item">
-                      <span class="dropdown-item-icon">⚖️</span>
+                    <a href="/ozellikler#aktivasyon" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Karar &amp; Fikir Takibi</div>
-                        <div class="dropdown-item-desc">Değişen fikirleri arşivleme</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#gorsel" class="dropdown-item">
-                      <span class="dropdown-item-icon">🗺️</span>
-                      <div>
-                        <div class="dropdown-item-title">Görsel Biliş</div>
-                        <div class="dropdown-item-desc">Zihin haritaları ve şemalar</div>
+                        <div class="dropdown-item-title">ACT-R Yayılan Aktivasyon</div>
+                        <div class="dropdown-item-desc">Çağrışımsal nöral bağlam uyarımı</div>
                       </div>
                     </a>
                     <a href="/ozellikler#mcp" class="dropdown-item">
-                      <span class="dropdown-item-icon">🔌</span>
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">MCP Eklentileri</div>
-                        <div class="dropdown-item-desc">Claude &amp; Cursor entegrasyonu</div>
+                        <div class="dropdown-item-title">Model Context Protocol</div>
+                        <div class="dropdown-item-desc">Claude Desktop &amp; Cursor köprüsü</div>
                       </div>
                     </a>
                     <a href="/ozellikler#yerel" class="dropdown-item">
-                      <span class="dropdown-item-icon">⚡</span>
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Yerel Node</div>
-                        <div class="dropdown-item-desc">%100 çevrimdışı çalışma</div>
+                        <div class="dropdown-item-title">SQLite Yerel Depolama</div>
+                        <div class="dropdown-item-desc">Cihazınızda %100 şifreli ve çevrimdışı</div>
                       </div>
                     </a>
                   </div>
 
-                  <!-- Right Column -->
+                  <!-- Right Column: Ecosystem & Interfaces -->
                   <div>
-                    <a href="/ozellikler#gorev" class="dropdown-item">
-                      <span class="dropdown-item-icon">📋</span>
+                    <a href="/ozellikler#cli" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Çalışma &amp; Proje</div>
-                        <div class="dropdown-item-desc">Günlük yaşam akışı ve hedefler</div>
+                        <div class="dropdown-item-title">Geliştirici CLI</div>
+                        <div class="dropdown-item-desc">Terminal üzerinden doğrudan sorgulama</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#kaynak" class="dropdown-item">
-                      <span class="dropdown-item-icon">🌐</span>
+                    <a href="/bilgi#benchmark" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Web &amp; Kaynak Sentezi</div>
-                        <div class="dropdown-item-desc">Derin teknik araştırmalar</div>
+                        <div class="dropdown-item-title">N=132 Benchmark</div>
+                        <div class="dropdown-item-desc">%94.8 doğruluk ve 18ms sorgu süresi</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#belge" class="dropdown-item">
-                      <span class="dropdown-item-icon">💬</span>
+                    <a href="/ozellikler#unutma" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Slack &amp; Notion Köprüsü</div>
-                        <div class="dropdown-item-desc">Belge ve not hafızası</div>
+                        <div class="dropdown-item-title">Wixted-Ebbinghaus Yasası</div>
+                        <div class="dropdown-item-desc">Bilişsel pekişme ve sönümlenme</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#rapor" class="dropdown-item">
-                      <span class="dropdown-item-icon">📊</span>
+                    <a href="/hakkinda#guvenlik" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Slayt &amp; Rapor Üretimi</div>
-                        <div class="dropdown-item-desc">Baştan sona çıktı hazırlama</div>
+                        <div class="dropdown-item-title">Sıfır Telemetri</div>
+                        <div class="dropdown-item-desc">Hiçbir veri harici sunucuya iletilmez</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#space" class="dropdown-item">
-                      <span class="dropdown-item-icon">🪐</span>
+                    <a href="/ozellikler#modeller" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Bilişsel Space</div>
-                        <div class="dropdown-item-desc">Özelleştirilmiş çalışma alanları</div>
+                        <div class="dropdown-item-title">Model Bağımsızlığı</div>
+                        <div class="dropdown-item-desc">Ollama, DeepSeek, Claude ile uyumlu</div>
                       </div>
                     </a>
-                    <a href="/ozellikler#ogrenme" class="dropdown-item">
-                      <span class="dropdown-item-icon">🪜</span>
+                    <a href="/indir" class="dropdown-item">
+                      <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">Adım Adım Öğrenme</div>
-                        <div class="dropdown-item-desc">Kullanıcı alışkanlıklarını benimseme</div>
-                      </div>
-                    </a>
-                    <a href="/ozellikler#sesli" class="dropdown-item">
-                      <span class="dropdown-item-icon">🎙️</span>
-                      <div>
-                        <div class="dropdown-item-title">Sesli İletişim</div>
-                        <div class="dropdown-item-desc">Akıcı doğal sesli asistan</div>
+                        <div class="dropdown-item-title">Çoklu Platform</div>
+                        <div class="dropdown-item-desc">macOS, Windows, Linux tek tıkla kurulum</div>
                       </div>
                     </a>
                   </div>
                 </div>
 
                 <div class="dropdown-footer">
-                  <span style="font-size:12px; color:var(--text-faint);">Tüm modüller %100 yerel şifrelidir</span>
+                  <span style="font-size:12px; color:var(--text-faint);">Tüm mimari açık standartlara dayanır</span>
                   <a href="/ozellikler">Tüm Yetenekleri Keşfet &rarr;</a>
                 </div>
               </div>
@@ -648,22 +612,31 @@
 
         <div class="powers-grid" style="margin-top:30px;">
           <div class="power-card">
-            <h3>Zamansal Çıkarım</h3>
+            <h3>
+              <span style="color:var(--gold);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <span>Zamansal Çıkarım</span>
+            </h3>
             <p>"Geçen ay konuştuğumuz startup fikri neydi?" veya "İzmir'e taşınmadan önceki kararım neydi?" gibi zamana bağlı soruları eksiksiz yanıtlar.</p>
           </div>
           <div class="power-card">
-            <h3>%100 Cihaz İçi Gizlilik</h3>
+            <h3>
+              <span style="color:var(--gold);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+              <span>%100 Cihaz İçi Gizlilik</span>
+            </h3>
             <p>Hafızanız hiçbir yapay zekâ devinin sunucularında saklanmaz. Kendi bilgisayarınızda SQLite üzerinde şifrelenir ve yalnızca size aittir.</p>
           </div>
           <div class="power-card">
-            <h3>Model Özgürlüğü</h3>
+            <h3>
+              <span style="color:var(--gold);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+              <span>Model Özgürlüğü</span>
+            </h3>
             <p>Claude, ChatGPT, Ollama veya DeepSeek... Hangi modeli kullanırsanız kullanın, hafızanız tek ve bağımsız kalır.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MINIMAL LUXURY FOOTER -->
+    <!-- MINIMAL LUXURY FOOTER WITH RESTORED WORDMARK -->
     <footer class="footer">
       <div class="wrap">
         <div class="footer-grid">
@@ -673,7 +646,7 @@
               <span style="font-weight:700; color:#fff; font-size:17px;">Synaphe AI</span>
             </div>
             <p style="line-height:1.6; max-width:320px; font-size:13px; color:var(--text-soft);">
-              Seni unutmayan, sohbeti kapatsan bile hafızasını kaybetmeyen ve tamamen senin cihazında yaşayan yerel bilişsel zekâ.
+              Eidetis nöro-sembolik bilişsel bellek motoru. Sohbeti kapatsan bile hafızasını kaybetmeyen, tamamen senin cihazında yaşayan yerel yapay zekâ.
             </p>
           </div>
           <div class="footer-col">
@@ -702,9 +675,13 @@
             </ul>
           </div>
         </div>
+
+        <!-- RESTORED HISTORIC SYNAPHE WORDMARK -->
+        <div class="lml-wordmark" aria-hidden="true">SYNAPHE</div>
+
         <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:24px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--text-faint); flex-wrap:wrap; gap:12px;">
-          <span>&copy; 2026 Synaphe AI. Tüm hakları saklıdır.</span>
-          <span style="font-family:var(--mono);">v1.4.2 • Pure Edge AI</span>
+          <span>&copy; 2026 Synaphe AI. Bilişsel Bellek Mimarisi. Tüm hakları saklıdır.</span>
+          <span style="font-family:var(--mono);">Eidetis Engine v1.4.2 • Pure Edge AI</span>
         </div>
       </div>
     </footer>
@@ -723,7 +700,7 @@
     }
   </script>
 
-  <!-- LIVING 3D BIOLOGICAL BUTTERFLY KINEMATICS + SYNAPSE PARTICLES -->
+  <!-- LIVING 3D BIOLOGICAL BUTTERFLY KINEMATICS -->
   <script>
     (function initLivingButterfly() {
       const rig = document.getElementById('goldenButterflyRig');
@@ -794,11 +771,11 @@
         mouseY = e.clientY;
       }, { passive: true });
 
-      // Synaptic Nodes (Increased density to emphasize the neural synapse network)
+      // Synaptic Nodes
       const count = Math.min(Math.floor((w * h) / 7500), 140);
       const particles = [];
       for (let i = 0; i < count; i++) {
-        const isPrincipal = Math.random() < 0.28; // 28% major synaptic soma nodes
+        const isPrincipal = Math.random() < 0.28;
         particles.push({
           x: Math.random() * w,
           y: Math.random() * h,
@@ -811,7 +788,7 @@
         });
       }
 
-      // Action Potentials / Traveling Synaptic Signal Pulses
+      // Traveling Synaptic Pulses
       const pulses = [];
       function spawnPulse(fromP, toP) {
         if (pulses.length > 20) return;
@@ -826,7 +803,6 @@
       function draw() {
         ctx.clearRect(0, 0, w, h);
 
-        // Update & Draw Synaptic Nodes & Axons
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
           p.x += p.vx;
@@ -838,7 +814,6 @@
           if (p.y < 0) p.y = h;
           if (p.y > h) p.y = 0;
 
-          // Mouse proximity attraction & illumination
           const mdx = mouseX - p.x;
           const mdy = mouseY - p.y;
           const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -849,7 +824,6 @@
 
           const currentAlpha = Math.min(p.baseAlpha + Math.sin(p.pulse) * 0.18 + extraAlpha, 1.0);
 
-          // Glowing Halo for Principal Nodes
           if (p.isPrincipal) {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius * 2.8, 0, Math.PI * 2);
@@ -857,13 +831,11 @@
             ctx.fill();
           }
 
-          // Node core
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(251, 191, 36, ${currentAlpha})`;
           ctx.fill();
 
-          // Connect nearby synaptic nodes (Axons & Dendrites)
           for (let j = i + 1; j < particles.length; j++) {
             const p2 = particles[j];
             const dx = p.x - p2.x;
@@ -880,7 +852,6 @@
               ctx.lineWidth = p.isPrincipal || p2.isPrincipal ? 1.0 : 0.65;
               ctx.stroke();
 
-              // Spontaneous synaptic impulse firing
               if (Math.random() < 0.00045) {
                 spawnPulse(p, p2);
               }
@@ -888,7 +859,6 @@
           }
         }
 
-        // Draw and update traveling Synaptic Impulses
         for (let k = pulses.length - 1; k >= 0; k--) {
           const pulse = pulses[k];
           pulse.progress += pulse.speed;
