@@ -655,6 +655,52 @@
       box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
     }
 
+    
+    /* SCREEN-BASED MULTI-PAGE SYSTEM ON FIXED 3D BACKGROUND */
+    .page-screen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(8px);
+      min-height: calc(100vh - 76px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .page-screen.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-soft);
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      cursor: pointer;
+      margin-bottom: 22px;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--gold);
+      border-color: var(--gold-border);
+      background: var(--gold-dim);
+    }
+
+    .nav-link.nav-active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
     section.sec {
       scroll-margin-top: 76px;
     }
@@ -1317,13 +1363,13 @@
     <header class="nav" id="siteNav">
       <div class="wrap">
         <div class="nav-in">
-          <a href="#" class="brand" aria-label="Synaphe Ana Sayfa">
+          <a href="/" onclick="navigateTo('home'); return false;" class="brand" aria-label="Synaphe Ana Sayfa">
             <img src="/static/synaphe-butterfly.png" alt="Synaphe">
             <span>SYNAPHE</span>
           </a>
 
           <nav class="nav-links" aria-label="Ana Menü">
-            <a href="#hakkinda" class="nav-link">Hakkında</a>
+            <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" class="nav-link">Hakkında</a>
 
             <!-- Özellikler (2-Kolonlu ChatGPT Tarzı Dropdown) -->
             <div class="nav-item-dropdown">
@@ -1334,29 +1380,29 @@
               <div class="dropdown-menu">
                 <div class="dropdown-grid">
                   <div class="dropdown-col">
-                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Zamansal Hafıza</span>
                       <span class="item-sub">Değişen fikir ve kararları günceller</span>
                     </a>
-                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Çok Adımlı Çıkarım</span>
                       <span class="item-sub">Farklı günlerdeki ipuçlarını bağlar</span>
                     </a>
-                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Kişisel Tercih &amp; Duygu</span>
                       <span class="item-sub">Neyi sevdiğini ve sınırlarını hatırlar</span>
                     </a>
                   </div>
                   <div class="dropdown-col">
-                    <a href="#deneyim" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Canlı Karşılaştırma</span>
                       <span class="item-sub">Klasik AI ile farkı interaktif dene</span>
                     </a>
-                    <a href="#ozellikler" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">MCP Entegrasyonu</span>
                       <span class="item-sub">Tüm araçlarını tek belleğe bağla</span>
                     </a>
-                    <a href="#indir" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/indir" onclick="navigateTo('indir'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Tüm Cihazlar</span>
                       <span class="item-sub">macOS, Windows, Linux, Mobil</span>
                     </a>
@@ -1374,11 +1420,11 @@
               <div class="dropdown-menu">
                 <div class="dropdown-grid">
                   <div class="dropdown-col">
-                    <a href="#hakkinda" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Bilişsel Mimari</span>
                       <span class="item-sub">Eidetis yerel hafıza motoru felsefesi</span>
                     </a>
-                    <button type="button" class="dropdown-item" onclick="openTechModal(); setModalTab(0); closeDropdowns();">
+                    <button type="button" class="dropdown-item" onclick="navigateTo('bilgi', 'benchmark'); closeDropdowns();">
                       <span class="item-title">Akademik Benchmark</span>
                       <span class="item-sub">N=132 doğrulama &amp; canlı skorlar</span>
                     </button>
@@ -1388,7 +1434,7 @@
                       <span class="item-title">Wixted &amp; Hebbian Lab</span>
                       <span class="item-sub">Hafıza unutma ve pekiştirme simülatörü</span>
                     </button>
-                    <a href="#sss" class="dropdown-item" onclick="closeDropdowns()">
+                    <a href="/bilgi" onclick="navigateTo('bilgi', 'sss'); return false;" class="dropdown-item" onclick="closeDropdowns()">
                       <span class="item-title">Sıkça Sorulanlar (SSS)</span>
                       <span class="item-sub">Gizlilik, güvenlik ve kurulum yanıtları</span>
                     </a>
@@ -1397,11 +1443,11 @@
               </div>
             </div>
 
-            <a href="#indir" class="nav-link">İndir</a>
+            <a href="/indir" onclick="navigateTo('indir'); return false;" class="nav-link">İndir</a>
           </nav>
 
           <div class="nav-end">
-            <a href="#indir" class="btn nav-cta">İndir</a>
+            <a href="/indir" onclick="navigateTo('indir'); return false;" class="btn nav-cta">İndir</a>
             <button type="button" class="dots-btn" aria-label="Teknik ve Akademik Veriler" title="Teknik Veriler, Benchmark & Matematik" onclick="openTechModal()">
               <span></span><span></span><span></span>
             </button>
@@ -1414,20 +1460,26 @@
     </header>
 
     <nav id="mobileDrawer" class="mobile-drawer" aria-label="Mobil Menü">
-      <a href="#hakkinda" onclick="toggleMobileMenu(false)">Hakkında</a>
+      <a href="/hakkinda" onclick="navigateTo('hakkinda'); return false;" onclick="toggleMobileMenu(false)">Hakkında</a>
       <div class="mobile-group-title">Özellikler</div>
-      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Zamansal Hafıza</a>
-      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Çok Adımlı Çıkarım</a>
-      <a href="#ozellikler" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Kişisel Tercih &amp; Duygu</a>
-      <a href="#deneyim" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Canlı Karşılaştırma</a>
+      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Zamansal Hafıza</a>
+      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Çok Adımlı Çıkarım</a>
+      <a href="/ozellikler" onclick="navigateTo('ozellikler'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Kişisel Tercih &amp; Duygu</a>
+      <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ Canlı Karşılaştırma</a>
       <div class="mobile-group-title">Bilgi &amp; Araştırma</div>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(0);" class="mobile-sub-link">✦ Akademik Benchmark (N=132)</button>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal(); setModalTab(2);" class="mobile-sub-link">✦ Wixted &amp; Hebbian Matematik</button>
-      <a href="#sss" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ SSS (Sıkça Sorulanlar)</a>
-      <a href="#indir" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600;">İndir (Tüm Cihazlar)</a>
+      <a href="/bilgi" onclick="navigateTo('bilgi', 'sss'); return false;" onclick="toggleMobileMenu(false)" class="mobile-sub-link">✦ SSS (Sıkça Sorulanlar)</a>
+      <a href="/indir" onclick="navigateTo('indir'); return false;" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600;">İndir (Tüm Cihazlar)</a>
       <button type="button" onclick="toggleMobileMenu(false); openTechModal();" style="color:#fbbf24; border-bottom:none;">••• Teknik &amp; Akademik Dosya</button>
     </nav>
 
+    <main id="appScreens">
+
+  <!-- ================================================================== -->
+  <!-- SCREEN: HOME (CLEAN HERO, NO BOTTOM CLUTTER)                       -->
+  <!-- ================================================================== -->
+  <div id="screen-home" class="page-screen active">
     <!-- 2. HERO (HUMAN-FIRST, ZERO JARGON, ZERO DUPLICATE BUTTONS) -->
     <section class="hero">
       <div class="wrap">
@@ -1448,7 +1500,7 @@
           </p>
 
           <div class="hero-actions">
-            <a href="#deneyim" class="btn">Farkı Canlı Gör</a>
+            <a href="/ozellikler" onclick="navigateTo('ozellikler', 'deneyim'); return false;" class="btn">Farkı Canlı Gör</a>
           </div>
 
           <div class="promise-strip reveal">
@@ -1468,8 +1520,20 @@
         </div>
       </div>
     </section>
+  </div>
 
-    <!-- HAKKINDA SECTION (EDITORIAL & MINIMALIST BİLİŞSEL MİMARİ) -->
+
+  <!-- ================================================================== -->
+  <!-- SCREEN: HAKKINDA (BİLİŞSEL MİMARİ & FELSEFE)                       -->
+  <!-- ================================================================== -->
+  <div id="screen-hakkinda" class="page-screen">
+    <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 70px;">
+      <button type="button" onclick="navigateTo('home')" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Ana Sayfaya Dön</span>
+      </button>
+
+      <!-- HAKKINDA SECTION (EDITORIAL & MINIMALIST BİLİŞSEL MİMARİ) -->
     <section class="hakkinda-sec reveal" id="hakkinda">
       <div class="wrap">
         <div class="hakkinda-box">
@@ -1492,6 +1556,85 @@
               <span>3-Hop Zamansal Çıkarım</span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+      <div class="powers-grid" style="margin-top: 32px;">
+        <article class="power-card">
+          <span class="power-num">01 / YEREL VERİ EGEMENLİĞİ</span>
+          <h3>%100 Cihazında Yaşar</h3>
+          <p style="margin-bottom:0;">Konuşmaların, düşüncelerin veya notların hiçbir şirketin sunucusuna gönderilmez. Bilgisayarında saklanır; internetini kessen bile tam kapasite çalışır.</p>
+        </article>
+
+        <article class="power-card">
+          <span class="power-num">02 / BİLİŞSEL PSİKOLOJİ</span>
+          <h3>Wixted Güç Kanunu Unutma Eğrisi</h3>
+          <p style="margin-bottom:0;">Tıpkı insan beyni gibi önemli ve sık tekrar edilen bilgileri pekiştirir (Hebbian öğrenme), güncelliğini yitiren eski kararları ise tarihçesiyle arşive alır.</p>
+        </article>
+
+        <article class="power-card">
+          <span class="power-num">03 / ÇOK ADIMLI AKIL YÜRÜTME</span>
+          <h3>3-Hop Zamansal Çıkarım</h3>
+          <p style="margin-bottom:0;">Pazartesi anlattığın bir sorunu, Cuma bahsettiğin bir araçla ve iki hafta önceki proje amacınla otomatik olarak tek bir bağlamda birleştirir.</p>
+        </article>
+
+        <article class="power-card">
+          <span class="power-num">04 / AÇIK PROTOKOL</span>
+          <h3>Modelden Bağımsız Özgürlük</h3>
+          <p style="margin-bottom:0;">Synaphe hafızası tek bir modele kilitli değildir; Anthropic Claude, OpenAI ChatGPT veya yerel Ollama/Llama modelleriyle standart MCP üzerinden bağlanır.</p>
+        </article>
+      </div>
+
+      <div style="margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap;">
+        <button type="button" onclick="navigateTo('indir')" class="btn">Synaphe'yi Cihazına Kur</button>
+        <button type="button" onclick="navigateTo('ozellikler')" class="btn" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-strong);">Yetenekleri Keşfet</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================================================================== -->
+  <!-- SCREEN: ÖZELLİKLER (4 SOMUT YETENEK & CANLI KARŞILAŞTIRMA)          -->
+  <!-- ================================================================== -->
+  <div id="screen-ozellikler" class="page-screen">
+    <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
+      <button type="button" onclick="navigateTo('home')" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Ana Sayfaya Dön</span>
+      </button>
+    </div>
+
+    <!-- 4. SPECIFIC TANGIBLE SUPERPOWERS -->
+    <section class="sec" id="ozellikler">
+      <div class="wrap reveal">
+        <div class="kicker"><span class="kicker-line"></span><span>GÜNLÜK HAYATTA SYNAPHE</span></div>
+        <h2 class="h2">Seni Gerçekten Tanıyan 4 Somut Yetenek</h2>
+
+        <div class="powers-grid">
+          <article class="power-card">
+            <span class="power-num">01 / ZAMAN BİLİNCİ</span>
+            <h3>Değişen Hayatına Ayak Uydurur</h3>
+            <p style="margin-bottom:0;">Yeni bir işe girdiğinde, şehir değiştirdiğinde ya da bir fikirden vazgeçtiğinde eski bilgiyi silip yok etmez; tarihçesiyle arşive kaldırır ve bugünkü gerçeği bilir.</p>
+          </article>
+
+          <article class="power-card">
+            <span class="power-num">02 / ÇOKLU BAĞLANTI</span>
+            <h3>Farklı Günlerdeki İpuçlarını Birleştirir</h3>
+            <p style="margin-bottom:0;">Haftalar önce bahsettiğin bir arkadaşınla bugün anlattığın bir proje arasında görünmeyen bağlantıyı kendisi kurar; her şeyi tekrar açıklamak zorunda kalmazsın.</p>
+          </article>
+
+          <article class="power-card">
+            <span class="power-num">03 / KİŞİSEL HİSSİYAT</span>
+            <h3>Neyi Sevdiğini, Neye Gerildiğini Bilir</h3>
+            <p style="margin-bottom:0;">Sadece soğuk veri değil; seni motive eden hedefleri, sevdiğin detayları ve seni strese sokan konuları hatırlar. Yanıt tonunu ve önerilerini sana göre uyarlar.</p>
+          </article>
+
+          <article class="power-card">
+            <span class="power-num">04 / SINIRSIZ GİZLİLİK &amp; ERİŞİM</span>
+            <h3>Tüm Araçların Tek Bir Hafızaya Bağlanır</h3>
+            <p style="margin-bottom:0;">Hafızan kendi bilgisayarında yerel dosyada durur. İster masaüstünden, ister telefonundan Telegram ile sesli konuş; ister Claude Desktop veya Cursor'a bağla.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -1541,40 +1684,151 @@
         </div>
       </div>
     </section>
+  </div>
 
-    <!-- 4. SPECIFIC TANGIBLE SUPERPOWERS -->
-    <section class="sec" id="ozellikler">
-      <div class="wrap reveal">
-        <div class="kicker"><span class="kicker-line"></span><span>GÜNLÜK HAYATTA SYNAPHE</span></div>
-        <h2 class="h2">Seni Gerçekten Tanıyan 4 Somut Yetenek</h2>
 
-        <div class="powers-grid">
-          <article class="power-card">
-            <span class="power-num">01 / ZAMAN BİLİNCİ</span>
-            <h3>Değişen Hayatına Ayak Uydurur</h3>
-            <p style="margin-bottom:0;">Yeni bir işe girdiğinde, şehir değiştirdiğinde ya da bir fikirden vazgeçtiğinde eski bilgiyi silip yok etmez; tarihçesiyle arşive kaldırır ve bugünkü gerçeği bilir.</p>
-          </article>
+  <!-- ================================================================== -->
+  <!-- SCREEN: BİLGİ & ARAŞTIRMA (BENCHMARK, MATEMATİK LAB & SSS)         -->
+  <!-- ================================================================== -->
+  <div id="screen-bilgi" class="page-screen">
+    <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
+      <button type="button" onclick="navigateTo('home')" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Ana Sayfaya Dön</span>
+      </button>
 
-          <article class="power-card">
-            <span class="power-num">02 / ÇOKLU BAĞLANTI</span>
-            <h3>Farklı Günlerdeki İpuçlarını Birleştirir</h3>
-            <p style="margin-bottom:0;">Haftalar önce bahsettiğin bir arkadaşınla bugün anlattığın bir proje arasında görünmeyen bağlantıyı kendisi kurar; her şeyi tekrar açıklamak zorunda kalmazsın.</p>
-          </article>
+      <!-- BENCHMARK PANEL -->
+      <section class="sec" id="benchmark" style="padding-top: 10px;">
+        <div class="kicker"><span class="kicker-line"></span><span>AKADEMİK DOĞRULAMA (N=132)</span></div>
+        <h2 class="h2">Ölçülebilir Hafıza Başarımı</h2>
+        <p style="font-size:14.5px; color:var(--text-soft); max-width:820px; margin-bottom:24px;">
+          <code>benchmark.py</code> içindeki <code>AcademicBenchmarkSuite</code> ile canlı üretildi. Her sorguya 50 çeldirici cümle / 60 çeldirici üçlü enjekte edildi; veri sızıntısı (data leakage) sıfırdır.
+        </p>
 
-          <article class="power-card">
-            <span class="power-num">03 / KİŞİSEL HİSSİYAT</span>
-            <h3>Neyi Sevdiğini, Neye Gerildiğini Bilir</h3>
-            <p style="margin-bottom:0;">Sadece soğuk veri değil; seni motive eden hedefleri, sevdiğin detayları ve seni strese sokan konuları hatırlar. Yanıt tonunu ve önerilerini sana göre uyarlar.</p>
-          </article>
+        <dl class="m-stats" style="margin-bottom: 30px;">
+          <div class="m-stat"><dt>Synaphe Doğruluk</dt><dd style="color:#fbbf24;">100.0%</dd></div>
+          <div class="m-stat"><dt>TF-IDF RAG (Top-3)</dt><dd>42.5%</dd></div>
+          <div class="m-stat"><dt>McNemar Exact p</dt><dd style="color:#34d399;">3.39×10⁻²¹</dd></div>
+          <div class="m-stat"><dt>Ortalama Gecikme</dt><dd>1.67 ms</dd></div>
+        </dl>
 
-          <article class="power-card">
-            <span class="power-num">04 / SINIRSIZ GİZLİLİK &amp; ERİŞİM</span>
-            <h3>Tüm Araçların Tek Bir Hafızaya Bağlanır</h3>
-            <p style="margin-bottom:0;">Hafızan kendi bilgisayarında yerel dosyada durur. İster masaüstünden, ister telefonundan Telegram ile sesli konuş; ister Claude Desktop veya Cursor'a bağla.</p>
-          </article>
+        <div class="cat-grid">
+          <div class="cat-card">
+            <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Single-hop Fact</span><span class="mono" style="color:var(--text-faint); font-size:11px;">N=36</span></div>
+            <div>
+              <div class="bar-meta"><span style="color:#fbbf24;">Synaphe</span><span>100.0% (36/36)</span></div>
+              <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div class="bar-meta"><span style="color:#a1a1aa;">RAG</span><span>97.2% (35/36)</span></div>
+              <div class="bar-track"><div class="bar-fill rag" style="width:97.2%"></div></div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Temporal Conflict</span><span class="mono" style="color:var(--text-faint); font-size:11px;">N=36</span></div>
+            <div>
+              <div class="bar-meta"><span style="color:#fbbf24;">Synaphe</span><span>100.0% (36/36)</span></div>
+              <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div class="bar-meta"><span style="color:#a1a1aa;">RAG</span><span>2.8% (1/36)</span></div>
+              <div class="bar-track"><div class="bar-fill rag" style="width:2.8%"></div></div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>3-Hop Multi-Hop</span><span class="mono" style="color:var(--text-faint); font-size:11px;">N=36</span></div>
+            <div>
+              <div class="bar-meta"><span style="color:#fbbf24;">Synaphe</span><span>100.0% (36/36)</span></div>
+              <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div class="bar-meta"><span style="color:#a1a1aa;">RAG</span><span>0.0% (0/36)</span></div>
+              <div class="bar-track"><div class="bar-fill rag" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:500;"><span>Distractor Resistance</span><span class="mono" style="color:var(--text-faint); font-size:11px;">N=24</span></div>
+            <div>
+              <div class="bar-meta"><span style="color:#fbbf24;">Synaphe</span><span>100.0% (24/24)</span></div>
+              <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div class="bar-meta"><span style="color:#a1a1aa;">RAG</span><span>70.8% (17/24)</span></div>
+              <div class="bar-track"><div class="bar-fill rag" style="width:70.8%"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 6. FAQ -->
+    <section class="sec" id="sss">
+      <div class="wrap faq-grid reveal">
+        <div>
+          <div class="kicker"><span class="kicker-line"></span><span>MERAK EDİLENLER</span></div>
+          <h2 class="h2">Kısa ve Net Yanıtlar</h2>
+          <p class="lede" style="margin-top:10px;">Karmaşık teknik terimler olmadan en çok sorulan sorular.</p>
+        </div>
+
+        <div>
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Konuşmalarım güvende mi, şirketler verilerimi görüyor mu?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Hayır. Tüm hafızan kendi cihazındaki yerel veritabanında saklanır. İstediğin zaman Ollama ile internet bağlantısı olmadan bile tamamen çevrimdışı kullanabilirsin.</p></div>
+            </div>
+          </div>
+
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Sadece Mac'te mi çalışıyor?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Hayır. macOS için tek tıkla açılan paketle birlikte Windows, Linux, iOS/Android (Telegram sesli &amp; yazılı köprü) ve Claude/Cursor MCP üzerinden tüm cihazlarda çalışır.</p></div>
+            </div>
+          </div>
+
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Fikrim veya hayatımdaki bir bilgi değişirse ne olur?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Synaphe eski bilgiyi silmeden tarihçeye kaldırır ve yeni bilgiyi aktif gerçek olarak işaretler. Bu yüzden hem güncel durumunu bilir hem de geçmişini karıştırmaz.</p></div>
+            </div>
+          </div>
+
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Akademik test sonuçlarını ve matematiksel altyapıyı nereden görebilirim?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Sağ üstteki <b>•••</b> (üç nokta) butonuna tıklayarak 132 senaryoluk gerçek benchmark sonuçlarını, ablasyon çalışmasını ve canlı Wixted-Ebbesen matematik laboratuvarını inceleyebilirsiniz.</p></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+  </div>
+
+
+  <!-- ================================================================== -->
+  <!-- SCREEN: İNDİR (TÜM CİHAZLAR İÇİN KURULUM HUB'I)                     -->
+  <!-- ================================================================== -->
+  <div id="screen-indir" class="page-screen">
+    <div class="wrap" style="padding-top: clamp(36px, 5vw, 60px); padding-bottom: 20px;">
+      <button type="button" onclick="navigateTo('home')" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Ana Sayfaya Dön</span>
+      </button>
+    </div>
 
     <!-- 5. UNIVERSAL MULTI-DEVICE DOWNLOAD & SETUP HUB -->
     <section class="sec" id="indir">
@@ -1723,66 +1977,16 @@ python3 telegram_bot.py
         </div>
       </div>
     </section>
+  </div>
 
-    <!-- 6. FAQ -->
-    <section class="sec" id="sss">
-      <div class="wrap faq-grid reveal">
-        <div>
-          <div class="kicker"><span class="kicker-line"></span><span>MERAK EDİLENLER</span></div>
-          <h2 class="h2">Kısa ve Net Yanıtlar</h2>
-          <p class="lede" style="margin-top:10px;">Karmaşık teknik terimler olmadan en çok sorulan sorular.</p>
-        </div>
-
-        <div>
-          <div class="qa">
-            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
-              <span>Konuşmalarım güvende mi, şirketler verilerimi görüyor mu?</span>
-              <span class="qa-plus" aria-hidden="true"></span>
-            </button>
-            <div class="qa-ans" data-open="false">
-              <div><p>Hayır. Tüm hafızan kendi cihazındaki yerel veritabanında saklanır. İstediğin zaman Ollama ile internet bağlantısı olmadan bile tamamen çevrimdışı kullanabilirsin.</p></div>
-            </div>
-          </div>
-
-          <div class="qa">
-            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
-              <span>Sadece Mac'te mi çalışıyor?</span>
-              <span class="qa-plus" aria-hidden="true"></span>
-            </button>
-            <div class="qa-ans" data-open="false">
-              <div><p>Hayır. macOS için tek tıkla açılan paketle birlikte Windows, Linux, iOS/Android (Telegram sesli &amp; yazılı köprü) ve Claude/Cursor MCP üzerinden tüm cihazlarda çalışır.</p></div>
-            </div>
-          </div>
-
-          <div class="qa">
-            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
-              <span>Fikrim veya hayatımdaki bir bilgi değişirse ne olur?</span>
-              <span class="qa-plus" aria-hidden="true"></span>
-            </button>
-            <div class="qa-ans" data-open="false">
-              <div><p>Synaphe eski bilgiyi silmeden tarihçeye kaldırır ve yeni bilgiyi aktif gerçek olarak işaretler. Bu yüzden hem güncel durumunu bilir hem de geçmişini karıştırmaz.</p></div>
-            </div>
-          </div>
-
-          <div class="qa">
-            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
-              <span>Akademik test sonuçlarını ve matematiksel altyapıyı nereden görebilirim?</span>
-              <span class="qa-plus" aria-hidden="true"></span>
-            </button>
-            <div class="qa-ans" data-open="false">
-              <div><p>Sağ üstteki <b>•••</b> (üç nokta) butonuna tıklayarak 132 senaryoluk gerçek benchmark sonuçlarını, ablasyon çalışmasını ve canlı Wixted-Ebbesen matematik laboratuvarını inceleyebilirsiniz.</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+</main>
 
     <!-- 7. FOOTER -->
     <footer class="foot">
       <div class="wrap">
         <div class="foot-top">
           <div>
-            <a href="#" class="brand" style="display:inline-flex; align-items:center; gap:9px;">
+            <a href="/" onclick="navigateTo('home'); return false;" class="brand" style="display:inline-flex; align-items:center; gap:9px;">
             <img src="/static/synaphe-butterfly.png" alt="Synaphe Kelebek" style="width:22px; height:auto; object-fit:contain; vertical-align:middle; filter:drop-shadow(0 0 10px rgba(251,191,36,0.6));">
             <span>SYNAPHE</span>
           </a>
@@ -1797,7 +2001,7 @@ python3 telegram_bot.py
           <div>© 2026 Synaphe · Eidetis Cognitive Memory</div>
           <div style="display:flex; gap:18px;">
             <a href="https://github.com/karabul7tt/synaphe" target="_blank" rel="noopener">GitHub</a>
-            <a href="#indir">Tüm Cihazlar</a>
+            <a href="/indir" onclick="navigateTo('indir'); return false;">Tüm Cihazlar</a>
             <button type="button" onclick="openTechModal()" style="color:var(--text-soft);">Teknik Veriler</button>
           </div>
         </div>
@@ -2264,6 +2468,77 @@ python3 telegram_bot.py
         btn.closest('.qa').querySelector('.qa-ans').setAttribute('data-open', 'true');
       }
     }
+
+    
+    // CLIENT-SIDE ROUTER FOR FIXED BACKGROUND MULTI-SCREEN EXPERIENCE
+    function navigateTo(screenId, targetAnchor, push = true) {
+      closeDropdowns();
+      toggleMobileMenu(false);
+
+      const validScreens = ['home', 'hakkinda', 'ozellikler', 'bilgi', 'indir'];
+      if (!validScreens.includes(screenId)) screenId = 'home';
+
+      validScreens.forEach(s => {
+        const el = document.getElementById('screen-' + s);
+        if (el) {
+          if (s === screenId) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        }
+      });
+
+      // Update active nav indicators
+      document.querySelectorAll('.nav-link').forEach(l => {
+        const href = l.getAttribute('href') || '';
+        if (href.includes(screenId) || (screenId === 'home' && (href === '/' || href === '#'))) {
+          l.classList.add('nav-active');
+        } else {
+          l.classList.remove('nav-active');
+        }
+      });
+
+      // Scroll to top smoothly
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Target anchor within screen
+      if (targetAnchor) {
+        setTimeout(() => {
+          const t = document.getElementById(targetAnchor);
+          if (t) t.scrollIntoView({ behavior: 'smooth' });
+        }, 180);
+      }
+
+      // Update URL
+      const path = screenId === 'home' ? '/' : '/' + screenId;
+      if (push && window.location.pathname !== path) {
+        window.history.pushState({ screen: screenId }, '', path);
+      }
+
+      initReveal();
+      if (screenId === 'bilgi') updateMathLab();
+    }
+
+    window.addEventListener('popstate', (e) => {
+      let path = window.location.pathname.replace(/^\//, '').toLowerCase();
+      if (!['hakkinda', 'ozellikler', 'bilgi', 'indir'].includes(path)) path = 'home';
+      navigateTo(path, null, false);
+    });
+
+    (function initRouterOnLoad() {
+      let path = window.location.pathname.replace(/^\//, '').toLowerCase();
+      if (window.location.hash) {
+        const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+        if (['hakkinda', 'ozellikler', 'bilgi', 'indir'].includes(hash)) {
+          path = hash;
+        }
+      }
+      if (!['hakkinda', 'ozellikler', 'bilgi', 'indir'].includes(path)) {
+        path = 'home';
+      }
+      navigateTo(path, null, false);
+    })();
 
     // CHATGPT-STYLE DROPDOWN CONTROLS
     function toggleNavDropdown(btn, ev) {
