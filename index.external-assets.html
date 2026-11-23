@@ -3,73 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Synaphe — Bilişsel Bellek & Yapay Zekâ Mimarisi</title>
-  <meta name="description" content="Synaphe, zamansal bilgi grafiği ve nöro-sembolik bilişsel hafıza mimarisiyle çalışan yeni nesil kişisel yapay zekâ.">
+  <title>Synaphe — Eidetis Nöro-Sembolik Bilişsel Bellek Mimarisi</title>
+  <meta name="description" content="Synaphe (Eidetis Engine): Zamansal MultiDiGraph, ACT-R Yayılan Aktivasyon, AGM İnanç Revizyonu ve Wixted-Ebbinghaus Güç Yasası ile çalışan yerel-öncelikli bilişsel hafıza mimarisi.">
   <link rel="icon" type="image/png" href="/static/favicon.png">
   <link rel="apple-touch-icon" href="/static/icon-192.png">
 
   <style>
-    /* ------------------------------------------------------------------ */
-    /* LILAC MEADOW ARCHITECTURE THEMED IN OBSIDIAN GOLD & SYNAPHE AMBER  */
-    /* ------------------------------------------------------------------ */
     :root {
-      --lml-bg: #050608;
-      --lml-card: rgba(14, 16, 24, 0.78);
-      --lml-card-border: rgba(255, 255, 255, 0.08);
-      --lml-line: rgba(255, 255, 255, 0.10);
-      --lml-text: #ffffff;
-      --lml-soft: #a1a1aa;
-      --lml-faint: #71717a;
-      --lml-wash: #fbbf24;
-      --lml-wash2: rgba(245, 158, 11, 0.15);
-      --lml-accent: #f59e0b;
-      --lml-deep: #0c0e14;
-      --lml-ondeep: #ffffff;
-      --lml-ondeep-soft: #94a3b8;
-      --lml-gold: #f59e0b;
-      --lml-gold-bright: #fbbf24;
-      --lml-gold-glow: rgba(245, 158, 11, 0.35);
-      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      --bg: #050608;
+      --surface: rgba(13, 15, 22, 0.76);
+      --surface-solid: #0c0e14;
+      --surface-hover: rgba(20, 23, 34, 0.86);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #fafafa;
+      --text-soft: #a1a1aa;
+      --text-faint: #71717a;
+      --gold: #fbbf24;
+      --gold-deep: #f59e0b;
+      --gold-dim: rgba(251, 191, 36, 0.14);
+      --gold-border: rgba(251, 191, 36, 0.32);
+      --emerald: #34d399;
+      --emerald-dim: rgba(52, 211, 153, 0.12);
+      --rose: #f87171;
+      --rose-dim: rgba(248, 113, 113, 0.12);
+      --sky: #38bdf8;
+      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", sans-serif;
+      --mono: "SF Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     html {
       scroll-behavior: smooth;
-      background: var(--lml-bg);
-      color: var(--lml-text);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
     }
 
     body {
       overflow-x: hidden;
-      background: var(--lml-bg);
-      color: var(--lml-text);
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       position: relative;
+      line-height: 1.5;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-    }
+    a { text-decoration: none; color: inherit; }
+    button { background: none; border: none; cursor: pointer; font: inherit; color: inherit; }
+    code, pre, .mono { font-family: var(--mono); }
 
     /* ------------------------------------------------------------------ */
-    /* BACKGROUND LAYERS: VIGNETTE BLOOM + SYNAPSE KNOWLEDGE GRAPH CANVAS */
+    /* BACKGROUND LAYERS: VIGNETTE BLOOM + SYNAPSE CANVAS + 3D BUTTERFLY  */
     /* ------------------------------------------------------------------ */
     .bg-vignette-art {
       position: fixed;
@@ -90,8 +82,8 @@
       height: 100%;
       object-fit: cover;
       object-position: center 30%;
-      opacity: 0.55;
-      filter: contrast(1.18) brightness(0.92) saturate(1.12);
+      opacity: 0.52;
+      filter: contrast(1.18) brightness(0.88) saturate(1.12);
       transform: scale(1.02);
       transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       will-change: transform;
@@ -100,7 +92,7 @@
     .bg-bloom-fade {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 36%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.55) 50%, #050608 92%);
+      background: radial-gradient(circle at 50% 34%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.6) 52%, #050608 92%);
       pointer-events: none;
     }
 
@@ -114,7 +106,6 @@
       display: block;
     }
 
-    /* Ambient radial glow following scroll */
     .bg-ambient-vignette {
       position: fixed;
       inset: 0;
@@ -122,10 +113,9 @@
       height: 100vh;
       pointer-events: none;
       z-index: 3;
-      background: radial-gradient(circle at 50% 45%, transparent 20%, rgba(5, 6, 8, 0.5) 65%, #050608 96%);
+      background: radial-gradient(circle at 50% 45%, transparent 18%, rgba(5, 6, 8, 0.55) 66%, #050608 96%);
     }
 
-    /* Floating Golden Embers / Pollen */
     .lml-pollen {
       position: fixed;
       inset: 0;
@@ -138,277 +128,33 @@
       position: absolute;
       bottom: -10px;
       border-radius: 50%;
-      background: #fbbf24;
-      box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.65);
+      background: var(--gold);
+      box-shadow: 0 0 8px 2px rgba(251, 191, 36, 0.6);
       opacity: 0;
       animation: lml-rise linear infinite;
     }
 
     @keyframes lml-rise {
       0% { opacity: 0; transform: translate(0, 0); }
-      15% { opacity: 0.9; }
-      85% { opacity: 0.45; }
+      15% { opacity: 0.85; }
+      85% { opacity: 0.4; }
       100% { opacity: 0; transform: translate(32px, -100vh); }
     }
 
-    /* ------------------------------------------------------------------ */
-    /* LAYOUT & TYPOGRAPHY SYSTEM (LILAC MEADOW)                           */
-    /* ------------------------------------------------------------------ */
-    .site-content {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-    }
-
-    .lml-wrap {
-      width: min(100% - 40px, 1160px);
-      margin: 0 auto;
-    }
-
-    .lml-sec {
-      padding: clamp(64px, 8vw, 110px) 0;
-      position: relative;
-    }
-
-    .lml-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--lml-wash);
-      margin-bottom: 12px;
-    }
-
-    .lml-kicker-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--lml-wash);
-      box-shadow: 0 0 10px 1px var(--lml-wash);
-    }
-
-    .lml-h1 {
-      font-size: clamp(38px, 5.8vw, 76px);
-      font-weight: 600;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      background: linear-gradient(180deg, #FFFFFF 15%, #F4F4F5 65%, #FBBF24 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 22px;
-      text-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
-    }
-
-    .lml-h2 {
-      font-size: clamp(28px, 3.4vw, 44px);
-      font-weight: 500;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-      color: var(--lml-text);
-    }
-
-    .lml-lede {
-      font-size: clamp(15px, 1.4vw, 18px);
-      line-height: 1.6;
-      color: var(--lml-soft);
-      max-width: 38em;
-    }
-
-    .lml-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      padding: 13px 26px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 500;
-      background: var(--lml-text);
-      color: #050608;
-      box-shadow: 0 10px 25px -8px rgba(251, 191, 36, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s;
-    }
-
-    .lml-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 32px -6px rgba(251, 191, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 1);
-    }
-
-    .lml-btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--lml-text);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .lml-btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.14);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 1. STICKY GLASS NAVIGATION BAR                                     */
-    /* ------------------------------------------------------------------ */
-    .lml-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      width: 100%;
-      padding: 14px 0;
-      transition: background-color 0.3s, border-color 0.3s, backdrop-filter 0.3s;
-    }
-
-    .lml-nav[data-scrolled="true"] {
-      background: rgba(5, 6, 8, 0.75);
-      border-bottom: 1px solid var(--lml-line);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .lml-navin {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .lml-brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: #ffffff;
-    }
-
-    .lml-brand-butterfly {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
-    }
-
-    .lml-brand-badge {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      color: #fbbf24;
-    }
-
-    .lml-links {
-      display: flex;
-      align-items: center;
-      gap: 26px;
-    }
-
-    .lml-link {
-      font-size: 13.5px;
-      color: var(--lml-soft);
-      transition: color 0.2s;
-    }
-
-    .lml-link:hover {
-      color: #ffffff;
-    }
-
-    .lml-navend {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .lml-menu-btn {
-      display: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .lml-menu-btn span {
-      display: block;
-      width: 16px;
-      height: 1.5px;
-      background: #ffffff;
-      border-radius: 1px;
-    }
-
-    .lml-mobile-drawer {
-      display: none;
-      position: fixed;
-      top: 66px;
-      left: 0;
-      right: 0;
-      z-index: 150;
-      background: rgba(8, 10, 16, 0.96);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding: 18px 24px 24px;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .lml-mobile-drawer.open { display: flex; }
-    .lml-mobile-drawer a {
-      color: #e4e4e7;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    @media (max-width: 860px) {
-      .lml-links { display: none; }
-      .lml-menu-btn { display: flex; }
-      .golden-butterfly-3d-rig { width: 170px; opacity: 0.45; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .golden-butterfly-3d-rig, #pollenContainer { display: none !important; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 2. HERO SECTION & FLOATING SCROLL BUTTERFLY                        */
-    /* ------------------------------------------------------------------ */
-    .lml-hero {
-      min-height: calc(100vh - 75px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(60px, 8vw, 120px) 0;
-      text-align: center;
-      position: relative;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 2. LIVING 3D BIOLOGICAL BUTTERFLY (ORGANIC WINGS - ZERO BLACK BG)  */
-    /* ------------------------------------------------------------------ */
+    /* LIVING 3D BIOLOGICAL GOLDEN BUTTERFLY */
     .golden-butterfly-3d-rig {
       position: fixed;
       top: 0;
       left: 0;
-      width: clamp(220px, 24vw, 320px);
+      width: clamp(210px, 23vw, 310px);
       aspect-ratio: 1170 / 691;
       perspective: 900px;
       -webkit-perspective: 900px;
       pointer-events: none;
-      z-index: 4;
+      z-index: 5;
       opacity: 0.88;
       will-change: transform;
-      filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.45));
+      filter: drop-shadow(0 0 24px rgba(245, 158, 11, 0.42));
     }
 
     .butterfly-3d-carrier {
@@ -430,17 +176,10 @@
       will-change: transform;
     }
 
-    .wing-3d-wrap.wing-left-wrap {
-      left: 0;
-      transform-origin: 100% 50%;
-    }
+    .wing-3d-wrap.wing-left-wrap { left: 0; transform-origin: 100% 50%; }
+    .wing-3d-wrap.wing-right-wrap { right: 0; transform-origin: 0% 50%; }
 
-    .wing-3d-wrap.wing-right-wrap {
-      right: 0;
-      transform-origin: 0% 50%;
-    }
-
-    .wing-img {
+    .wing-img, .body-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -459,812 +198,1072 @@
       pointer-events: none;
     }
 
-    .body-img {
+    /* ------------------------------------------------------------------ */
+    /* LAYOUT & EDITORIAL TYPOGRAPHY                                      */
+    /* ------------------------------------------------------------------ */
+    .site-content {
+      position: relative;
+      z-index: 10;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      pointer-events: none;
     }
 
-    .lml-hero-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 840px;
+    .wrap {
+      width: min(100% - 40px, 1180px);
       margin: 0 auto;
     }
 
-    .lml-hero-desc {
-      font-size: clamp(16px, 1.6vw, 19px);
+    .sec {
+      padding: clamp(68px, 8.5vw, 118px) 0;
+      position: relative;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .kicker-line {
+      width: 18px;
+      height: 1px;
+      background: var(--gold);
+      display: inline-block;
+    }
+
+    .h1 {
+      font-size: clamp(44px, 6.8vw, 88px);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      line-height: 0.98;
+      background: linear-gradient(180deg, #ffffff 18%, #e4e4e7 68%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 24px;
+    }
+
+    .h2 {
+      font-size: clamp(28px, 3.6vw, 46px);
+      font-weight: 500;
+      letter-spacing: -0.032em;
+      line-height: 1.12;
+      color: var(--text);
+    }
+
+    .lede {
+      font-size: clamp(15px, 1.35vw, 17.5px);
+      line-height: 1.65;
+      color: var(--text-soft);
+      max-width: 42em;
+    }
+
+    /* BUTTONS — PURE TYPOGRAPHIC, ZERO ICONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      background: #ffffff;
+      color: #050608;
+      box-shadow: 0 10px 28px -8px rgba(251, 191, 36, 0.42), inset 0 1px 0 #ffffff;
+      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s, background 0.22s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px -6px rgba(251, 191, 36, 0.58);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* 1. STICKY GLASS NAVBAR (PURE TYPOGRAPHY)                           */
+    /* ------------------------------------------------------------------ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 160;
+      padding: 16px 0;
+      transition: background 0.3s ease, border-color 0.3s ease, padding 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav[data-scrolled="true"] {
+      padding: 12px 0;
+      background: rgba(5, 6, 8, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-in {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .brand-ver {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-border);
+      background: var(--gold-dim);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      font-weight: 450;
+      color: var(--text-soft);
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: #ffffff; }
+
+    .nav-end {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-cta {
+      padding: 9px 18px;
+      font-size: 12.5px;
+    }
+
+    .menu-btn {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: rgba(255, 255, 255, 0.04);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 16px;
+      height: 1.5px;
+      background: #ffffff;
+      border-radius: 2px;
+    }
+
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 63px;
+      left: 0;
+      right: 0;
+      z-index: 155;
+      background: rgba(8, 10, 16, 0.96);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px 24px;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a {
+      color: #e4e4e7;
+      font-size: 15px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* 2. HERO + VERIFIED TELEMETRY STRIP                                 */
+    /* ------------------------------------------------------------------ */
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(48px, 7vw, 96px) 0 clamp(40px, 5vw, 64px);
+      text-align: center;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .hero-desc {
+      font-size: clamp(16px, 1.55vw, 19px);
       line-height: 1.65;
       color: #d4d4d8;
       margin-bottom: 34px;
       max-width: 680px;
     }
 
-    .lml-hero-actions {
+    .hero-actions {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
+    }
+
+    .telemetry-strip {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      text-align: left;
+    }
+
+    .tele-cell {
+      background: rgba(10, 12, 18, 0.82);
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tele-label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .tele-val {
+      font-size: clamp(24px, 2.5vw, 32px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tele-val.gold { color: var(--gold); }
+    .tele-val.emerald { color: var(--emerald); }
+
+    .tele-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-soft);
     }
 
     /* ------------------------------------------------------------------ */
-    /* 3. WHAT IS SYNAPHE STATEMENT (lml-what)                            */
+    /* 3. STATEMENT & ARCHITECTURE PILLARS                                */
     /* ------------------------------------------------------------------ */
-    .lml-whatgrid {
+    .whatgrid {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.45fr);
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.48fr);
       gap: 32px clamp(32px, 6vw, 72px);
       align-items: baseline;
-      padding-bottom: clamp(64px, 8vw, 104px);
-      border-bottom: 1px solid var(--lml-line);
+      padding-bottom: clamp(56px, 7vw, 88px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .lml-statement {
-      font-size: clamp(18px, 2vw, 25px);
-      line-height: 1.55;
+    .statement {
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.58;
       letter-spacing: -0.015em;
       color: #e4e4e7;
     }
 
-    .lml-statement b {
-      color: var(--lml-wash);
+    .statement b {
+      color: var(--gold);
       font-weight: 500;
     }
 
-    @media (max-width: 760px) {
-      .lml-whatgrid { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 4. THREE FLAGSHIP FEATURE CARDS (lml-feats)                        */
-    /* ------------------------------------------------------------------ */
-    .lml-feats {
+    .feats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(18px, 2.4vw, 28px);
-      padding-bottom: clamp(64px, 8vw, 110px);
+      gap: 20px;
     }
 
-    .lml-feat {
-      position: relative;
+    .feat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 380px;
-      padding: clamp(24px, 2.6vw, 34px);
-      border-radius: 24px;
-      background: var(--lml-card);
-      border: 1px solid var(--lml-card-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      overflow: hidden;
-      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+      gap: 24px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: border-color 0.25s, transform 0.25s;
     }
 
-    .lml-feat:hover {
-      transform: translateY(-4px);
-      border-color: rgba(245, 158, 11, 0.35);
+    .feat:hover {
+      border-color: var(--gold-border);
+      transform: translateY(-3px);
     }
 
-    .lml-feat-tag {
+    .feat-tag {
       display: inline-block;
-      align-self: flex-start;
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
+      font-family: var(--mono);
+      font-size: 10.5px;
       letter-spacing: 0.1em;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(251, 191, 36, 0.12);
-      border: 1px solid rgba(251, 191, 36, 0.3);
-      color: #fbbf24;
-      margin-bottom: 16px;
-    }
-
-    .lml-feat h3 {
-      font-size: clamp(20px, 1.8vw, 24px);
-      font-weight: 500;
-      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      color: var(--gold);
       margin-bottom: 12px;
-      color: #ffffff;
     }
 
-    .lml-feat p {
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: var(--lml-soft);
+    .feat h3 {
+      font-size: 21px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
     }
 
-    .lml-feat-viz {
-      margin: 14px 0 6px;
-      width: 100%;
+    .feat p {
+      font-size: 14px;
+      line-height: 1.62;
+      color: var(--text-soft);
     }
 
-    /* PRO KNOWLEDGE GRAPH VISUALIZATIONS */
     .graph-viz-box {
-      width: 100%;
-      height: 155px;
-      margin: 10px 0 8px;
+      background: rgba(6, 8, 12, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 14px;
-      background: rgba(6, 8, 12, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 12px;
     }
 
-    .graph-svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+    .graph-svg { width: 100%; height: auto; display: block; }
 
     .graph-legend-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 12px;
+      font-family: var(--mono);
       font-size: 10.5px;
-      color: #71717a;
-      padding: 0 4px;
-      font-family: monospace;
-      margin-top: 4px;
+      color: var(--text-faint);
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .graph-badge-pill {
-      font-size: 9.5px;
+    .badge-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+    }
+
+    .badge-pill.emerald {
+      color: var(--emerald);
+      background: var(--emerald-dim);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* 4. REAL ACADEMIC BENCHMARK & ABLATION DASHBOARD (N=132)            */
+    /* ------------------------------------------------------------------ */
+    .bench-shell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: clamp(24px, 4vw, 44px);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .bench-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+
+    .bench-tabs {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .bench-tab {
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
       font-weight: 500;
-      color: #fbbf24;
-      background: rgba(251, 191, 36, 0.1);
-      border: 1px solid rgba(251, 191, 36, 0.25);
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-family: monospace;
+      color: var(--text-soft);
+      transition: background 0.2s, color 0.2s;
     }
 
-    .terminal-box {
-      width: 92%;
-      max-width: 420px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: rgba(6, 8, 12, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      font-family: monospace;
-      font-size: 11px;
+    .bench-tab[aria-selected="true"] {
+      background: #ffffff;
+      color: #050608;
+    }
+
+    .bench-panel { display: none; }
+    .bench-panel[data-active="true"] { display: block; }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .cat-card {
+      background: rgba(6, 8, 12, 0.78);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 16px;
+    }
+
+    .cat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .cat-name { font-size: 15px; font-weight: 500; color: #ffffff; }
+    .cat-n { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+
+    .bar-row { display: flex; flex-direction: column; gap: 6px; }
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 11.5px;
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .bar-fill.syn { background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+    .bar-fill.rag { background: rgba(255, 255, 255, 0.34); }
+    .bar-fill.rag-zero { background: var(--rose); }
+
+    .stat-meta-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-mini {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .stat-mini dt {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-faint);
+      margin-bottom: 4px;
+    }
+
+    .stat-mini dd {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    /* ABLATION TABLE */
+    .ablation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ablation-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.2fr) 90px 100px;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 20px;
+      background: rgba(6, 8, 12, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .ablation-row.highlight {
+      border-color: var(--gold-border);
+      background: rgba(251, 191, 36, 0.05);
+    }
+
+    .ablation-title { font-size: 14.5px; font-weight: 500; color: #ffffff; }
+    .ablation-comp { font-family: var(--mono); font-size: 11.5px; color: var(--text-soft); margin-top: 3px; }
+    .ablation-score { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; }
+
+    /* UNIT TESTS GRID */
+    .unit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .unit-item {
+      background: rgba(6, 8, 12, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .unit-code {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .unit-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d4d4d8;
+    }
+
+    .pass-tag {
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--emerald);
+      background: var(--emerald-dim);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* 5. REAL MATHEMATICAL ENGINE LAB (WIXTED-EBBESEN + HEBBIAN LTP)     */
+    /* ------------------------------------------------------------------ */
+    .calcbox {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: clamp(24px, 4vw, 44px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: clamp(28px, 4.5vw, 52px);
+      align-items: center;
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .formula-bar {
+      margin: 18px 0 24px;
+      padding: 14px 16px;
+      background: rgba(6, 8, 12, 0.88);
+      border: 1px solid rgba(251, 191, 36, 0.22);
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      color: #fef3c7;
+    }
+
+    .field { margin-bottom: 22px; }
+
+    .fieldhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      color: var(--text-soft);
+    }
+
+    .amount {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold) var(--fill-pct, 30%), rgba(255, 255, 255, 0.12) var(--fill-pct, 30%));
+      outline: none;
+      cursor: pointer;
+    }
+
+    .range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.65);
+    }
+
+    .ticks {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--text-faint);
+      margin-top: 7px;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .result-box {
+      background: rgba(6, 8, 12, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .result-box.hi {
+      border-color: var(--gold-border);
+      background: rgba(251, 191, 36, 0.06);
+    }
+
+    .result-box dt {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+
+    .result-box dd {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .chartbox {
+      background: rgba(6, 8, 12, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .legend i {
+      width: 14px;
+      height: 2.5px;
+      background: var(--gold);
+      display: inline-block;
+    }
+    .legend i.base { background: rgba(255, 255, 255, 0.35); }
+    .legend i.thresh { background: var(--rose); }
+
+    .svg-chart { width: 100%; height: 220px; display: block; }
+
+    /* ------------------------------------------------------------------ */
+    /* 6. MCP & ECOSYSTEM TABS                                            */
+    /* ------------------------------------------------------------------ */
+    .eco-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 28px 0 22px;
+    }
+
+    .eco-tab {
       text-align: left;
+      padding: 18px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .eco-tab[aria-selected="true"] {
+      border-color: var(--gold-border);
+      background: rgba(251, 191, 36, 0.06);
+    }
+
+    .eco-tab-n {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .eco-tab-t {
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .eco-card {
+      display: none;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+      gap: 28px;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: clamp(24px, 3.8vw, 40px);
+      backdrop-filter: blur(20px);
+    }
+
+    .eco-card[data-on="true"] { display: grid; }
+
+    .eco-card h3 {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .eco-card p {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text-soft);
+      margin-bottom: 18px;
+    }
+
+    .tool-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tool-list li {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #d4d4d8;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+    }
+
+    .tool-list li b { color: var(--gold); font-weight: 500; }
+
+    .terminal-box {
+      background: #07090e;
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.68;
+      color: #e4e4e7;
+      overflow-x: auto;
     }
 
     .terminal-head {
       display: flex;
       justify-content: space-between;
-      color: #71717a;
-      font-size: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 6px;
-      margin-bottom: 2px;
-    }
-
-    @media (max-width: 900px) {
-      .lml-feats { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 5. BACKERS & ACADEMIC FOUNDATIONS STRIP (lml-backers)              */
-    /* ------------------------------------------------------------------ */
-    .lml-backers {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 20px 40px;
       align-items: center;
-      padding-bottom: clamp(64px, 8vw, 104px);
-      border-bottom: 1px solid var(--lml-line);
-    }
-
-    .lml-backers p {
-      font-size: 11.5px;
-      line-height: 1.5;
-      color: var(--lml-faint);
-    }
-
-    .lml-logos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 18px 28px;
-      list-style: none;
-    }
-
-    .lml-logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: #a1a1aa;
-      transition: color 0.25s, transform 0.25s;
-    }
-
-    .lml-logo:hover {
-      color: #ffffff;
-      transform: translateY(-2px);
-    }
-
-    @media (max-width: 760px) {
-      .lml-backers { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 6. TABBED USE CASES SHOWCASE (lml-uc)                              */
-    /* ------------------------------------------------------------------ */
-    .lml-uc {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px clamp(32px, 5vw, 72px);
-      padding-bottom: clamp(72px, 9vw, 120px);
-    }
-
-    .lml-uchead .lml-h2 {
-      margin: 8px 0 14px;
-    }
-
-    .lml-tabs {
-      display: flex;
-      flex-direction: column;
-      margin-top: clamp(28px, 4vw, 48px);
-      border-top: 1px solid var(--lml-line);
-    }
-
-    .lml-tab {
-      position: relative;
-      display: grid;
-      grid-template-columns: 34px 1fr auto;
-      align-items: center;
-      gap: 8px;
-      padding: 18px 4px;
-      border-bottom: 1px solid var(--lml-line);
-      color: var(--lml-faint);
-      transition: color 0.3s, padding 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .lml-tab:hover {
-      color: var(--lml-text);
-    }
-
-    .lml-tab[aria-selected="true"] {
-      color: var(--lml-text);
-      padding-left: 12px;
-    }
-
-    .lml-tabn {
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
       font-size: 11px;
-      font-variant-numeric: tabular-nums;
+      color: var(--text-faint);
     }
 
-    .lml-tabt {
-      font-size: clamp(17px, 1.5vw, 21px);
-      letter-spacing: -0.02em;
+    .copy-btn {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      color: #e4e4e7;
+      transition: border-color 0.2s, color 0.2s;
     }
 
-    .lml-tabbar {
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      height: 2px;
-      width: 100%;
-      background: var(--lml-wash);
-      transform-origin: left;
-      transform: scaleX(0);
-    }
+    .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-    .lml-tab[aria-selected="true"] .lml-tabbar {
-      animation: lml-bar 8s linear forwards;
-    }
-
-    @keyframes lml-bar {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
-    }
-
-    .lml-cards {
+    /* ------------------------------------------------------------------ */
+    /* 7. FAQ ACCORDION                                                   */
+    /* ------------------------------------------------------------------ */
+    .faq-grid {
       display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+      gap: 40px;
+      align-items: start;
     }
 
-    .lml-card {
-      grid-area: 1 / 1;
-      position: relative;
+    .qa {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .qa-btn {
+      width: 100%;
+      text-align: left;
+      padding: 22px 0;
       display: flex;
-      flex-direction: column;
-      min-height: clamp(380px, 34vw, 480px);
-      border-radius: 24px;
-      background: var(--lml-card);
-      border: 1px solid var(--lml-card-border);
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(14px) scale(0.985);
-      visibility: hidden;
-      transition: opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s 0.5s;
-    }
-
-    .lml-card[data-on="true"] {
-      opacity: 1;
-      transform: none;
-      visibility: visible;
-      transition-delay: 0s;
-    }
-
-    .lml-cardtext {
-      padding: 26px 26px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .lml-card h3 {
-      font-size: clamp(20px, 1.8vw, 24px);
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      font-size: 16px;
       font-weight: 500;
-      letter-spacing: -0.025em;
+      color: #ffffff;
     }
 
-    .lml-card p {
+    .qa-plus {
+      width: 14px;
+      height: 14px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .qa-plus::before, .qa-plus::after {
+      content: "";
+      position: absolute;
+      background: var(--gold);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .qa-plus::before { width: 14px; height: 1.5px; }
+    .qa-plus::after { width: 1.5px; height: 14px; }
+
+    .qa-btn[aria-expanded="true"] .qa-plus::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+      opacity: 0;
+    }
+
+    .qa-ans {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+
+    .qa-ans[data-open="true"] { grid-template-rows: 1fr; }
+    .qa-ans > div { overflow: hidden; }
+    .qa-ans p {
+      padding-bottom: 22px;
+      font-size: 14.5px;
+      line-height: 1.68;
+      color: var(--text-soft);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* 8. CLOSING CTA & FOOTER (SINGLE CLEAN ACTION, NO DUPLICATES)       */
+    /* ------------------------------------------------------------------ */
+    .cta-box {
+      background: linear-gradient(180deg, rgba(16, 18, 28, 0.85) 0%, rgba(8, 10, 15, 0.92) 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: 28px;
+      padding: clamp(40px, 6vw, 72px) 28px;
+      text-align: center;
+      backdrop-filter: blur(22px);
+    }
+
+    .cta-box p {
+      max-width: 38em;
+      margin: 14px auto 30px;
+      font-size: 15.5px;
+      line-height: 1.65;
+      color: var(--text-soft);
+    }
+
+    .cta-meta {
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--text-faint);
+    }
+
+    .foot {
+      padding: 64px 0 42px;
+      border-top: 1px solid var(--border);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .foot-tagline {
       margin-top: 12px;
       font-size: 13.5px;
       line-height: 1.6;
-      color: var(--lml-soft);
-      max-width: 28em;
+      color: var(--text-faint);
+      max-width: 30em;
     }
 
-    .lml-artbox {
-      position: relative;
-      flex: 1;
-      min-height: 220px;
-      margin-top: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at 50% 60%, rgba(245, 158, 11, 0.12) 0%, transparent 75%);
-    }
-
-    @media (max-width: 860px) {
-      .lml-uc { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 7. COGNITIVE MEMORY DEPTH SIMULATOR (lml-calc)                     */
-    /* ------------------------------------------------------------------ */
-    .lml-calc {
-      padding-bottom: clamp(72px, 9vw, 120px);
-    }
-
-    .lml-calcbox {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-      gap: clamp(24px, 4vw, 56px);
-      padding: clamp(24px, 3.6vw, 48px);
-      border-radius: 28px;
-      background: var(--lml-deep);
-      border: 1px solid var(--lml-line);
-      color: var(--lml-ondeep);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .lml-calcbox::before {
-      content: "";
-      position: absolute;
-      right: -10%;
-      top: -25%;
-      width: 55%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: radial-gradient(closest-side, rgba(245, 158, 11, 0.22), transparent);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .lml-field {
-      margin-top: 26px;
-    }
-
-    .lml-fieldhead {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 12px;
-    }
-
-    .lml-fieldlabel, .lml-fieldhead label {
-      font-size: 12px;
-      color: var(--lml-ondeep-soft);
-    }
-
-    .lml-amount {
-      font-size: clamp(24px, 2.8vw, 34px);
-      letter-spacing: -0.03em;
-      font-variant-numeric: tabular-nums;
-      color: #fbbf24;
-      font-weight: 500;
-    }
-
-    .lml-range {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 28px;
-      margin-top: 6px;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .lml-range::-webkit-slider-runnable-track {
-      height: 4px;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #fbbf24 0%, #f59e0b var(--fill-pct, 50%), rgba(255, 255, 255, 0.16) var(--fill-pct, 50%));
-    }
-
-    .lml-range::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      margin-top: -9px;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.35), 0 4px 10px rgba(0, 0, 0, 0.4);
-      transition: box-shadow 0.25s;
-    }
-
-    .lml-ticks {
-      display: flex;
-      justify-content: space-between;
+    .foot-col h4 {
+      font-family: var(--mono);
       font-size: 11px;
-      color: var(--lml-ondeep-soft);
-      margin-top: 4px;
-    }
-
-    .lml-seg {
-      display: inline-flex;
-      padding: 4px;
-      margin-top: 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .lml-seg button {
-      height: 32px;
-      padding: 0 14px;
-      border-radius: 999px;
-      font-size: 12.5px;
-      color: var(--lml-ondeep-soft);
-      transition: background-color 0.25s, color 0.25s;
-    }
-
-    .lml-seg button[aria-pressed="true"] {
-      background: #ffffff;
-      color: #050608;
-      font-weight: 600;
-    }
-
-    .lml-results {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 26px;
-    }
-
-    .lml-result {
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .lml-result dt {
-      font-size: 11.5px;
-      color: var(--lml-ondeep-soft);
-    }
-
-    .lml-result dd {
-      margin-top: 4px;
-      font-size: clamp(18px, 1.8vw, 23px);
-      letter-spacing: -0.03em;
-      font-variant-numeric: tabular-nums;
-      color: #ffffff;
-    }
-
-    .lml-result--hi dd {
-      color: #fbbf24;
-      font-weight: 600;
-    }
-
-    .lml-chartbox {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      min-height: 320px;
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .lml-legend {
-      display: flex;
-      gap: 18px;
-      font-size: 12px;
-      color: var(--lml-ondeep-soft);
-      margin-bottom: 12px;
-    }
-
-    .lml-legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .lml-legend i {
-      width: 14px;
-      height: 3px;
-      border-radius: 2px;
-      background: #fbbf24;
-    }
-
-    .lml-legend i.lml-dash {
-      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0 4px, transparent 4px 7px);
-    }
-
-    .lml-svg-chart {
-      width: 100%;
-      height: 220px;
-    }
-
-    @media (max-width: 900px) {
-      .lml-calcbox { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 8. FAQ ACCORDION (lml-faq)                                         */
-    /* ------------------------------------------------------------------ */
-    .lml-faq {
-      display: grid;
-      grid-template-columns: 1fr 1.35fr;
-      gap: 32px clamp(32px, 6vw, 96px);
-      padding-bottom: clamp(72px, 9vw, 120px);
-      border-bottom: 1px solid var(--lml-line);
-    }
-
-    .lml-faqhead .lml-h2 {
-      margin: 8px 0 14px;
-    }
-
-    .lml-qa {
-      border-top: 1px solid var(--lml-line);
-    }
-
-    .lml-qa:last-child {
-      border-bottom: 1px solid var(--lml-line);
-    }
-
-    .lml-q {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 22px 2px;
-      font-size: clamp(15px, 1.3vw, 17px);
-      letter-spacing: -0.015em;
-      color: var(--lml-text);
-      text-align: left;
-    }
-
-    .lml-plus {
-      position: relative;
-      flex: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      transition: background-color 0.3s, transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
-    }
-
-    .lml-plus::before, .lml-plus::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 11px;
-      height: 1.5px;
-      margin: -0.75px 0 0 -5.5px;
-      background: currentColor;
-      border-radius: 2px;
-      transition: transform 0.3s;
-    }
-
-    .lml-plus::after {
-      transform: rotate(90deg);
-    }
-
-    .lml-q[aria-expanded="true"] .lml-plus {
-      transform: rotate(180deg);
-      background: var(--lml-wash);
-      color: #050608;
-    }
-
-    .lml-q[aria-expanded="true"] .lml-plus::after {
-      transform: rotate(0deg);
-    }
-
-    .lml-a {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .lml-a[data-open="true"] {
-      grid-template-rows: 1fr;
-    }
-
-    .lml-a > div {
-      overflow: hidden;
-    }
-
-    .lml-a p {
-      padding: 0 40px 22px 2px;
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--lml-soft);
-    }
-
-    @media (max-width: 860px) {
-      .lml-faq { grid-template-columns: 1fr; }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 9. JOIN / DOWNLOAD HERO BAND (lml-join)                            */
-    /* ------------------------------------------------------------------ */
-    .lml-join {
-      padding-bottom: clamp(40px, 5vw, 64px);
-    }
-
-    .lml-joinbox {
-      position: relative;
-      min-height: clamp(380px, 36vw, 480px);
-      border-radius: 28px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: clamp(36px, 5vw, 64px) 24px;
-      background: radial-gradient(circle at 50% 35%, rgba(245, 158, 11, 0.22) 0%, rgba(12, 14, 20, 0.95) 70%, #050608 100%);
-      border: 1px solid var(--lml-line);
-      isolation: isolate;
-    }
-
-    .lml-joincopy .lml-h2 {
-      margin-bottom: 14px;
-    }
-
-    .lml-platform-pills {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 32px;
-    }
-
-    .lml-platform-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-size: 13.5px;
-      font-weight: 500;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      color: #ffffff;
-      transition: background 0.2s, transform 0.2s, border-color 0.2s;
-    }
-
-    .lml-platform-pill:hover {
-      background: rgba(255, 255, 255, 0.16);
-      transform: translateY(-2px);
-      border-color: rgba(251, 191, 36, 0.4);
-    }
-
-    /* ------------------------------------------------------------------ */
-    /* 10. FOOTER                                                         */
-    /* ------------------------------------------------------------------ */
-    .lml-foot {
-      padding: clamp(40px, 5vw, 64px) 0 28px;
-    }
-
-    .lml-footgrid {
-      display: grid;
-      grid-template-columns: 1.4fr repeat(3, minmax(0, 1fr));
-      gap: 32px;
-      margin-bottom: 40px;
-    }
-
-    .lml-tagline {
-      margin-top: 14px;
-      max-width: 22em;
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--lml-soft);
-    }
-
-    .lml-col h4 {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--lml-faint);
+      color: var(--text-soft);
       margin-bottom: 14px;
     }
 
-    .lml-col ul {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .foot-col a { font-size: 13.5px; color: var(--text-faint); transition: color 0.2s; }
+    .foot-col a:hover { color: #ffffff; }
 
-    .lml-col a {
-      font-size: 13.5px;
-      color: var(--lml-soft);
-      transition: color 0.2s;
-    }
-
-    .lml-col a:hover {
-      color: #ffffff;
-    }
-
-    .lml-wordmark {
-      font-size: clamp(64px, 15vw, 190px);
+    .wordmark {
+      font-size: clamp(54px, 13.5vw, 176px);
       font-weight: 700;
-      letter-spacing: -0.05em;
-      line-height: 0.85;
+      letter-spacing: -0.04em;
+      line-height: 0.88;
       text-align: center;
-      background: linear-gradient(180deg, rgba(251, 191, 36, 0.15) 0%, transparent 90%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.02) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       user-select: none;
-      margin: 40px 0 20px;
+      margin-bottom: 28px;
     }
 
-    .lml-bar {
+    .foot-bar {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      gap: 12px;
-      padding-top: 20px;
-      border-top: 1px solid var(--lml-line);
-      font-size: 12px;
-      color: var(--lml-faint);
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--text-faint);
     }
 
-    @media (max-width: 860px) {
-      .lml-footgrid { grid-template-columns: 1fr 1fr; }
-      .lml-footgrid > :first-child { grid-column: 1 / -1; }
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .telemetry-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .feats, .cat-grid { grid-template-columns: 1fr; }
+      .calcbox, .eco-card, .faq-grid, .whatgrid { grid-template-columns: 1fr; }
+      .stat-meta-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ablation-row { grid-template-columns: 1fr; gap: 10px; }
+      .ablation-score { text-align: left; }
+      .unit-grid { grid-template-columns: 1fr; }
+      .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 820px) {
+      .nav-links, .nav-cta { display: none; }
+      .menu-btn { display: flex; }
+      .eco-tabs { grid-template-columns: 1fr; }
+      .results { grid-template-columns: 1fr; }
+      .golden-butterfly-3d-rig { width: 165px; opacity: 0.45; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .golden-butterfly-3d-rig, #pollenContainer { display: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND ART: VIGNETTE BLOOM HALTONE MATRIX -->
+  <!-- BACKGROUND ART: VIGNETTE BLOOM -->
   <div class="bg-vignette-art" id="bgVignetteArt">
-    <img src="/static/bloom_bg_blended.jpg" alt="Vignette Bloom Cognitive Art" id="bloomImg" class="bg-bloom-img">
+    <img src="/static/bloom_bg_blended.jpg" alt="" id="bloomImg" class="bg-bloom-img">
     <div class="bg-bloom-fade"></div>
   </div>
 
@@ -1277,29 +1276,44 @@
   <!-- FLOATING GOLDEN POLLEN PARTICLES -->
   <div class="lml-pollen" id="pollenContainer"></div>
 
+  <!-- LIVING 3D BIOLOGICAL GOLDEN BUTTERFLY -->
+  <div class="golden-butterfly-3d-rig" id="goldenButterflyRig" aria-hidden="true">
+    <div class="butterfly-3d-carrier" id="butterflyCarrier">
+      <div class="wing-3d-wrap wing-left-wrap" id="wingLeft">
+        <img src="/static/wing_left_3d.png" alt="" class="wing-img">
+      </div>
+      <div class="wing-3d-wrap wing-right-wrap" id="wingRight">
+        <img src="/static/wing_right_3d.png" alt="" class="wing-img">
+      </div>
+      <div class="body-3d-wrap">
+        <img src="/static/body_center_3d.png" alt="" class="body-img">
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN PAGE CONTENT -->
   <div class="site-content">
 
-    <!-- 1. STICKY GLASS NAVBAR -->
-    <header class="lml-nav" id="siteNav">
-      <div class="lml-wrap">
-        <div class="lml-navin">
-          <a href="#" class="lml-brand" style="display:inline-flex; align-items:center; gap:9px;">
-            <img src="/static/synaphe-app-icon.png" alt="Synaphe" style="width:28px; height:28px; border-radius:7px; object-fit:contain; vertical-align:middle;">
-            <span>Synaphe</span>
+    <!-- 1. STICKY MINIMALIST NAVBAR (NO ICONS, SINGLE ACTION) -->
+    <header class="nav" id="siteNav">
+      <div class="wrap">
+        <div class="nav-in">
+          <a href="#" class="brand">
+            <span>SYNAPHE</span>
+            <span class="brand-ver">EIDETIS v2.4</span>
           </a>
 
-          <nav class="lml-links">
-            <a href="#nedir" class="lml-link">Bilişsel Mimari</a>
-            <a href="#ozellikler" class="lml-link">Graf Özellikleri</a>
-            <a href="#kullanim" class="lml-link">Kullanım Alanları</a>
-            <a href="#simulator" class="lml-link">Simülatör</a>
-            <a href="#sss" class="lml-link">SSS</a>
+          <nav class="nav-links" aria-label="Ana Menü">
+            <a href="#mimari" class="nav-link">Mimari</a>
+            <a href="#benchmark" class="nav-link">Benchmark</a>
+            <a href="#matematik" class="nav-link">Matematik</a>
+            <a href="#ekosistem" class="nav-link">MCP & Altyapı</a>
+            <a href="#sss" class="nav-link">SSS</a>
           </nav>
 
-          <div class="lml-navend">
-            <a href="/app" class="lml-btn">Web Uygulaması →</a>
-            <button type="button" id="mobileMenuBtn" class="lml-menu-btn" aria-label="Menü" aria-expanded="false" onclick="toggleMobileMenu()">
+          <div class="nav-end">
+            <a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip" class="btn nav-cta">macOS İndir</a>
+            <button type="button" id="mobileMenuBtn" class="menu-btn" aria-label="Menüyü Aç" aria-expanded="false" onclick="toggleMobileMenu()">
               <span></span><span></span>
             </button>
           </div>
@@ -1307,573 +1321,694 @@
       </div>
     </header>
 
-    <nav id="mobileDrawer" class="lml-mobile-drawer" aria-label="Mobil Menü">
-      <a href="#nedir" onclick="toggleMobileMenu(false)">Bilişsel Mimari</a>
-      <a href="#ozellikler" onclick="toggleMobileMenu(false)">Graf Özellikleri</a>
-      <a href="#kullanim" onclick="toggleMobileMenu(false)">Kullanım Alanları</a>
-      <a href="#simulator" onclick="toggleMobileMenu(false)">Simülatör</a>
+    <nav id="mobileDrawer" class="mobile-drawer" aria-label="Mobil Menü">
+      <a href="#mimari" onclick="toggleMobileMenu(false)">Mimari</a>
+      <a href="#benchmark" onclick="toggleMobileMenu(false)">Benchmark (N=132)</a>
+      <a href="#matematik" onclick="toggleMobileMenu(false)">Matematik Motoru</a>
+      <a href="#ekosistem" onclick="toggleMobileMenu(false)">MCP & Altyapı</a>
       <a href="#sss" onclick="toggleMobileMenu(false)">SSS</a>
-      <a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip" onclick="toggleMobileMenu(false)" style="color:#fffbeb; font-weight:500;">macOS İndir (.app)</a>
-      <a href="/app" style="color:#fbbf24; font-weight:600; border-bottom:none;">Web Uygulaması →</a>
+      <a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip" onclick="toggleMobileMenu(false)" style="color:#fbbf24; font-weight:600; border-bottom:none;">macOS İndir (.app)</a>
     </nav>
 
-    <!-- 2. HERO SECTION -->
-    <section class="lml-sec lml-hero">
-      <!-- LIVING 3D BIOLOGICAL GOLDEN BUTTERFLY (ORGANIC FLIGHT - ZERO BLACK BG) -->
-      <div class="golden-butterfly-3d-rig" id="goldenButterflyRig" aria-hidden="true">
-        <div class="butterfly-3d-carrier" id="butterflyCarrier">
-          <div class="wing-3d-wrap wing-left-wrap" id="wingLeft">
-            <img src="/static/wing_left_3d.png" alt="Left Wing" class="wing-img">
-          </div>
-          <div class="wing-3d-wrap wing-right-wrap" id="wingRight">
-            <img src="/static/wing_right_3d.png" alt="Right Wing" class="wing-img">
-          </div>
-          <div class="body-3d-wrap">
-            <img src="/static/body_center_3d.png" alt="Body" class="body-img">
-          </div>
-        </div>
-      </div>
-
-      <div class="lml-wrap">
-        <div class="lml-hero-inner">
-          <div class="lml-kicker">
-            <span class="lml-kicker-dot"></span>
-            <span>EİDETİS BİLİŞSEL BELLEK MİMARİSİ</span>
+    <!-- 2. HERO + REAL VERIFIED TELEMETRY STRIP -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-inner">
+          <div class="kicker">
+            <span class="kicker-line"></span>
+            <span>NÖRO-SEMBOLİK BİLİŞSEL BELLEK MOTORU</span>
           </div>
 
-          <h1 class="lml-h1">BİLİŞSEL HAFIZA</h1>
+          <h1 class="h1">BİLİŞSEL HAFIZA</h1>
 
-          <p class="lml-hero-desc">
-            Klasik sohbet robotlarının aksine; zaman damgalı bilgi grafiğiyle akıl yürüten, çelişkileri AGM mantığıyla çözen ve asla unutmayan nöro-sembolik kişisel zekâ.
+          <p class="hero-desc">
+            Düz vektör parçaları yerine zamansal <b>MultiDiGraph</b> topolojisiyle çalışan; çelişkileri <b>AGM İnanç Revizyonu</b> ile çözen, <b>ACT-R Yayılan Aktivasyon</b> ve <b>Wixted-Ebbinghaus</b> güç yasasıyla hatırlayan yerel-öncelikli bellek mimarisi.
           </p>
 
-          <div class="lml-hero-actions">
-            <a href="/static/Synaphe-macOS.zip" class="lml-btn" download="Synaphe-macOS.zip" style="display:inline-flex; align-items:center; gap:8px;">
-              <img src="/static/synaphe-app-icon.png" alt="" style="width:20px; height:20px; border-radius:5px;">
-              <span>macOS İçin İndir (.app)</span>
-            </a>
-            <a href="/app" class="lml-btn lml-btn-secondary">Web'de Hemen Dene →</a>
+          <div class="hero-actions">
+            <a href="#benchmark" class="btn">Benchmark Verilerini İncele</a>
+            <a href="https://github.com/karabul7tt/synaphe-website" target="_blank" rel="noopener" class="btn btn-ghost">GitHub Deposu</a>
+          </div>
+
+          <!-- REAL LIVE BENCHMARK TELEMETRY (EXECUTED FROM benchmark.py) -->
+          <div class="telemetry-strip reveal">
+            <div class="tele-cell">
+              <span class="tele-label">Genel Doğruluk (N=120)</span>
+              <span class="tele-val gold">100.0%</span>
+              <span class="tele-sub">TF-IDF RAG: 42.5% (51/120)</span>
+            </div>
+            <div class="tele-cell">
+              <span class="tele-label">McNemar Anlamlılık</span>
+              <span class="tele-val">3.39×10⁻²¹</span>
+              <span class="tele-sub">b = 69, c = 0 · p &lt; 0.001</span>
+            </div>
+            <div class="tele-cell">
+              <span class="tele-label">Ortalama Sorgu Süresi</span>
+              <span class="tele-val emerald">1.67 ms</span>
+              <span class="tele-sub">132 senaryo toplam 220.4 ms</span>
+            </div>
+            <div class="tele-cell">
+              <span class="tele-label">Bilişsel Birim Testleri</span>
+              <span class="tele-val">12 / 12</span>
+              <span class="tele-sub">95% Wilson CI: [96.9%, 100%]</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. WHAT IS SYNAPHE STATEMENT -->
-    <section class="lml-sec" id="nedir">
-      <div class="lml-wrap lml-whatgrid">
-        <div>
-          <h2 class="lml-h2">Yapay zekânın unuttuğu çağ sona erdi.</h2>
-          <div style="margin-top: 20px;">
-            <a href="#ozellikler" class="lml-btn lml-btn-secondary">Nasıl Çalışıyor? →</a>
-          </div>
-        </div>
-        <p class="lml-statement">
-          Geleneksel geniş dil modelleri her yeni oturumda sıfırlanır ya da geçmişi dar bir bağlam penceresine sıkıştırır. <b>Synaphe</b>, diyaloğu zamansal bir graf düğümüne dönüştürür. Aylar önce konuştuğun bir projeyi, değişen fikirlerini veya hedeflerini unutmaz; bilgi arttıkça seninle birlikte olgunlaşır.
-        </p>
-      </div>
-    </section>
-
-    <!-- 4. THREE FLAGSHIP FEATURE CARDS -->
-    <section class="lml-sec" id="ozellikler">
-      <div class="lml-wrap">
-        <div style="margin-bottom: 40px; text-align: center;">
-          <div class="lml-kicker">
-            <span class="lml-kicker-dot"></span>
-            <span>ÜÇ BÜYÜK FARK</span>
-          </div>
-          <h2 class="lml-h2">Klasik Botlardan Neden Farklı?</h2>
-        </div>
-
-        <div class="lml-feats">
-          <!-- Card 1: Zaman Çizgisi -->
-          <article class="lml-feat">
-            <div>
-              <span class="lml-feat-tag">Zaman Grafı</span>
-              <h3>Zaman Damgalı Bellek</h3>
-              <p>Her diyaloğu ve kararı zamansal bir graf düğümüne işler. Olayların kronolojik sırasını ve geçmişteki değişimleri asla karıştırmaz.</p>
-            </div>
-            <div class="lml-feat-viz">
-              <div class="graph-viz-box">
-                <svg class="graph-svg" viewBox="0 0 340 145" fill="none">
-                  <!-- Timeline axis line -->
-                  <line x1="25" y1="110" x2="315" y2="110" stroke="rgba(255,255,255,0.14)" stroke-width="1.5" />
-                  <circle cx="55" cy="110" r="3.5" fill="#71717a" />
-                  <circle cx="170" cy="110" r="3.5" fill="#71717a" />
-                  <circle cx="285" cy="110" r="4" fill="#fbbf24" />
-                  <text x="55" y="128" fill="#71717a" font-size="9" font-family="monospace" text-anchor="middle">t₀: -5 Ay</text>
-                  <text x="170" y="128" fill="#71717a" font-size="9" font-family="monospace" text-anchor="middle">t₁: -2 Hafta</text>
-                  <text x="285" y="128" fill="#fbbf24" font-size="9" font-family="monospace" text-anchor="middle">t₂: Şimdi</text>
-
-                  <!-- Curved temporal edges -->
-                  <path d="M 55 60 Q 115 15 170 52" stroke="rgba(251,191,36,0.45)" stroke-width="1.5" stroke-dasharray="3 3" />
-                  <path d="M 170 52 Q 225 15 285 60" stroke="#fbbf24" stroke-width="1.8" />
-                  <path d="M 55 60 Q 170 0 285 60" stroke="rgba(251,191,36,0.25)" stroke-width="1.2" />
-
-                  <!-- Nodes -->
-                  <circle cx="55" cy="60" r="16" fill="rgba(15,18,26,0.95)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-                  <circle cx="55" cy="60" r="4" fill="#a1a1aa" />
-                  <text x="55" y="38" fill="#d4d4d8" font-size="9" font-family="monospace" text-anchor="middle">e₁: Başlangıç</text>
-
-                  <circle cx="170" cy="52" r="17" fill="rgba(15,18,26,0.95)" stroke="rgba(251,191,36,0.4)" stroke-width="1.5" />
-                  <circle cx="170" cy="52" r="5" fill="#f59e0b" />
-                  <text x="170" y="28" fill="#d4d4d8" font-size="9" font-family="monospace" text-anchor="middle">e₂: Revizyon</text>
-
-                  <circle cx="285" cy="60" r="19" fill="rgba(245,158,11,0.15)" stroke="#fbbf24" stroke-width="2" />
-                  <circle cx="285" cy="60" r="6" fill="#fbbf24" />
-                  <text x="285" y="36" fill="#fbbf24" font-size="9" font-family="monospace" font-weight="bold" text-anchor="middle">e₃: Aktif Sorgu</text>
-
-                  <rect x="195" y="24" width="60" height="15" rx="3" fill="rgba(8,10,16,0.9)" stroke="rgba(251,191,36,0.3)" />
-                  <text x="225" y="35" fill="#fbbf24" font-size="8" font-family="monospace" text-anchor="middle">[:RECALLS]</text>
-                </svg>
-              </div>
-              <div class="graph-legend-bar">
-                <span>Graf: Zamansal MultiDiGraph</span>
-                <span class="graph-badge-pill">Zamansal Doğruluk: %100</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 2: Noktaları Birleştirir -->
-          <article class="lml-feat">
-            <div>
-              <span class="lml-feat-tag">Multi-Hop</span>
-              <h3>Gizil Akıl Yürütme</h3>
-              <p>Farklı zamanlarda paylaşılan bağımsız veriler arasında köprü kurar. Doğrudan söylenmemiş 3. derece mantıksal bağıntıları saptar.</p>
-            </div>
-            <div class="lml-feat-viz">
-              <div class="graph-viz-box">
-                <svg class="graph-svg" viewBox="0 0 340 145" fill="none">
-                  <!-- Latent Direct Arc -->
-                  <path d="M 45 70 Q 170 5 295 70" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4 4" />
-                  <rect x="135" y="12" width="70" height="15" rx="3" fill="rgba(8,10,16,0.95)" stroke="#fbbf24" stroke-width="1" />
-                  <text x="170" y="23" fill="#fbbf24" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">3-HOP ÇIKARIM</text>
-
-                  <!-- Hop Lines -->
-                  <line x1="45" y1="70" x2="130" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-                  <line x1="130" y1="100" x2="210" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-                  <line x1="210" y1="100" x2="295" y2="70" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-
-                  <!-- Nodes -->
-                  <circle cx="45" cy="70" r="17" fill="rgba(15,18,26,0.95)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
-                  <circle cx="45" cy="70" r="5" fill="#a1a1aa" />
-                  <text x="45" y="102" fill="#d4d4d8" font-size="8.5" font-family="monospace" text-anchor="middle">Girdi (A)</text>
-
-                  <circle cx="130" cy="100" r="14" fill="rgba(15,18,26,0.95)" stroke="rgba(251,191,36,0.4)" stroke-width="1.2" />
-                  <circle cx="130" cy="100" r="4" fill="#f59e0b" />
-                  <text x="130" y="126" fill="#71717a" font-size="8" font-family="monospace" text-anchor="middle">Köprü (B)</text>
-
-                  <circle cx="210" cy="100" r="14" fill="rgba(15,18,26,0.95)" stroke="rgba(251,191,36,0.4)" stroke-width="1.2" />
-                  <circle cx="210" cy="100" r="4" fill="#f59e0b" />
-                  <text x="210" y="126" fill="#71717a" font-size="8" font-family="monospace" text-anchor="middle">Bağlantı (C)</text>
-
-                  <circle cx="295" cy="70" r="19" fill="rgba(245,158,11,0.15)" stroke="#fbbf24" stroke-width="2" />
-                  <circle cx="295" cy="70" r="6" fill="#fbbf24" />
-                  <text x="295" y="102" fill="#fbbf24" font-size="8.5" font-family="monospace" font-weight="bold" text-anchor="middle">Sentez (D)</text>
-                </svg>
-              </div>
-              <div class="graph-legend-bar">
-                <span>Algoritma: ACT-R Yayılan Aktivasyon</span>
-                <span class="graph-badge-pill">Derinlik: k=3 Seviye</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 3: Sıfır Uydurma -->
-          <article class="lml-feat">
-            <div>
-              <span class="lml-feat-tag">AGM Modeli</span>
-              <h3>Sıfır Halüsinasyon</h3>
-              <p>İnanç revizyonu aksiyomlarıyla çelişkileri anında çözer. Graf üzerinde kanıtı olmayan hiçbir iddiayı yanıta dönüştürmez.</p>
-            </div>
-            <div class="lml-feat-viz">
-              <div class="graph-viz-box">
-                <svg class="graph-svg" viewBox="0 0 340 145" fill="none">
-                  <line x1="75" y1="72" x2="265" y2="72" stroke="rgba(239,68,68,0.4)" stroke-width="1.5" stroke-dasharray="4 3" />
-                  
-                  <rect x="130" y="58" width="80" height="28" rx="5" fill="rgba(10,12,18,0.95)" stroke="#34d399" stroke-width="1.2" />
-                  <text x="170" y="71" fill="#34d399" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">AGM AKSİYOMU</text>
-                  <text x="170" y="81" fill="#a1a1aa" font-size="7.5" font-family="monospace" text-anchor="middle">K * φ → K'</text>
-
-                  <!-- Outdated Node -->
-                  <circle cx="75" cy="72" r="22" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.5)" stroke-width="1.5" stroke-dasharray="3 3" />
-                  <text x="75" y="69" fill="#f87171" font-size="8.5" font-family="monospace" text-anchor="middle">Eski İnanç</text>
-                  <text x="75" y="80" fill="#71717a" font-size="7" font-family="monospace" text-anchor="middle">[Arşivlendi]</text>
-                  <line x1="60" y1="58" x2="90" y2="86" stroke="#ef4444" stroke-width="1.8" />
-
-                  <!-- Valid Active Node -->
-                  <circle cx="265" cy="72" r="24" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="2" />
-                  <circle cx="265" cy="72" r="5" fill="#34d399" />
-                  <text x="265" y="66" fill="#ffffff" font-size="9" font-family="monospace" font-weight="bold" text-anchor="middle">Yeni Gerçek</text>
-                  <text x="265" y="79" fill="#34d399" font-size="7.5" font-family="monospace" text-anchor="middle">[Aktif Tutarlı]</text>
-                </svg>
-              </div>
-              <div class="graph-legend-bar">
-                <span>Kontrol: AGM Tutarlılık Motoru</span>
-                <span class="graph-badge-pill" style="color:#34d399; border-color:rgba(52,211,153,0.3); background:rgba(52,211,153,0.1);">Graf Çelişki Hatası: %0.0</span>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. TEKNOLOJİ & MİMARİ ALTYAPI STRIP -->
-    <section class="lml-sec" style="padding-top: 0;">
-      <div class="lml-wrap lml-backers">
-        <p>Kullanılan Teknolojiler & Mimari Altyapı</p>
-        <ul class="lml-logos">
-          <li class="lml-logo">NetworkX Zamansal Bilgi Grafı</li>
-          <li class="lml-logo">AGM İnanç Revizyonu Mantığı</li>
-          <li class="lml-logo">Ollama Yerel Çıkarım Çekirdeği</li>
-          <li class="lml-logo">Nöro-Sembolik Hibrit Bellek</li>
-          <li class="lml-logo">%100 Cihaz İçi Yerel Gizlilik</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 6. TABBED USE CASES SHOWCASE -->
-    <section class="lml-sec" id="kullanim">
-      <div class="lml-wrap lml-uc">
-        <div class="lml-uchead">
-          <div class="lml-kicker">
-            <span class="lml-kicker-dot"></span>
-            <span>NERELERDE İŞİNE YARAR?</span>
-          </div>
-          <h2 class="lml-h2">Zihnindeki Dağınıklığı Toplayan İkinci Beynin</h2>
-          <p class="lml-lede">Düşüncelerini, planlarını ve notlarını unutmaktan korkmadan doğrudan Synaphe'e emanet et.</p>
-
-          <div class="lml-tabs" role="tablist">
-            <button type="button" class="lml-tab" role="tab" aria-selected="true" onclick="setUseCaseTab(0)">
-              <span class="lml-tabn">01</span>
-              <span class="lml-tabt">Kişisel Asistanın</span>
-              <span class="lml-tabbar"></span>
-            </button>
-            <button type="button" class="lml-tab" role="tab" aria-selected="false" onclick="setUseCaseTab(1)">
-              <span class="lml-tabn">02</span>
-              <span class="lml-tabt">Araştırma & Notlar</span>
-              <span class="lml-tabbar"></span>
-            </button>
-            <button type="button" class="lml-tab" role="tab" aria-selected="false" onclick="setUseCaseTab(2)">
-              <span class="lml-tabn">03</span>
-              <span class="lml-tabt">Kendi Cihazında (%100 Gizli)</span>
-              <span class="lml-tabbar"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="lml-cards">
-          <!-- Tab 1 -->
-          <article class="lml-card" data-on="true" id="ucCard0">
-            <div class="lml-cardtext">
-              <h3>Kişisel Asistan</h3>
-              <p>Diyalog geçmişini ve kişisel tercihleri semantik düğümler halinde tutar. İhtiyaç duyduğunda geçmiş bağlamı anında geri çağırır.</p>
-            </div>
-            <div class="lml-artbox">
-              <div class="terminal-box">
-                <div class="terminal-head">
-                  <span>[QUERY: TEMPORAL_RECALL]</span>
-                  <span style="color:#fbbf24;">e_id: 1842</span>
-                </div>
-                <div style="color:#a1a1aa;">&gt; input_query: "Bilişsel modelleme notları"</div>
-                <div style="color:#fef3c7; background:rgba(251,191,36,0.08); padding:6px 8px; border-radius:6px; border-left:2px solid #fbbf24;">
-                  &gt; matched_node: "Thinking, Fast and Slow (Kahneman) - Dual-Process Model"
-                </div>
-                <div style="display:flex; justify-content:space-between; color:#71717a; font-size:10px; margin-top:2px;">
-                  <span>delta_t: 218d</span>
-                  <span style="color:#34d399;">confidence: 0.998</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Tab 2 -->
-          <article class="lml-card" data-on="false" id="ucCard1">
-            <div class="lml-cardtext">
-              <h3>Araştırma ve Tez Hafızası</h3>
-              <p>Literatürdeki makaleleri, hipotezleri ve kanıtları ilişkisel graf olarak haritalar. Farklı kaynaklar arasındaki teorik köprüleri kurar.</p>
-            </div>
-            <div class="lml-artbox">
-              <div class="terminal-box">
-                <div class="terminal-head">
-                  <span>[GRAPH_SCHEMA: ACADEMIC_CORPUS]</span>
-                  <span style="color:#38bdf8;">depth: k=3</span>
-                </div>
-                <div style="display:flex; flex-direction:column; gap:4px; color:#d4d4d8;">
-                  <div>[1] Vaswani_2017 ──[:EXTENDED_BY]──&gt; Attention_Weights</div>
-                  <div>[2] Alchourron_1985 ──[:INTEGRATED]──&gt; Belief_Revision</div>
-                  <div style="color:#38bdf8; background:rgba(56,189,248,0.08); padding:4px 6px; border-radius:4px; border-left:2px solid #38bdf8;">
-                    &gt; synthesis: "Dinamik dikkat ağırlıklı AGM bellek mimarisi kuruldu."
-                  </div>
-                </div>
-                <div style="display:flex; justify-content:space-between; color:#71717a; font-size:10px; margin-top:2px;">
-                  <span>nodes: 1,420</span>
-                  <span style="color:#38bdf8;">edges: 6,840</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Tab 3 -->
-          <article class="lml-card" data-on="false" id="ucCard2">
-            <div class="lml-cardtext">
-              <h3>Yerel-Öncelikli & Esnek Çalışma</h3>
-              <p>Bilişsel graf yerel SQLite (D1 uyumlu) + NetworkX üzerinde tutulur. İsteğe bağlı Ollama Llama 3.2 ile tam çevrimdışı veya Gemini bulut hızlandırmasıyla hibrit çalışır.</p>
-            </div>
-            <div class="lml-artbox">
-              <div class="terminal-box">
-                <div class="terminal-head">
-                  <span>[SYSTEM_RUNTIME: LOCAL_FIRST]</span>
-                  <span style="color:#34d399;">MODE: OLLAMA / HYBRID</span>
-                </div>
-                <div style="display:flex; flex-direction:column; gap:4px; color:#d4d4d8;">
-                  <div>STORAGE: ./synaphe_d1.db + memory_persistence.json</div>
-                  <div>ENGINE: NetworkX MultiDiGraph + ACT-R / AGM / Wixted</div>
-                  <div>LLM_MODES: Offline Ollama (llama3.2) • Cloud Gemini 2.5</div>
-                  <div>BENCHMARK: 120/120 (100% vs RAG 42.5%) • N=132</div>
-                </div>
-                <div style="display:flex; justify-content:space-between; color:#71717a; font-size:10px; margin-top:2px;">
-                  <span>privacy: Local-First Storage</span>
-                  <span style="color:#34d399;">mcnemar_p: &lt; 0.01</span>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. COGNITIVE MEMORY DEPTH SIMULATOR -->
-    <section class="lml-sec lml-calc" id="simulator">
-      <div class="lml-wrap">
-        <div class="lml-calcbox">
+    <!-- 3. ARCHITECTURAL STATEMENT & 3 PILLARS -->
+    <section class="sec" id="mimari">
+      <div class="wrap">
+        <div class="whatgrid reveal">
           <div>
-            <div class="lml-kicker">
-              <span class="lml-kicker-dot"></span>
-              <span>CANLI TEST ET</span>
-            </div>
-            <h2 class="lml-h2">Hafıza Karşılaştırması</h2>
-            <p class="lml-lede">Normal modeller birkaç bin kelime sonra her şeyi unuturken, Synaphe'in yıllar geçse de aynı netlikte hatırladığını gör.</p>
+            <div class="kicker"><span class="kicker-line"></span><span>EİDETİS ÇEKİRDEĞİ</span></div>
+            <h2 class="h2">Klasik RAG neden çelişkilerde çöker?</h2>
+          </div>
+          <p class="statement">
+            Geleneksel vektör veritabanları zamanı ve mantıksal tekilliği bilmez. Kullanıcı 6 ay önce <i>"Ankara'da yaşıyorum"</i>, bugün <i>"İstanbul'a taşındım"</i> dediğinde klasik RAG iki parçayı da aynı anda getirip çelişki üretir. <b>Synaphe</b>, her olguyu yönlü ve zaman damgalı bir graf kenarına dönüştürür; eski inancı silmeden <code>is_active=False</code> olarak arşivler ve yalnızca tutarlı zeminden yanıt üretir.
+          </p>
+        </div>
 
-            <div class="lml-field">
-              <div class="lml-fieldhead">
-                <label for="eventRange">Hafızadaki Olay Sayısı</label>
-                <output class="lml-amount" id="eventOutput">5,000 Olay</output>
+        <div class="feats reveal" style="margin-top: clamp(48px, 6vw, 72px);">
+          <!-- Pillar 1 -->
+          <article class="feat">
+            <div>
+              <span class="feat-tag">01 / ZAMANSAL MULTIDIGRAPH</span>
+              <h3>Zamansal Çelişki Çözümü</h3>
+              <p>Tekil yüklemlerde (<code>YAŞAR_YER</code>, <code>ÇALIŞIR</code>, <code>ÜNİVERSİTESİ</code>) yeni olgu geldiğinde eski kenar tarihçesi korunarak pasifleştirilir. N=36 zamansal çelişki testinde klasik RAG %0.0 alırken Synaphe %100.0 doğruluğa ulaşır.</p>
+            </div>
+            <div>
+              <div class="graph-viz-box">
+                <svg class="graph-svg" viewBox="0 0 340 140" fill="none">
+                  <line x1="25" y1="108" x2="315" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="1.2" />
+                  <circle cx="58" cy="108" r="3" fill="#71717a" />
+                  <circle cx="170" cy="108" r="3" fill="#71717a" />
+                  <circle cx="282" cy="108" r="4" fill="#fbbf24" />
+                  <text x="58" y="126" fill="#71717a" font-size="9" font-family="monospace" text-anchor="middle">t₀: Eski</text>
+                  <text x="170" y="126" fill="#71717a" font-size="9" font-family="monospace" text-anchor="middle">t₁: Revizyon</text>
+                  <text x="282" y="126" fill="#fbbf24" font-size="9" font-family="monospace" text-anchor="middle">t₂: Aktif</text>
+
+                  <path d="M 58 58 Q 114 18 170 50" stroke="rgba(248,113,113,0.45)" stroke-width="1.4" stroke-dasharray="3 3" />
+                  <path d="M 170 50 Q 226 18 282 58" stroke="#fbbf24" stroke-width="1.8" />
+
+                  <circle cx="58" cy="58" r="15" fill="rgba(12,14,20,0.95)" stroke="rgba(248,113,113,0.45)" stroke-width="1.3" />
+                  <text x="58" y="34" fill="#a1a1aa" font-size="8.5" font-family="monospace" text-anchor="middle">is_active=0</text>
+
+                  <circle cx="170" cy="50" r="16" fill="rgba(12,14,20,0.95)" stroke="rgba(251,191,36,0.45)" stroke-width="1.4" />
+                  <circle cx="170" cy="50" r="4.5" fill="#f59e0b" />
+                  <text x="170" y="26" fill="#d4d4d8" font-size="8.5" font-family="monospace" text-anchor="middle">AGM K*φ</text>
+
+                  <circle cx="282" cy="58" r="18" fill="rgba(251,191,36,0.14)" stroke="#fbbf24" stroke-width="1.8" />
+                  <circle cx="282" cy="58" r="5.5" fill="#fbbf24" />
+                  <text x="282" y="34" fill="#fbbf24" font-size="8.5" font-family="monospace" font-weight="bold" text-anchor="middle">is_active=1</text>
+                </svg>
               </div>
-              <input type="range" class="lml-range" id="eventRange" min="0" max="100000" step="500" value="5000" oninput="updateSim()">
-              <div class="lml-ticks">
-                <span>0</span>
-                <span>50K</span>
-                <span>100K Olay</span>
+              <div class="graph-legend-bar">
+                <span>Temporal Conflict (N=36)</span>
+                <span class="badge-pill">36/36 · +100% Kazanç</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pillar 2 -->
+          <article class="feat">
+            <div>
+              <span class="feat-tag">02 / ACT-R SPREADING ACTIVATION</span>
+              <h3>3-Hop Sembolik Çıkarım</h3>
+              <p>John Anderson'ın ACT-R Fan Etkisi denklemiyle (<code>W_j / √fan_j · S_ji · λ</code>) yalnızca aktif kenarlar üzerinden 3 adıma kadar yayılır ve biçimsel mantık ispatı (<code>P₁ ∧ P₂ ⊢ Çıkarım</code>) üretir.</p>
+            </div>
+            <div>
+              <div class="graph-viz-box">
+                <svg class="graph-svg" viewBox="0 0 340 140" fill="none">
+                  <path d="M 42 66 Q 170 4 298 66" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="4 4" />
+                  <rect x="122" y="10" width="96" height="16" rx="4" fill="#07090e" stroke="#fbbf24" stroke-width="1" />
+                  <text x="170" y="21" fill="#fbbf24" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">λ=0.65 · k=3 HOP</text>
+
+                  <line x1="42" y1="66" x2="128" y2="98" stroke="rgba(255,255,255,0.22)" stroke-width="1.4" />
+                  <line x1="128" y1="98" x2="212" y2="98" stroke="rgba(255,255,255,0.22)" stroke-width="1.4" />
+                  <line x1="212" y1="98" x2="298" y2="66" stroke="rgba(255,255,255,0.22)" stroke-width="1.4" />
+
+                  <circle cx="42" cy="66" r="15" fill="#0c0e14" stroke="rgba(255,255,255,0.28)" stroke-width="1.3" />
+                  <text x="42" y="96" fill="#d4d4d8" font-size="8" font-family="monospace" text-anchor="middle">Burak</text>
+
+                  <circle cx="128" cy="98" r="13" fill="#0c0e14" stroke="rgba(251,191,36,0.45)" stroke-width="1.2" />
+                  <text x="128" y="124" fill="#a1a1aa" font-size="7.5" font-family="monospace" text-anchor="middle">Platform</text>
+
+                  <circle cx="212" cy="98" r="13" fill="#0c0e14" stroke="rgba(251,191,36,0.45)" stroke-width="1.2" />
+                  <text x="212" y="124" fill="#a1a1aa" font-size="7.5" font-family="monospace" text-anchor="middle">Ceph</text>
+
+                  <circle cx="298" cy="66" r="17" fill="rgba(251,191,36,0.14)" stroke="#fbbf24" stroke-width="1.8" />
+                  <circle cx="298" cy="66" r="5" fill="#fbbf24" />
+                  <text x="298" y="96" fill="#fbbf24" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">Amsterdam</text>
+                </svg>
+              </div>
+              <div class="graph-legend-bar">
+                <span>Multi-hop Reasoning (N=48)</span>
+                <span class="badge-pill">48/48 · +66.7% Kazanç</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pillar 3 -->
+          <article class="feat">
+            <div>
+              <span class="feat-tag">03 / HEBBIAN LTP &amp; DAMASIO</span>
+              <h3>Sinaptik Pekiştirme &amp; Duygu</h3>
+              <p>Tekrarlanan bağlar Hebb kuralıyla (<code>S_max=6.0</code> doygunluklu) güçlenirken, Damasio Somatik İşaretleyici motoru aktif kenarlardan <code>O(deg(v))</code> karmaşıklıkta Değerlik ve Uyarılma hesaplar.</p>
+            </div>
+            <div>
+              <div class="graph-viz-box">
+                <svg class="graph-svg" viewBox="0 0 340 140" fill="none">
+                  <line x1="72" y1="68" x2="268" y2="68" stroke="rgba(52,211,153,0.4)" stroke-width="1.6" />
+                  <rect x="116" y="52" width="108" height="32" rx="6" fill="#07090e" stroke="#34d399" stroke-width="1.2" />
+                  <text x="170" y="66" fill="#34d399" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">SOMATIC MARKER</text>
+                  <text x="170" y="78" fill="#a1a1aa" font-size="7.5" font-family="monospace" text-anchor="middle">V: +0.82 | A: 0.70</text>
+
+                  <circle cx="72" cy="68" r="22" fill="rgba(251,191,36,0.08)" stroke="rgba(251,191,36,0.5)" stroke-width="1.4" />
+                  <text x="72" y="65" fill="#fbbf24" font-size="8" font-family="monospace" text-anchor="middle">LTP S(n)</text>
+                  <text x="72" y="76" fill="#a1a1aa" font-size="7" font-family="monospace" text-anchor="middle">max 6.0</text>
+
+                  <circle cx="268" cy="68" r="22" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="1.6" />
+                  <text x="268" y="65" fill="#ffffff" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">Valence</text>
+                  <text x="268" y="76" fill="#34d399" font-size="7" font-family="monospace" text-anchor="middle">O(deg v)</text>
+                </svg>
+              </div>
+              <div class="graph-legend-bar">
+                <span>Bilişsel Birim Testleri</span>
+                <span class="badge-pill emerald">12/12 Doğrulandı</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. REAL ACADEMIC BENCHMARK & ABLATION STUDY (N=132) -->
+    <section class="sec" id="benchmark">
+      <div class="wrap">
+        <div class="bench-shell reveal">
+          <div class="bench-header">
+            <div>
+              <div class="kicker"><span class="kicker-line"></span><span>GERÇEK BENCHMARK SONUÇLARI · benchmark.py</span></div>
+              <h2 class="h2">Veri Sızıntısız Akademik Değerlendirme</h2>
+              <p class="lede" style="margin-top: 10px;">
+                Her test senaryosuna <b>50 çeldirici cümle</b> ve <b>60 çeldirici graf üçlüsü</b> enjekte edilerek, hedef cevap fonksiyona verilmeden (zero-leakage) Stemmed TF-IDF RAG (Top-3) ile canlı karşılaştırıldı.
+              </p>
+            </div>
+
+            <div class="bench-tabs" role="tablist">
+              <button type="button" class="bench-tab" role="tab" aria-selected="true" onclick="setBenchTab(0)">Kategori Kırılımı</button>
+              <button type="button" class="bench-tab" role="tab" aria-selected="false" onclick="setBenchTab(1)">Ablasyon Çalışması</button>
+              <button type="button" class="bench-tab" role="tab" aria-selected="false" onclick="setBenchTab(2)">12 Birim Testi</button>
+            </div>
+          </div>
+
+          <!-- PANEL 0: CATEGORY BREAKDOWN -->
+          <div class="bench-panel" id="benchPanel0" data-active="true">
+            <div class="cat-grid">
+              <div class="cat-card">
+                <div class="cat-top">
+                  <span class="cat-name">Single-hop Fact</span>
+                  <span class="cat-n">N = 36 · +2.8%</span>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#fbbf24;">Synaphe Eidetis</span><span>100.0% (36/36)</span></div>
+                  <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#a1a1aa;">TF-IDF RAG (Top-3)</span><span>97.2% (35/36)</span></div>
+                  <div class="bar-track"><div class="bar-fill rag" style="width:97.2%"></div></div>
+                </div>
+              </div>
+
+              <div class="cat-card">
+                <div class="cat-top">
+                  <span class="cat-name">Temporal Conflict</span>
+                  <span class="cat-n">N = 36 · +100.0%</span>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#fbbf24;">Synaphe Eidetis</span><span>100.0% (36/36)</span></div>
+                  <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#f87171;">TF-IDF RAG (Top-3)</span><span style="color:#f87171;">0.0% (0/36)</span></div>
+                  <div class="bar-track"><div class="bar-fill rag-zero" style="width:2%"></div></div>
+                </div>
+              </div>
+
+              <div class="cat-card">
+                <div class="cat-top">
+                  <span class="cat-name">Multi-hop Reasoning</span>
+                  <span class="cat-n">N = 48 · +66.7%</span>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#fbbf24;">Synaphe Eidetis</span><span>100.0% (48/48)</span></div>
+                  <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-meta"><span style="color:#a1a1aa;">TF-IDF RAG (Top-3)</span><span>33.3% (16/48)</span></div>
+                  <div class="bar-track"><div class="bar-fill rag" style="width:33.3%"></div></div>
+                </div>
               </div>
             </div>
 
-            <div class="lml-field">
-              <span class="lml-fieldlabel">Zaman Çizelgesi</span>
-              <div class="lml-seg">
-                <button type="button" aria-pressed="false" onclick="setTimeDepth(this, 1)">1 Ay</button>
-                <button type="button" aria-pressed="true" onclick="setTimeDepth(this, 6)">6 Ay</button>
-                <button type="button" aria-pressed="false" onclick="setTimeDepth(this, 12)">1 Yıl</button>
-                <button type="button" aria-pressed="false" onclick="setTimeDepth(this, 36)">3 Yıl</button>
+            <dl class="stat-meta-row">
+              <div class="stat-mini">
+                <dt>Synaphe 95% Wilson CI</dt>
+                <dd style="color:#fbbf24;">[96.9%, 100.0%]</dd>
               </div>
-            </div>
-
-            <dl class="lml-results">
-              <div class="lml-result lml-result--hi">
-                <dt>Synaphe Hatırlama Oranı</dt>
-                <dd id="synapheScore">99.4%</dd>
+              <div class="stat-mini">
+                <dt>Baseline RAG 95% CI</dt>
+                <dd>[34.0%, 51.4%]</dd>
               </div>
-              <div class="lml-result">
-                <dt>Normal Modeller (Hafıza Kaybı)</dt>
-                <dd id="flatScore" style="color: #ef4444;">14.2%</dd>
+              <div class="stat-mini">
+                <dt>McNemar Exact Test</dt>
+                <dd style="color:#34d399;">p = 3.39 × 10⁻²¹</dd>
+              </div>
+              <div class="stat-mini">
+                <dt>Çeldirici / Test</dt>
+                <dd>50 metin / 60 üçlü</dd>
               </div>
             </dl>
-
-            <p style="margin-top: 18px; font-size: 13px; color: var(--lml-ondeep-soft);" id="compText">
-              Synaphe, geleneksel bir sohbet modeline kıyasla <b style="color:#ffffff;">7.0× daha fazla</b> olayı eksiksiz hatırlar.
-            </p>
           </div>
 
-          <div class="lml-chartbox">
-            <div class="lml-legend">
-              <span><i></i>Synaphe Canlı Grafı (Asla Unutmaz)</span>
-              <span><i class="lml-dash"></i>Normal LLM (Pencere Dolunca Unutur)</span>
+          <!-- PANEL 1: ABLATION STUDY -->
+          <div class="bench-panel" id="benchPanel1" data-active="false">
+            <div class="ablation-list">
+              <div class="ablation-row">
+                <div>
+                  <div class="ablation-title">1. Baseline TF-IDF RAG (Top-3)</div>
+                  <div class="ablation-comp">Düz Metin + Türkçe Kökleme + Kosinüs Benzerliği</div>
+                </div>
+                <div class="bar-track"><div class="bar-fill rag" style="width:42.5%"></div></div>
+                <div class="mono" style="font-size:12px; color:var(--text-soft);">51 / 120</div>
+                <div class="ablation-score">42.5%</div>
+              </div>
+
+              <div class="ablation-row">
+                <div>
+                  <div class="ablation-title">2. Sadece Graf (AGM Yok, 1-Hop)</div>
+                  <div class="ablation-comp">MultiDiGraph (Tekil 1-Hop Erişim)</div>
+                </div>
+                <div class="bar-track"><div class="bar-fill rag" style="width:30%"></div></div>
+                <div class="mono" style="font-size:12px; color:var(--text-soft);">36 / 120</div>
+                <div class="ablation-score">30.0%</div>
+              </div>
+
+              <div class="ablation-row">
+                <div>
+                  <div class="ablation-title">3. Graf + AGM İnanç Revizyonu</div>
+                  <div class="ablation-comp">MultiDiGraph + AGM Çelişki Çözücü (Temporal Conflict Çözülür)</div>
+                </div>
+                <div class="bar-track"><div class="bar-fill rag" style="width:60%"></div></div>
+                <div class="mono" style="font-size:12px; color:var(--text-soft);">72 / 120</div>
+                <div class="ablation-score">60.0%</div>
+              </div>
+
+              <div class="ablation-row highlight">
+                <div>
+                  <div class="ablation-title" style="color:#fbbf24;">4. Tam Synaphe / Eidetis Motoru</div>
+                  <div class="ablation-comp">MultiDiGraph + AGM + ACT-R Spreading Activation + Wixted-Ebbinghaus</div>
+                </div>
+                <div class="bar-track"><div class="bar-fill syn" style="width:100%"></div></div>
+                <div class="mono" style="font-size:12px; color:#fbbf24;">120 / 120</div>
+                <div class="ablation-score" style="color:#fbbf24;">100.0%</div>
+              </div>
             </div>
+          </div>
 
-            <svg class="lml-svg-chart" viewBox="0 0 360 200" preserveAspectRatio="none">
-              <!-- Grid lines -->
-              <line x1="0" y1="50" x2="360" y2="50" stroke="rgba(255,255,255,0.06)" />
-              <line x1="0" y1="100" x2="360" y2="100" stroke="rgba(255,255,255,0.06)" />
-              <line x1="0" y1="150" x2="360" y2="150" stroke="rgba(255,255,255,0.06)" />
-
-              <!-- Synaphe steady line -->
-              <path id="synaphePath" d="M 0 22 Q 180 24 360 28" fill="none" stroke="#fbbf24" stroke-width="2.6" />
-              <!-- Flat LLM degradation curve -->
-              <path id="degradPath" d="M 0 30 C 80 40, 160 140, 360 185" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.8" stroke-dasharray="4 4" />
-            </svg>
-
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--lml-ondeep-soft); margin-top:8px;">
-              <span>Bugün</span>
-              <span>Aylar Sonra</span>
-              <span>Yıllar Sonra</span>
+          <!-- PANEL 2: 12 COGNITIVE UNIT TESTS -->
+          <div class="bench-panel" id="benchPanel2" data-active="false">
+            <div class="unit-grid">
+              <div class="unit-item">
+                <div><div class="unit-code">#121 · ebbinghaus_retention</div><div class="unit-desc">72 saatlik pekiştirilmemiş anı, yeni anıdan daha düşük tutma skoruna sahip.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#122 · ebbinghaus_long_horizon</div><div class="unit-desc">720 saat (30 gün) geçen pekiştirilmemiş anı unutma eşiğinin (&lt; 0.45) altına iner.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#123 · ebbinghaus_strength_resistance</div><div class="unit-desc">Yüksek sinaptik güçlü (S=5.0) anı, zayıf (S=1.0) anıdan daha yüksek kalıcılık korur.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#124 · hebbian_ltp</div><div class="unit-desc">Tekrarlanan sinaptik bağın gücü Hebb kuralıyla logaritmik olarak artar.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#125 · hebbian_saturation</div><div class="unit-desc">Aşırı tekrarlanan (n=100) anı S_max=6.0 doygunluk sınırını aşmadan dengelenir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#126 · actr_fan_effect</div><div class="unit-desc">Yüksek dereceli düğümden yayılan birim aktivasyon √fan faktörüyle seyreltilir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#127 · actr_distance_attenuation</div><div class="unit-desc">Yayılan aktivasyon 1-hop'tan 3-hop'a giderken monotonik olarak sönümlenir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#128 · agm_archival_integrity</div><div class="unit-desc">Tekil yüklem güncellenince eski kenar silinmeden is_active=False olarak arşivlenir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#129 · agm_reactivation</div><div class="unit-desc">Arşivlenen inanç tekrar beyan edildiğinde kenar çoğaltmadan yeniden aktifleştirilir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#130 · somatic_positive_valence</div><div class="unit-desc">Pozitif duygusal ilişkilerde Damasio değerlik skoru pozitif (V &gt; 0) üretilir.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#131 · somatic_negative_valence</div><div class="unit-desc">Çatışma/stres kenarlarında değerlik negatif (V &lt; 0) ve yüksek uyarılma ölçülür.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
+              <div class="unit-item">
+                <div><div class="unit-code">#132 · multi_hop_formal_proof</div><div class="unit-desc">Çok adımlı çıkarımda yönlü biçimsel öncül zinciri (P₁ ∧ P₂ ⊢ Çıkarım) doğrulanır.</div></div>
+                <span class="pass-tag">PASS</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 8. FAQ ACCORDION -->
-    <section class="lml-sec" id="sss">
-      <div class="lml-wrap lml-faq">
-        <div class="lml-faqhead">
-          <div class="lml-kicker">
-            <span class="lml-kicker-dot"></span>
-            <span>MERAK EDİLENLER</span>
+    <!-- 5. REAL MATHEMATICAL ENGINE LAB (WIXTED-EBBESEN + HEBBIAN LTP) -->
+    <section class="sec" id="matematik">
+      <div class="wrap">
+        <div class="calcbox reveal">
+          <div>
+            <div class="kicker"><span class="kicker-line"></span><span>GERÇEK MATEMATİK MOTORU · cognitive_math.py</span></div>
+            <h2 class="h2">Wixted-Ebbesen &amp; Hebbian LTP Laboratuvarı</h2>
+            <p class="lede" style="margin-top: 10px;">
+              Aşağıdaki simülatör uydurma oranlar yerine doğrudan <code>CognitiveMathEngine</code> içindeki gerçek güç yasası ve logaritmik pekiştirme denklemlerini çalıştırır.
+            </p>
+
+            <div class="formula-bar">
+              <div>S(n) = min(6.0, 1.0 + 0.65 · ln(1 + n))</div>
+              <div>R(Δt) = (1 + Δt / (S · 48.0))⁻⁰·⁵⁵ &nbsp;·&nbsp; θ_forget = 0.20</div>
+            </div>
+
+            <div class="field">
+              <div class="fieldhead">
+                <label for="hoursRange">Geçen Süre (Δt)</label>
+                <output class="amount" id="hoursOutput">168 saat (7.0 gün)</output>
+              </div>
+              <input type="range" class="range" id="hoursRange" min="0" max="720" step="6" value="168" oninput="updateMathLab()">
+              <div class="ticks">
+                <span>0 sa</span>
+                <span>168 sa (7g)</span>
+                <span>360 sa (15g)</span>
+                <span>720 sa (30g)</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="fieldhead">
+                <label for="reinfRange">Sinaptik Pekiştirme Tekrarı (n)</label>
+                <output class="amount" id="reinfOutput">12 tekrar</output>
+              </div>
+              <input type="range" class="range" id="reinfRange" min="0" max="50" step="1" value="12" oninput="updateMathLab()">
+              <div class="ticks">
+                <span>n = 0 (Tekil)</span>
+                <span>n = 15</span>
+                <span>n = 30</span>
+                <span>n = 50</span>
+              </div>
+            </div>
+
+            <dl class="results">
+              <div class="result-box hi">
+                <dt>Pekiştirilmiş R(Δt)</dt>
+                <dd id="labRetReinf" style="color:#fbbf24;">66.4%</dd>
+              </div>
+              <div class="result-box">
+                <dt>Sinaptik Güç S(n)</dt>
+                <dd id="labStrength">2.67</dd>
+              </div>
+              <div class="result-box">
+                <dt>Pekiştirilmemiş (S=1)</dt>
+                <dd id="labRetBase" style="color:#a1a1aa;">43.6%</dd>
+              </div>
+            </dl>
           </div>
-          <h2 class="lml-h2">Aklına Takılanlar</h2>
-          <p class="lml-lede">Gizlilikten çalışma mantığına kadar en çok sorulan soruların net cevapları.</p>
+
+          <div class="chartbox">
+            <div class="legend">
+              <span><i></i>Pekiştirilmiş İz S(n)</span>
+              <span><i class="base"></i>Tekil İz (S = 1.0)</span>
+              <span><i class="thresh"></i>Unutma Eşiği (0.20)</span>
+            </div>
+
+            <svg class="svg-chart" viewBox="0 0 360 200" preserveAspectRatio="none">
+              <line x1="0" y1="20" x2="360" y2="20" stroke="rgba(255,255,255,0.06)" />
+              <line x1="0" y1="65" x2="360" y2="65" stroke="rgba(255,255,255,0.06)" />
+              <line x1="0" y1="110" x2="360" y2="110" stroke="rgba(255,255,255,0.06)" />
+              <line x1="0" y1="154" x2="360" y2="154" stroke="rgba(248,113,113,0.45)" stroke-dasharray="4 4" />
+
+              <path id="mathBasePath" d="" fill="none" stroke="rgba(255,255,255,0.34)" stroke-width="1.6" stroke-dasharray="4 4" />
+              <path id="mathReinfPath" d="" fill="none" stroke="#fbbf24" stroke-width="2.6" />
+              <circle id="mathCursor" cx="84" cy="80" r="4.5" fill="#fbbf24" stroke="#050608" stroke-width="1.5" />
+            </svg>
+
+            <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-top:10px;">
+              <span>0 saat</span>
+              <span>10 gün</span>
+              <span>20 gün</span>
+              <span>30 gün (720 sa)</span>
+            </div>
+
+            <p id="labStatusText" class="mono" style="margin-top:14px; font-size:11.5px; color:#d4d4d8; line-height:1.6;"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. MCP & LOCAL-FIRST ECOSYSTEM SHOWCASE -->
+    <section class="sec" id="ekosistem">
+      <div class="wrap reveal">
+        <div class="kicker"><span class="kicker-line"></span><span>MÜHENDİSLİK EKOSİSTEMİ</span></div>
+        <h2 class="h2">Yerel-Öncelikli, Modüler ve MCP Uyumlu</h2>
+        <p class="lede" style="margin-top: 10px;">
+          Synaphe yalnızca bağımsız bir masaüstü uygulaması değil; Anthropic Claude Desktop, Cursor, Zed ve Claude Code ile doğrudan konuşabilen resmi bir <b>Model Context Protocol (MCP)</b> sunucusudur.
+        </p>
+
+        <div class="eco-tabs" role="tablist">
+          <button type="button" class="eco-tab" role="tab" aria-selected="true" onclick="setEcoTab(0)">
+            <span class="eco-tab-n">01 / PROTOKOL</span>
+            <span class="eco-tab-t">MCP Stdio Sunucusu</span>
+          </button>
+          <button type="button" class="eco-tab" role="tab" aria-selected="false" onclick="setEcoTab(1)">
+            <span class="eco-tab-n">02 / ÇIKARIM</span>
+            <span class="eco-tab-t">Canlı 3-Hop Kanıt Zinciri</span>
+          </button>
+          <button type="button" class="eco-tab" role="tab" aria-selected="false" onclick="setEcoTab(2)">
+            <span class="eco-tab-n">03 / ALTYAPI</span>
+            <span class="eco-tab-t">Yerel Depolama &amp; Hibrit LLM</span>
+          </button>
+        </div>
+
+        <!-- TAB 0: MCP -->
+        <article class="eco-card" id="ecoCard0" data-on="true">
+          <div>
+            <h3>4 Yerel MCP Aracı</h3>
+            <p><code>mcp_server.py</code> üzerinden çalışan standart MCP arayüzü, kullandığınız yapay zekâ araçlarına kalıcı ve çelişkisiz bilişsel hafıza kazandırır.</p>
+            <ul class="tool-list">
+              <li><b>synaphe_remember</b> — Yeni olguyu AGM denetimiyle grafiğe işler.</li>
+              <li><b>synaphe_recall</b> — ACT-R yayılan aktivasyonla bağlam getirir.</li>
+              <li><b>synaphe_somatic_marker</b> — Damasio Valence &amp; Arousal skoru üretir.</li>
+              <li><b>synaphe_proof</b> — İki kavram arası mantıksal çıkarım zincirini ispatlar.</li>
+            </ul>
+          </div>
+          <div class="terminal-box">
+            <div class="terminal-head">
+              <span>claude_desktop_config.json</span>
+              <button type="button" class="copy-btn" onclick="copyMcpConfig(this)">Kopyala</button>
+            </div>
+<pre id="mcpSnippet">{
+  "mcpServers": {
+    "synaphe": {
+      "command": "python3",
+      "args": ["/path/to/Synaphe/mcp_server.py"],
+      "env": {
+        "SYNAPHE_API_URL": "http://127.0.0.1:8000"
+      }
+    }
+  }
+}</pre>
+          </div>
+        </article>
+
+        <!-- TAB 1: REAL MULTI-HOP PROOF FROM BENCHMARK -->
+        <article class="eco-card" id="ecoCard1" data-on="false">
+          <div>
+            <h3>Biçimsel Mantık İspatı</h3>
+            <p><code>solve_multi_hop_proof()</code> fonksiyonu, 50+ çeldirici düğüm arasından yönlü aktif kenarları takip ederek doğrulanabilir kanıt zinciri oluşturur.</p>
+            <ul class="tool-list">
+              <li><b>Sorgu #113:</b> Mehmet'in mimarisindeki aksiyomların kuramcısı kimdir?</li>
+              <li><b>RAG Yanıtı:</b> FAIL (Bağlam kopması, 3-hop zincirini izleyemedi)</li>
+              <li><b>Synaphe:</b> PASS · <code>Carlos_Alchourron</code> (1.6 ms)</li>
+            </ul>
+          </div>
+          <div class="terminal-box">
+            <div class="terminal-head">
+              <span>EIDETIS PROOF ENGINE · k=3</span>
+              <span style="color:#34d399;">VERIFIED</span>
+            </div>
+<pre style="color:#d4d4d8;">&gt; query: "Burak'ın mimarı olduğu platformun kullandığı sistem nerede?"
+
+[1] MİMARI(Burak, Bulut_Platformu)       [active=1, S=1.65]
+[2] KULLANIR(Bulut_Platformu, Ceph)      [active=1, S=1.42]
+[3] VERİ_MERKEZİ(Ceph, Amsterdam)        [active=1, S=1.80]
+
+<span style="color:#fbbf24;">⊢ Çıkarım(Burak, Amsterdam)</span>
+
+latency: 1.67 ms | distractors_filtered: 60 | hallucination: 0.0%</pre>
+          </div>
+        </article>
+
+        <!-- TAB 2: LOCAL STACK -->
+        <article class="eco-card" id="ecoCard2" data-on="false">
+          <div>
+            <h3>Tamamen Senin Cihazında</h3>
+            <p>Veriler bulut sunucularına kilitlenmez. Tüm düğümler, aktif/pasif ilişkiler ve oturum geçmişi yerel diskte tutulur; dil modeli tamamen çevrimdışı veya hibrit seçilebilir.</p>
+            <ul class="tool-list">
+              <li><b>Depolama:</b> SQLite (Cloudflare D1 uyumlu) + <code>memory_persistence.json</code></li>
+              <li><b>Graf Motoru:</b> Python FastAPI + NetworkX <code>MultiDiGraph</code></li>
+              <li><b>Dil Modeli:</b> Çevrimdışı Ollama (<code>llama3.2</code>) veya Hibrit Gemini 2.5</li>
+              <li><b>İstemciler:</b> Native macOS <code>Synaphe.app</code> + Telegram Mobil Köprüsü</li>
+            </ul>
+          </div>
+          <div class="terminal-box">
+            <div class="terminal-head">
+              <span>RUNTIME TOPOLOGY</span>
+              <span style="color:#fbbf24;">LOCAL-FIRST</span>
+            </div>
+<pre style="color:#d4d4d8;">CLIENT LAYER    ─▶ macOS Synaphe.app / MCP Clients / Telegram Bot
+API CORE        ─▶ FastAPI (:8000) · Intent Priority · TR Morphology
+COGNITIVE MATH  ─▶ ACT-R (λ=0.65) · AGM · Wixted (ψ=0.55) · Damasio
+GRAPH &amp; STORE   ─▶ NetworkX MultiDiGraph + synaphe_d1.db (WAL)
+LLM INFERENCE   ─▶ Ollama llama3.2 (Offline) / Gemini 2.5 (Hybrid)</pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 7. FAQ ACCORDION -->
+    <section class="sec" id="sss">
+      <div class="wrap faq-grid reveal">
+        <div>
+          <div class="kicker"><span class="kicker-line"></span><span>SIKÇA SORULANLAR</span></div>
+          <h2 class="h2">Teknik Netlik</h2>
+          <p class="lede" style="margin-top: 12px;">
+            Mimari, gizlilik, benchmark metodolojisi ve kurulum hakkında doğrudan yanıtlar.
+          </p>
         </div>
 
         <div>
-          <!-- FAQ 1 -->
-          <div class="lml-qa">
-            <h3>
-              <button type="button" class="lml-q" aria-expanded="false" onclick="toggleFaq(this)">
-                Konuşmalarım güvende mi, şirketler verilerimi okuyor mu?
-                <span class="lml-plus" aria-hidden="true"></span>
-              </button>
-            </h3>
-            <div class="lml-a" data-open="false">
-              <div>
-                <p>Kesinlikle hayır. Synaphe cihazında yerel çalışacak şekilde geliştirildi. Konuşma geçmişin ve hafıza grafın sadece senin bilgisayarındaki yerel veritabanında saklanır. Buluta hiçbir veri aktarılmaz.</p>
-              </div>
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Benchmark sonuçları nasıl ölçüldü, veri sızıntısı var mı?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Tüm metrikler <code>benchmark.py</code> içindeki <code>AcademicBenchmarkSuite</code> ile canlı olarak üretilmiştir. 120 sorgunun her birinde 50 çeldirici metin ve 60 çeldirici üçlü eklenir; hedef cevap hiçbir zaman motora parametre olarak geçilmez. İstatistiksel anlamlılık McNemar kesin testiyle (p = 3.39 × 10⁻²¹) doğrulanmıştır.</p></div>
             </div>
           </div>
 
-          <!-- FAQ 2 -->
-          <div class="lml-qa">
-            <h3>
-              <button type="button" class="lml-q" aria-expanded="false" onclick="toggleFaq(this)">
-                ChatGPT veya Claude gibi modellerden farkı ne?
-                <span class="lml-plus" aria-hidden="true"></span>
-              </button>
-            </h3>
-            <div class="lml-a" data-open="false">
-              <div>
-                <p>Onlar konuşma penceresi dolunca eski mesajları siler veya özetlemeye çalışıp detayları kaybeder. Synaphe ise her cümleyi birbiriyle bağlantılı yaşayan bir bilgi grafı olarak saklar; aylar geçse bile nokta atışı hatırlar.</p>
-              </div>
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Verilerim buluta gönderiliyor mu?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Hayır. Synaphe yerel-öncelikli çalışır. Bilişsel graf ve konuşma geçmişi bilgisayarınızdaki <code>synaphe_d1.db</code> ve <code>memory_persistence.json</code> dosyalarında saklanır. Ollama ile tamamen internetsiz çalıştırabilirsiniz.</p></div>
             </div>
           </div>
 
-          <!-- FAQ 3 -->
-          <div class="lml-qa">
-            <h3>
-              <button type="button" class="lml-q" aria-expanded="false" onclick="toggleFaq(this)">
-                Uydurma (halüsinasyon) yapmadığından nasıl emin oluyorsunuz?
-                <span class="lml-plus" aria-hidden="true"></span>
-              </button>
-            </h3>
-            <div class="lml-a" data-open="false">
-              <div>
-                <p>Synaphe, konuşulan her iddiayı hafıza grafındaki gerçek kanıtlara dayandırır. Graf üzerinde karşılığı olmayan bir bilgiyi uydurmaz. Fikrin değiştiğinde ise eski bilgiyi otomatik olarak günceller.</p>
-              </div>
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Eski bir bilgim değiştiğinde geçmiş siliniyor mu?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Silinmez. AGM İnanç Revizyonu motoru çelişen eski kenarı <code>is_active=False</code> olarak zaman damgasıyla arşivler. Güncel sorgularda yalnızca aktif gerçek kullanılır; geçmişe dönük sorularda ise tarihçe eksiksiz korunur.</p></div>
             </div>
           </div>
 
-          <!-- FAQ 4 -->
-          <div class="lml-qa">
-            <h3>
-              <button type="button" class="lml-q" aria-expanded="false" onclick="toggleFaq(this)">
-                Ücretli mi, hemen deneyebilir miyim?
-                <span class="lml-plus" aria-hidden="true"></span>
-              </button>
-            </h3>
-            <div class="lml-a" data-open="false">
-              <div>
-                <p>Evet, hemen sağ üstteki "Web Uygulaması →" butonuna basıp web arayüzünü tarayıcında anında test edebilirsin ya da "macOS İçin İndir (.app)" butonuyla kelebek simgeli Synaphe masaüstü uygulamasını indirebilirsin.</p>
-              </div>
+          <div class="qa">
+            <button type="button" class="qa-btn" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Claude Desktop veya Cursor ile kullanabilir miyim?</span>
+              <span class="qa-plus" aria-hidden="true"></span>
+            </button>
+            <div class="qa-ans" data-open="false">
+              <div><p>Evet. Paket içindeki <code>mcp_server.py</code> dosyasını MCP yapılandırmanıza ekleyerek Claude Desktop, Cursor, Zed ve Claude Code'a doğrudan Synaphe bilişsel hafızasını bağlayabilirsiniz.</p></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 9. DOWNLOAD & JOIN CTA BAND -->
-    <section class="lml-sec lml-join">
-      <div class="lml-wrap">
-        <div class="lml-joinbox">
-          <div class="lml-joincopy">
-            <img src="/static/synaphe-app-icon.png" alt="Synaphe Uygulama Simgesi" style="width:84px; height:84px; border-radius:20px; margin:0 auto 18px; display:block; filter:drop-shadow(0 10px 26px rgba(251,191,36,0.32));">
-            <h2 class="lml-h2">Unutkan Yapay Zekâlarla Vakit Kaybetme</h2>
-            <p style="color: #d4d4d8; max-width: 32em; margin: 12px auto 0; font-size: 15px;">
-              Synaphe ile kendi bilişsel hafızanı hemen oluştur. Kendi cihazında, tamamen sana özel ve güvenli.
-            </p>
-
-            <div style="margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px;">
-              <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
-                <a href="/static/Synaphe-macOS.zip" class="lml-btn" download="Synaphe-macOS.zip" style="padding: 14px 30px; font-size: 15px; display:inline-flex; align-items:center; gap:9px;">
-                  <img src="/static/synaphe-app-icon.png" alt="" style="width:20px; height:20px; border-radius:5px;">
-                  <span>macOS Uygulamasını İndir (Synaphe.app)</span>
-                </a>
-                <a href="/app" class="lml-btn lml-btn-secondary" style="padding: 14px 28px; font-size: 15px;">Web'de Başlat →</a>
-              </div>
-              <span style="font-size: 13px; color: #a1a1aa;">Kelebek simgeli macOS yerel başlatıcı (.app) ve tüm modern tarayıcılarla %100 uyumlu</span>
-            </div>
-          </div>
+    <!-- 8. CLOSING CTA (SINGLE UNIQUE ACTION — NO DUPLICATE BUTTONS) -->
+    <section class="sec" style="padding-top: 24px;">
+      <div class="wrap">
+        <div class="cta-box reveal">
+          <div class="kicker" style="justify-content:center;"><span class="kicker-line"></span><span>MACOS YEREL SÜRÜM</span></div>
+          <h2 class="h2">Kendi Cihazında Bilişsel Hafıza Kur</h2>
+          <p>
+            Synaphe masaüstü paketini indir, yerel Eidetis motorunu tek tıkla başlat ve verilerinin tam kontrolünü elinde tut.
+          </p>
+          <a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip" class="btn" style="padding: 15px 34px; font-size: 14.5px;">Synaphe.app İndir (macOS)</a>
+          <div class="cta-meta">Python FastAPI · NetworkX MultiDiGraph · SQLite WAL · Ollama / MCP Ready</div>
         </div>
       </div>
     </section>
 
-    <!-- 10. SITE FOOTER -->
-    <footer class="lml-foot">
-      <div class="lml-wrap">
-        <div class="lml-footgrid">
+    <!-- 9. FOOTER -->
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot-grid">
           <div>
-            <a href="#" class="lml-brand">
-              <span>Synaphe</span>
-            </a>
-            <p class="lml-tagline">
-              Zamanı ve olayları asla unutmayan, seninle birlikte gelişen nöro-sembolik kişisel bilişsel bellek.
+            <a href="#" class="brand"><span>SYNAPHE</span></a>
+            <p class="foot-tagline">
+              Eidetis Nöro-Sembolik Bilişsel Bellek Mimarisi. Zamansal bilgi grafiği, AGM inanç revizyonu ve ACT-R yayılan aktivasyon çekirdeği.
             </p>
           </div>
 
-          <div class="lml-col">
+          <div class="foot-col">
             <h4>Mimari</h4>
             <ul>
-              <li><a href="#nedir">Bilişsel Mimari</a></li>
-              <li><a href="#ozellikler">Zamansal Graf</a></li>
-              <li><a href="#ozellikler">AGM Mantığı</a></li>
+              <li><a href="#mimari">Eidetis Çekirdeği</a></li>
+              <li><a href="#benchmark">Akademik Benchmark</a></li>
+              <li><a href="#matematik">Wixted &amp; Hebbian Lab</a></li>
             </ul>
           </div>
 
-          <div class="lml-col">
-            <h4>Kullanım</h4>
+          <div class="foot-col">
+            <h4>Ekosistem</h4>
             <ul>
-              <li><a href="#kullanim">Kişisel Asistan</a></li>
-              <li><a href="#kullanim">Araştırma & Notlar</a></li>
-              <li><a href="#simulator">Simülatör</a></li>
-            </ul>
-          </div>
-
-          <div class="lml-col">
-            <h4>Hızlı Erişim</h4>
-            <ul>
-              <li><a href="/app">Web Uygulaması</a></li>
-              <li><a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip">macOS İndir (.app)</a></li>
+              <li><a href="#ekosistem">MCP Sunucusu</a></li>
+              <li><a href="#ekosistem">3-Hop Kanıt Motoru</a></li>
               <li><a href="#sss">Sıkça Sorulanlar</a></li>
-              <li><a href="#sss">Gizlilik Yaklaşımı</a></li>
+            </ul>
+          </div>
+
+          <div class="foot-col">
+            <h4>Kaynaklar</h4>
+            <ul>
+              <li><a href="https://github.com/karabul7tt/synaphe-website" target="_blank" rel="noopener">GitHub Deposu</a></li>
+              <li><a href="/static/Synaphe-macOS.zip" download="Synaphe-macOS.zip">macOS Paketi (.zip)</a></li>
             </ul>
           </div>
         </div>
 
-        <div class="lml-wordmark">SYNAPHE</div>
+        <div class="wordmark">SYNAPHE</div>
 
-        <div class="lml-bar">
-          <div>© 2026 Synaphe. Bilişsel Bellek Mimarisi. Tüm hakları saklıdır.</div>
-          <div style="display:flex; gap: 16px;">
-            <a href="#sss">Gizlilik</a>
-            <a href="#nedir">Mimari</a>
-            <a href="/docs">API Dokümanları</a>
-          </div>
+        <div class="foot-bar">
+          <div>© 2026 Synaphe · Eidetis Cognitive Memory Architecture</div>
+          <div>N = 132 Verified · Local-First</div>
         </div>
       </div>
     </footer>
@@ -1891,15 +2026,31 @@
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    // 1. Sticky Nav Scrolled State
+    // 1. Sticky Nav State
     const siteNav = document.getElementById('siteNav');
     window.addEventListener('scroll', () => {
-      if (siteNav) {
-        siteNav.setAttribute('data-scrolled', window.scrollY > 40 ? 'true' : 'false');
-      }
+      if (siteNav) siteNav.setAttribute('data-scrolled', window.scrollY > 32 ? 'true' : 'false');
     }, { passive: true });
 
-    // 2. LIVING 3D BIOLOGICAL BUTTERFLY ENGINE (ORGANIC FLIGHT & SCROLL DYNAMICS)
+    // 2. Scroll Reveal Observer
+    (function initReveal() {
+      const els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('in'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    })();
+
+    // 3. LIVING 3D BIOLOGICAL BUTTERFLY ENGINE (ORGANIC FLIGHT & SCROLL DYNAMICS)
     (function initLivingBiologicalButterfly() {
       const rig = document.getElementById('goldenButterflyRig');
       const carrier = document.getElementById('butterflyCarrier');
@@ -1909,20 +2060,12 @@
 
       let vw = window.innerWidth;
       let vh = window.innerHeight;
-      window.addEventListener('resize', () => {
-        vw = window.innerWidth;
-        vh = window.innerHeight;
-      });
-
       let currX = Math.min(130, Math.max(30, vw * 0.08));
       let currY = Math.min(230, Math.max(160, vh * 0.22));
       let lastX = currX;
       let lastY = currY;
-
       let flapPhase = 0;
-      let currentRoll = 0;
-      let currentPitch = 0;
-      let currentYaw = 0;
+      let currentRoll = 0, currentPitch = 0, currentYaw = 0;
       let lastScrollY = window.scrollY;
       let scrollVelocity = 0;
 
@@ -1930,7 +2073,7 @@
         const sy = window.scrollY;
         scrollVelocity = Math.abs(sy - lastScrollY);
         lastScrollY = sy;
-      });
+      }, { passive: true });
 
       let lastTime = performance.now();
       let cachedMaxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -1939,6 +2082,8 @@
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       window.addEventListener('resize', () => {
+        vw = window.innerWidth;
+        vh = window.innerHeight;
         cachedMaxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         cachedRigW = rig.offsetWidth || 280;
         cachedRigH = rig.offsetHeight || 165;
@@ -1960,9 +2105,6 @@
         const scrollRatio = Math.min(1, Math.max(0, scrollY / cachedMaxScroll));
         const landingProgress = Math.max(0, Math.min(1, (scrollRatio - 0.88) / 0.12));
 
-        const rigWidth = cachedRigW;
-        const rigHeight = cachedRigH;
-
         const initialX = Math.min(130, Math.max(24, vw * 0.06));
         const initialY = Math.min(220, Math.max(130, vh * 0.20));
 
@@ -1972,14 +2114,14 @@
         const hoverX = Math.sin(t * 1.8) * 14 + Math.cos(t * 0.9) * 8;
         const hoverY = Math.cos(t * 2.2) * 10 + Math.sin(t * 1.2) * 6;
 
-        const destX = (vw - rigWidth) / 2;
-        const destY = vh - rigHeight - Math.max(85, Math.round(vh * 0.11));
+        const destX = (vw - cachedRigW) / 2;
+        const destY = vh - cachedRigH - Math.max(85, Math.round(vh * 0.11));
 
         const targetX = (1 - landingProgress) * (flightX + hoverX) + landingProgress * destX;
         const targetY = (1 - landingProgress) * (flightY + hoverY) + landingProgress * destY;
 
-        const safeX = Math.max(10, Math.min(vw - rigWidth - 10, targetX));
-        const safeY = Math.max(65, Math.min(vh - rigHeight - 15, targetY));
+        const safeX = Math.max(10, Math.min(vw - cachedRigW - 10, targetX));
+        const safeY = Math.max(65, Math.min(vh - cachedRigH - 15, targetY));
 
         currX += (safeX - currX) * lerpK;
         currY += (safeY - currY) * lerpK;
@@ -1993,20 +2135,15 @@
         const flightPitch = Math.max(-20, Math.min(20, -vy * 3.8 + Math.cos(t * 1.8) * 10));
         const flightRoll = Math.max(-24, Math.min(24, vx * 4.0 + Math.sin(t * 1.2) * 7));
 
-        const targetYaw = flightYaw * (1 - landingProgress);
-        const targetPitch = flightPitch * (1 - landingProgress);
-        const targetRoll = flightRoll * (1 - landingProgress);
-
-        currentYaw += (targetYaw - currentYaw) * lerpK;
-        currentPitch += (targetPitch - currentPitch) * lerpK;
-        currentRoll += (targetRoll - currentRoll) * lerpK;
+        currentYaw += (flightYaw * (1 - landingProgress) - currentYaw) * lerpK;
+        currentPitch += (flightPitch * (1 - landingProgress) - currentPitch) * lerpK;
+        currentRoll += (flightRoll * (1 - landingProgress) - currentRoll) * lerpK;
 
         scrollVelocity *= Math.pow(0.92, dt * 60);
         const speed = Math.hypot(vx, vy) + scrollVelocity * 0.05;
         const flapRate = (1 - landingProgress) * (3.5 + Math.min(10, speed * 2.0)) + landingProgress * 1.4;
         flapPhase += flapRate * dt * Math.PI * 2;
 
-        // Sürekli yumuşak geçiş (0.88 eşiğinde sıçrama yok)
         const activeFlap = (Math.sin(flapPhase) * 0.5 + 0.5) * 56 + 2;
         const restBreath = (Math.sin(t * 1.8) * 0.5 + 0.5) * 6;
         const flapAngle = (1 - landingProgress) * activeFlap + landingProgress * restBreath;
@@ -2021,7 +2158,7 @@
       if (!prefersReduced) requestAnimationFrame(flightLoop);
     })();
 
-    // 2. Mouse Parallax on Background Art
+    // 4. Mouse Parallax on Background Art
     const bloomImg = document.getElementById('bloomImg');
     if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
       window.addEventListener('mousemove', (e) => {
@@ -2033,12 +2170,12 @@
       }, { passive: true });
     }
 
-    // 3. Floating Golden Pollen Particles
+    // 5. Floating Golden Pollen
     const pollenContainer = document.getElementById('pollenContainer');
     if (pollenContainer) {
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 18; i++) {
         const p = document.createElement('i');
-        const size = Math.random() * 2.5 + 2;
+        const size = Math.random() * 2.4 + 1.8;
         p.style.width = size + 'px';
         p.style.height = size + 'px';
         p.style.left = (Math.random() * 94 + 3) + '%';
@@ -2049,7 +2186,7 @@
       }
     }
 
-    // 4. Living Synapse Knowledge Graph Canvas (Retina + Dinamik Yakınlık Kenarları)
+    // 6. Living Synapse Knowledge Graph Canvas
     (function initSynapse() {
       const canvas = document.getElementById('synapseCanvas');
       if (!canvas) return;
@@ -2077,16 +2214,16 @@
         nodes.length = 0;
         const cx = w * 0.5;
         const cy = h * 0.38;
-        const count = w < 768 ? 30 : 48;
+        const count = w < 768 ? 28 : 46;
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
           const dist = (Math.random() * 0.44 + 0.05) * Math.min(w, h);
           nodes.push({
             x: cx + Math.cos(angle) * dist,
             y: cy + Math.sin(angle) * dist * 0.8,
-            vx: (Math.random() - 0.5) * 0.32,
-            vy: (Math.random() - 0.5) * 0.32,
-            r: Math.random() * 2.2 + 1.1,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 2.1 + 1.1,
             gold: Math.random() > 0.45
           });
         }
@@ -2100,7 +2237,6 @@
         }
         ctx.clearRect(0, 0, w, h);
 
-        // Hareket + dinamik yakınlık kenarları (ekranı boydan boya kesen eski kenar bug'ı giderildi)
         for (let i = 0; i < nodes.length; i++) {
           const n = nodes[i];
           n.x += n.vx;
@@ -2109,7 +2245,7 @@
           if (n.y < 0 || n.y > h) n.vy *= -1;
         }
 
-        ctx.lineWidth = 0.85;
+        ctx.lineWidth = 0.8;
         for (let i = 0; i < nodes.length; i++) {
           const na = nodes[i];
           for (let j = i + 1; j < nodes.length; j++) {
@@ -2118,7 +2254,7 @@
             const dy = na.y - nb.y;
             const d2 = dx * dx + dy * dy;
             if (d2 < MAX_DIST * MAX_DIST) {
-              const alpha = (1 - Math.sqrt(d2) / MAX_DIST) * 0.34;
+              const alpha = (1 - Math.sqrt(d2) / MAX_DIST) * 0.32;
               ctx.strokeStyle = `rgba(251, 191, 36, ${alpha.toFixed(3)})`;
               ctx.beginPath();
               ctx.moveTo(na.x, na.y);
@@ -2130,118 +2266,117 @@
 
         for (let i = 0; i < nodes.length; i++) {
           const n = nodes[i];
-          ctx.fillStyle = n.gold ? 'rgba(251, 191, 36, 0.88)' : 'rgba(255, 255, 255, 0.78)';
+          ctx.fillStyle = n.gold ? 'rgba(251, 191, 36, 0.85)' : 'rgba(255, 255, 255, 0.72)';
           ctx.beginPath();
           ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
           ctx.fill();
         }
-
         requestAnimationFrame(render);
       }
       render();
     })();
 
-    // 5. Use Case Tabs Switcher (8s Otomatik İlerleme ile)
-    let currentTab = 0;
-    let tabAutoTimer = null;
-    function setUseCaseTab(idx) {
-      currentTab = idx % 3;
-      const tabs = document.querySelectorAll('.lml-tab');
-      tabs.forEach((t, i) => {
-        t.setAttribute('aria-selected', i === currentTab ? 'true' : 'false');
+    // 7. Benchmark Tabs
+    function setBenchTab(idx) {
+      document.querySelectorAll('.bench-tab').forEach((t, i) => {
+        t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
       });
       for (let i = 0; i < 3; i++) {
-        const card = document.getElementById('ucCard' + i);
-        if (card) {
-          card.setAttribute('data-on', i === currentTab ? 'true' : 'false');
-        }
-      }
-      clearInterval(tabAutoTimer);
-      tabAutoTimer = setInterval(() => setUseCaseTab((currentTab + 1) % 3), 8000);
-    }
-    tabAutoTimer = setInterval(() => setUseCaseTab((currentTab + 1) % 3), 8000);
-
-    // 6. Simulator Calculation (Gerçekçi Bozunma + Dinamik SVG Eğrisi)
-    let currentMonths = 6;
-    function setTimeDepth(btn, m) {
-      document.querySelectorAll('.lml-seg button').forEach(b => b.setAttribute('aria-pressed', 'false'));
-      btn.setAttribute('aria-pressed', 'true');
-      currentMonths = m;
-      updateSim();
-    }
-
-    function updateSim() {
-      const range = document.getElementById('eventRange');
-      const out = document.getElementById('eventOutput');
-      const synapheScore = document.getElementById('synapheScore');
-      const flatScore = document.getElementById('flatScore');
-      const compText = document.getElementById('compText');
-      const synPath = document.getElementById('synaphePath');
-      const degPath = document.getElementById('degradPath');
-
-      if (!range || !out) return;
-      const val = parseInt(range.value, 10);
-      out.textContent = Number(val).toLocaleString('tr-TR') + ' Olay';
-
-      const pct = (val / 100000) * 100;
-      range.style.setProperty('--fill-pct', pct + '%');
-
-      // Synaphe: Hebbian LTP + AGM konsolidasyon sayesinde yüksek kalıcılık (99.8% -> 96.8%)
-      const synVal = Math.max(95.5, 99.8 - (val / 100000) * 1.8 - (currentMonths / 36) * 1.1);
-      const synAcc = synVal.toFixed(1);
-      synapheScore.textContent = synAcc + '%';
-
-      // Normal LLM: Hem olay sayısı arttıkça hem süre uzadıkça bağlam penceresi ve çelişki kaybı ARTAR (doğruluk DÜŞER!)
-      const eventDecay = Math.exp(-val / 9500);
-      const timeDecay = Math.pow(1 + currentMonths * 0.45, -0.65);
-      const flatVal = Math.max(2.0, Math.min(96.0, 96.0 * eventDecay * timeDecay));
-      const flatAcc = flatVal.toFixed(1);
-      flatScore.textContent = flatAcc + '%';
-
-      // SVG eğrilerini canlı güncelle (x: 0..360, y: 18..188)
-      const mapY = (acc) => (188 - (acc / 100) * 170).toFixed(1);
-      if (synPath) {
-        const pts = [];
-        for (let i = 0; i <= 12; i++) {
-          const frac = i / 12;
-          const x = (frac * 360).toFixed(1);
-          const a = Math.max(95.5, 99.8 - frac * ((val / 100000) * 1.8 + (currentMonths / 36) * 1.1));
-          pts.push(`${i === 0 ? 'M' : 'L'} ${x} ${mapY(a)}`);
-        }
-        synPath.setAttribute('d', pts.join(' '));
-      }
-      if (degPath) {
-        const pts = [];
-        for (let i = 0; i <= 12; i++) {
-          const frac = i / 12;
-          const x = (frac * 360).toFixed(1);
-          const eD = Math.exp(-(val * frac) / 9500);
-          const tD = Math.pow(1 + (currentMonths * frac) * 0.45, -0.65);
-          const a = Math.max(2.0, 96.0 * eD * tD);
-          pts.push(`${i === 0 ? 'M' : 'L'} ${x} ${mapY(a)}`);
-        }
-        degPath.setAttribute('d', pts.join(' '));
-      }
-
-      const times = (synVal / flatVal).toFixed(1);
-      if (compText) {
-        compText.innerHTML = `Synaphe, normal sohbet modellerine kıyasla <b style="color:#ffffff;">${times} kat daha fazla</b> olayı tutarlı biçimde hatırlar.`;
+        const p = document.getElementById('benchPanel' + i);
+        if (p) p.setAttribute('data-active', i === idx ? 'true' : 'false');
       }
     }
-    updateSim();
 
-    // 7. FAQ Accordion Toggle
+    // 8. Ecosystem Tabs
+    function setEcoTab(idx) {
+      document.querySelectorAll('.eco-tab').forEach((t, i) => {
+        t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
+      for (let i = 0; i < 3; i++) {
+        const c = document.getElementById('ecoCard' + i);
+        if (c) c.setAttribute('data-on', i === idx ? 'true' : 'false');
+      }
+    }
+
+    // 9. REAL Wixted-Ebbesen (1991) + Hebbian LTP Math Engine
+    function computeRetention(deltaHours, strength) {
+      const effectiveScale = Math.max(0.25, strength * 48.0);
+      const r = Math.pow(1.0 + (deltaHours / effectiveScale), -0.55);
+      return Math.min(1.0, Math.max(0.05, r));
+    }
+
+    function computeStrength(n) {
+      return Math.min(6.0, 1.0 + 0.65 * Math.log1p(n));
+    }
+
+    function updateMathLab() {
+      const hInput = document.getElementById('hoursRange');
+      const nInput = document.getElementById('reinfRange');
+      if (!hInput || !nInput) return;
+
+      const hours = parseFloat(hInput.value);
+      const n = parseInt(nInput.value, 10);
+
+      hInput.style.setProperty('--fill-pct', ((hours / 720) * 100) + '%');
+      nInput.style.setProperty('--fill-pct', ((n / 50) * 100) + '%');
+
+      const days = (hours / 24).toFixed(1);
+      document.getElementById('hoursOutput').textContent = `${hours} saat (${days} gün)`;
+      document.getElementById('reinfOutput').textContent = `${n} tekrar`;
+
+      const S = computeStrength(n);
+      const rReinf = computeRetention(hours, S);
+      const rBase = computeRetention(hours, 1.0);
+
+      document.getElementById('labStrength').textContent = S.toFixed(2);
+      document.getElementById('labRetReinf').textContent = (rReinf * 100).toFixed(1) + '%';
+      document.getElementById('labRetBase').textContent = (rBase * 100).toFixed(1) + '%';
+
+      const mapY = (val) => (188 - val * 168).toFixed(1);
+      const reinfPts = [];
+      const basePts = [];
+      for (let i = 0; i <= 24; i++) {
+        const frac = i / 24;
+        const h = frac * 720;
+        const x = (frac * 360).toFixed(1);
+        reinfPts.push(`${i === 0 ? 'M' : 'L'} ${x} ${mapY(computeRetention(h, S))}`);
+        basePts.push(`${i === 0 ? 'M' : 'L'} ${x} ${mapY(computeRetention(h, 1.0))}`);
+      }
+      document.getElementById('mathReinfPath').setAttribute('d', reinfPts.join(' '));
+      document.getElementById('mathBasePath').setAttribute('d', basePts.join(' '));
+
+      const cursor = document.getElementById('mathCursor');
+      cursor.setAttribute('cx', ((hours / 720) * 360).toFixed(1));
+      cursor.setAttribute('cy', mapY(rReinf));
+
+      const gain = ((rReinf - rBase) * 100).toFixed(1);
+      const status = document.getElementById('labStatusText');
+      status.innerHTML = `n = ${n} tekrar ile sinaptik güç <b>S = ${S.toFixed(2)}</b> seviyesine konsolide edildi. ${days} gün sonunda pekiştirilmemiş izden <b style="color:#fbbf24;">+${gain} puan</b> daha yüksek kalıcılık korunuyor.`;
+    }
+    updateMathLab();
+
+    // 10. Copy MCP Config
+    function copyMcpConfig(btn) {
+      const code = document.getElementById('mcpSnippet');
+      if (!code || !navigator.clipboard) return;
+      navigator.clipboard.writeText(code.textContent).then(() => {
+        const prev = btn.textContent;
+        btn.textContent = 'Kopyalandı';
+        setTimeout(() => { btn.textContent = prev; }, 1600);
+      });
+    }
+
+    // 11. FAQ Accordion
     function toggleFaq(btn) {
       const open = btn.getAttribute('aria-expanded') === 'true';
-      // Close all
-      document.querySelectorAll('.lml-q').forEach(q => {
+      document.querySelectorAll('.qa-btn').forEach(q => {
         q.setAttribute('aria-expanded', 'false');
-        const ans = q.closest('.lml-qa').querySelector('.lml-a');
+        const ans = q.closest('.qa').querySelector('.qa-ans');
         if (ans) ans.setAttribute('data-open', 'false');
       });
       if (!open) {
         btn.setAttribute('aria-expanded', 'true');
-        const ans = btn.closest('.lml-qa').querySelector('.lml-a');
+        const ans = btn.closest('.qa').querySelector('.qa-ans');
         if (ans) ans.setAttribute('data-open', 'true');
       }
     }
