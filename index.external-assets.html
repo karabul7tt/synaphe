@@ -107,7 +107,7 @@
     }
     .bloom-vignette {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 36%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.55) 50%, var(--bg) 92%);
+      background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.35) 60%, rgba(5, 6, 8, 0.65) 100%);
     }
 
     /* SYNAPSE PARTICLES CANVAS */
@@ -392,7 +392,7 @@
 
     /* CTA BANNER */
     .cta-banner-box {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(13, 16, 24, 0.94));
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(13, 16, 24, 0.72));
       border: 1px solid var(--gold-border); border-radius: 28px;
       padding: clamp(36px, 5vw, 64px); display: flex; align-items: center;
       justify-content: space-between; gap: 32px; backdrop-filter: blur(24px);
@@ -405,7 +405,7 @@
       letter-spacing: -0.05em;
       line-height: 0.85;
       text-align: center;
-      background: linear-gradient(180deg, rgba(251, 191, 36, 0.16) 0%, transparent 90%);
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, transparent 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       user-select: none;
@@ -415,7 +415,8 @@
     /* FOOTER */
     .footer {
       border-top: 1px solid var(--border); padding: 48px 0 32px;
-      background: rgba(5,6,8,0.92); color: var(--text-soft); font-size: 13.5px;
+      background: rgba(5,6,8,0.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      color: var(--text-soft); font-size: 13.5px;
     }
     .footer-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px;
@@ -599,28 +600,21 @@
       </div>
     </header>
 
-    <!-- 1. HERO HEADLINE -->
+    <!-- 1. HERO HEADLINE (RESTORED ICONIC BUTTERFLY + SYNAPHE TITLE) -->
     <section class="hero">
       <div class="wrap">
-        <div class="kicker"><span class="kicker-line"></span><span>EİDETİS NÖRO-SEMBOLİK BİLİŞSEL BELLEK</span></div>
-        <h1 class="chatgpt-title">
-          Artık<br>
-          <span class="rainbow-letters">
-            <span style="color:#38bdf8;">h</span><span style="color:#fb923c;">a</span><span style="color:#60a5fa;">f</span><span style="color:#f472b6;">ı</span><span style="color:#34d399;">z</span><span style="color:#fbbf24;">a</span><span style="color:#f87171;">n</span><span style="color:#a78bfa;">ı</span><span style="color:#38bdf8;">z</span><span style="color:#fb923c;">ı</span>
-            <span class="rainbow-bar"></span>
-          </span><br>
-          , işlerinizi<br>
-          ve yapay zekâ<br>
-          çalışmalarınızı tek<br>
-          bir yerde<br>
-          yürütebilirsiniz.
-        </h1>
+        <div class="kicker"><span class="kicker-line"></span><span>SENİN CİHAZINDA YAŞAYAN İKİNCİ BEYNİN</span></div>
 
-        <p style="font-size:clamp(16px, 2vw, 19px); color:var(--text-soft); max-width:760px; margin:0 auto 34px; line-height:1.65;">
-          Aylar önce konuştuğun mimari kararları, değişen fikirlerini ve projelerindeki zamansal nedensellik zincirini gerçekten hatırlayan; oturum kapansa bile sıfırlanmayan yerel bilişsel zekâ.
+        <div style="display: flex; align-items: center; justify-content: center; gap: 18px; margin: 12px auto 20px;">
+          <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width: clamp(56px, 7.5vw, 88px); height: auto; object-fit: contain; filter: drop-shadow(0 0 24px rgba(251, 191, 36, 0.55));">
+          <h1 style="font-size: clamp(48px, 8vw, 92px); font-weight: 700; letter-spacing: -0.04em; color: #ffffff; line-height: 1; margin: 0;">Synaphe</h1>
+        </div>
+
+        <p style="font-size: clamp(16px, 1.8vw, 20px); color: var(--text-soft); max-width: 740px; margin: 0 auto 34px; line-height: 1.65;">
+          Aylar önce anlattığın bir fikri, taşındığın şehri, değişen kararlarını ve hayatındaki insanları gerçekten hatırlayan; sohbet kapansa bile sıfırlanmayan yerel kişisel zekâ.
         </p>
 
-        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom: 24px;">
           <a href="/indir" class="btn btn-gold" style="padding:13px 30px; font-size:15px;">Synaphe'yi Hemen İndir</a>
           <a href="/ozellikler" class="btn" style="padding:13px 26px; font-size:15px; background:rgba(255,255,255,0.06); border:1px solid var(--border-strong); color:#fff;">Farkı Canlı Gör</a>
         </div>
@@ -1030,11 +1024,10 @@
 
         const hoverY = Math.sin(flapPhase * 0.5) * 14;
         const hoverX = Math.cos(flapPhase * 0.3) * 8;
-        const scrollOffset = scrollY * 0.28;
         const tiltPitch = Math.sin(flapPhase * 0.5) * 5;
         const rollYaw = Math.cos(flapPhase * 0.35) * 4;
 
-        rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY + scrollOffset}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
+        rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
 
         requestAnimationFrame(animate);
       }

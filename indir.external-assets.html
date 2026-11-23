@@ -107,7 +107,7 @@
     }
     .bloom-vignette {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 36%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.55) 50%, var(--bg) 92%);
+      background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.05) 0%, rgba(5, 6, 8, 0.35) 60%, rgba(5, 6, 8, 0.65) 100%);
     }
 
     /* SYNAPSE PARTICLES CANVAS */
@@ -392,7 +392,7 @@
 
     /* CTA BANNER */
     .cta-banner-box {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(13, 16, 24, 0.94));
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(13, 16, 24, 0.72));
       border: 1px solid var(--gold-border); border-radius: 28px;
       padding: clamp(36px, 5vw, 64px); display: flex; align-items: center;
       justify-content: space-between; gap: 32px; backdrop-filter: blur(24px);
@@ -405,7 +405,7 @@
       letter-spacing: -0.05em;
       line-height: 0.85;
       text-align: center;
-      background: linear-gradient(180deg, rgba(251, 191, 36, 0.16) 0%, transparent 90%);
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, transparent 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       user-select: none;
@@ -415,7 +415,8 @@
     /* FOOTER */
     .footer {
       border-top: 1px solid var(--border); padding: 48px 0 32px;
-      background: rgba(5,6,8,0.92); color: var(--text-soft); font-size: 13.5px;
+      background: rgba(5,6,8,0.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      color: var(--text-soft); font-size: 13.5px;
     }
     .footer-grid {
       display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px;
@@ -752,11 +753,10 @@
 
         const hoverY = Math.sin(flapPhase * 0.5) * 14;
         const hoverX = Math.cos(flapPhase * 0.3) * 8;
-        const scrollOffset = scrollY * 0.28;
         const tiltPitch = Math.sin(flapPhase * 0.5) * 5;
         const rollYaw = Math.cos(flapPhase * 0.35) * 4;
 
-        rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY + scrollOffset}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
+        rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
 
         requestAnimationFrame(animate);
       }
