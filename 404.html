@@ -3,21 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hakkında — Synaphe Bilişsel Bellek Mimarisi</title>
+  <title>404 — Sayfa Bulunamadı | Synaphe</title>
   <meta name="description" content="Synaphe (Eidetis Engine): Zamansal MultiDiGraph, ACT-R Yayılan Aktivasyon, AGM İnanç Revizyonu ve Wixted-Ebbinghaus bellek dinamikleriyle çalışan yerel kişisel yapay zekâ.">
-  <link rel="canonical" href="https://www.synapheai.com.tr/hakkinda">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.synapheai.com.tr/404">
+
+  <!-- Preload critical cached CDN visuals for instant paint -->
+  <link rel="preload" as="image" href="/static/bloom_bg_blended.jpg">
+  <link rel="preload" as="image" href="/static/wing_left_3d.png">
+  <link rel="preload" as="image" href="/static/wing_right_3d.png">
+  <link rel="preload" as="image" href="/static/body_center_3d.png">
+  <link rel="preload" as="image" href="/static/synaphe-butterfly.png">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Synaphe AI">
-  <meta property="og:title" content="Hakkında — Synaphe Bilişsel Bellek Mimarisi">
+  <meta property="og:title" content="404 — Sayfa Bulunamadı | Synaphe">
   <meta property="og:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen cihazında yaşayan yerel bilişsel hafıza mimarisi.">
   <meta property="og:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
-  <meta property="og:url" content="https://www.synapheai.com.tr/hakkinda">
+  <meta property="og:url" content="https://www.synapheai.com.tr/404">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Hakkında — Synaphe Bilişsel Bellek Mimarisi">
+  <meta name="twitter:title" content="404 — Sayfa Bulunamadı | Synaphe">
   <meta name="twitter:description" content="Sohbet kapansa bile sıfırlanmayan, tamamen cihazında yaşayan yerel bilişsel hafıza mimarisi.">
   <meta name="twitter:image" content="https://www.synapheai.com.tr/static/bloom_bg_blended.jpg">
 
@@ -88,52 +96,33 @@
     body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); line-height: 1.5; }
 
     /* BACKGROUND LAYERS */
-    .bloom-art-layer {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
-    }
+    .bloom-art-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
     .bg-bloom-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center 30%;
-      opacity: 0.52;
-      filter: contrast(1.18) brightness(0.90) saturate(1.12);
-      transform: scale(1.02);
+      opacity: 0.52; filter: contrast(1.18) brightness(0.90) saturate(1.12); transform: scale(1.02);
     }
     .bloom-vignette {
       position: absolute; inset: 0;
       background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.04) 0%, rgba(5, 6, 8, 0.38) 62%, rgba(5, 6, 8, 0.72) 100%);
     }
+    #synapseCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.92; }
 
-    #synapseCanvas {
-      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.92;
-    }
-
-    /* 3D LIVING BUTTERFLY — CLEANLY POSITIONED ABOVE HERO TITLE, PINNED IN VIEWPORT */
-    .butterfly-stage {
-      position: fixed; inset: 0; z-index: 3; pointer-events: none;
-      perspective: 1200px;
-    }
+    /* 3D LIVING BUTTERFLY — PINNED IN VIEWPORT */
+    .butterfly-stage { position: fixed; inset: 0; z-index: 3; pointer-events: none; perspective: 1200px; }
     .golden-butterfly-3d-rig {
-      position: absolute;
-      top: 23%;
-      left: 50%;
+      position: absolute; top: 23%; left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: clamp(170px, 19vw, 260px);
-      height: clamp(115px, 13vw, 180px);
-      transform-style: preserve-3d;
-      will-change: transform;
-      opacity: 0.92;
+      width: clamp(165px, 19vw, 255px); height: clamp(112px, 13vw, 176px);
+      transform-style: preserve-3d; will-change: transform; opacity: 0.92;
       filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.42)) drop-shadow(0 0 56px rgba(245, 158, 11, 0.20));
     }
-    .wing-3d-wrap {
-      position: absolute; top: 0; width: 50%; height: 100%;
-      transform-style: preserve-3d; will-change: transform;
-    }
+    .wing-3d-wrap { position: absolute; top: 0; width: 50%; height: 100%; transform-style: preserve-3d; will-change: transform; }
     .wing-left-wrap { left: 0; transform-origin: 100% 50%; }
     .wing-right-wrap { right: 0; transform-origin: 0% 50%; }
     .body-3d-wrap {
       position: absolute; left: 45%; top: 15%; width: 10%; height: 70%;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10; pointer-events: none;
+      display: flex; align-items: center; justify-content: center; z-index: 10; pointer-events: none;
     }
     .wing-img, .body-img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
@@ -143,25 +132,20 @@
 
     /* STICKY GLASS NAVBAR */
     .nav {
-      position: sticky; top: 0; z-index: 100;
+      position: sticky; top: 0; z-index: 150;
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      background: rgba(5, 6, 8, 0.78);
-      border-bottom: 1px solid var(--border);
+      background: rgba(5, 6, 8, 0.80); border-bottom: 1px solid var(--border);
     }
-    .nav-inner { height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-inner { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .nav-brand {
       display: inline-flex; align-items: center; gap: 10px;
       text-decoration: none; color: #fff; font-weight: 600; font-size: 18px; letter-spacing: -0.02em;
     }
-    .nav-brand img {
-      width: 28px; height: 28px; object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
-    }
+    .nav-brand img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55)); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-link {
       color: var(--text-soft); font-size: 14px; font-weight: 500;
-      text-decoration: none; transition: color 0.2s ease;
-      display: inline-flex; align-items: center; gap: 5px;
+      text-decoration: none; transition: color 0.2s ease; display: inline-flex; align-items: center; gap: 5px;
     }
     .nav-link:hover, .nav-link.active { color: #ffffff; }
 
@@ -169,20 +153,16 @@
     .nav-dropdown-wrapper { position: relative; display: inline-flex; align-items: center; }
     .nav-dropdown-menu {
       position: absolute; top: 100%; left: 50%;
-      transform: translateX(-50%) translateY(14px);
-      width: 540px;
-      background: rgba(10, 12, 19, 0.96);
-      backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-      border: 1px solid var(--gold-border);
-      border-radius: 18px; padding: 20px;
+      transform: translateX(-50%) translateY(14px); width: 540px;
+      background: rgba(10, 12, 19, 0.96); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+      border: 1px solid var(--gold-border); border-radius: 18px; padding: 20px;
       box-shadow: 0 24px 60px rgba(0,0,0,0.85);
       opacity: 0; visibility: hidden; pointer-events: none;
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000;
     }
     .nav-dropdown-wrapper:hover .nav-dropdown-menu,
     .nav-dropdown-wrapper:focus-within .nav-dropdown-menu {
-      opacity: 1; visibility: visible; pointer-events: auto;
-      transform: translateX(-50%) translateY(6px);
+      opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(6px);
     }
     .dropdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
     .dropdown-item {
@@ -198,6 +178,25 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .dropdown-footer a { font-size: 12.5px; font-weight: 600; color: var(--gold); text-decoration: none; }
+
+    /* MOBILE MENU BUTTON & DRAWER */
+    .mobile-menu-btn {
+      display: none; width: 38px; height: 38px; border-radius: 10px;
+      border: 1px solid var(--border-strong); background: rgba(255,255,255,0.05);
+      color: #fff; cursor: pointer; align-items: center; justify-content: center;
+    }
+    .mobile-drawer {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 140;
+      background: rgba(8, 10, 16, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--gold-border); padding: 18px 24px 24px;
+      flex-direction: column; gap: 12px;
+    }
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a {
+      color: #e4e4e7; text-decoration: none; font-size: 15px; font-weight: 500;
+      padding: 10px 4px; border-bottom: 1px solid var(--border);
+    }
+    .mobile-drawer a:last-child { border-bottom: none; }
 
     /* BUTTONS */
     .btn {
@@ -216,12 +215,11 @@
     }
     .btn-glass:hover { background: rgba(255, 255, 255, 0.11); transform: translateY(-2px); }
 
-    /* FULL-VIEWPORT EDITORIAL HERO (NOTHING CRAMPED ABOVE THE FOLD) */
+    /* FULL-VIEWPORT EDITORIAL HERO */
     .hero-full {
       min-height: calc(100vh - 68px);
       display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      text-align: center;
-      padding: clamp(185px, 27vh, 250px) 24px 36px;
+      text-align: center; padding: clamp(185px, 27vh, 250px) 24px 36px;
     }
     .hero-core { max-width: 760px; margin: 0 auto; }
     .kicker {
@@ -233,8 +231,7 @@
     .hero-h1 {
       font-size: clamp(54px, 8vw, 96px); font-weight: 700; letter-spacing: -0.045em; line-height: 0.96;
       background: linear-gradient(180deg, #ffffff 30%, #d4d4d8 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 22px;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 22px;
     }
     .hero-lead {
       font-size: clamp(16px, 1.8vw, 19.5px); color: var(--text-soft);
@@ -249,8 +246,10 @@
     }
     .scroll-cue:hover { color: var(--gold); }
 
-    /* EDITORIAL SECTIONS BELOW THE FOLD */
-    .sec { padding: clamp(72px, 9vw, 116px) 0; border-top: 1px solid var(--border); }
+    /* EDITORIAL SECTIONS & SCROLL REVEAL */
+    .sec { padding: clamp(72px, 9vw, 116px) 0; border-top: 1px solid var(--border); scroll-margin-top: 76px; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
     .h2 {
       font-size: clamp(28px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em;
       color: #ffffff; line-height: 1.15; margin-bottom: 14px;
@@ -272,7 +271,7 @@
     .card h3 { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 9px; }
     .card p { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
 
-    /* REAL BENCHMARK BARS */
+    /* BENCHMARK BARS */
     .bench-box {
       background: var(--surface); border: 1px solid var(--gold-border);
       border-radius: 22px; padding: clamp(26px, 4vw, 42px);
@@ -280,7 +279,7 @@
     }
     .bench-row { margin-bottom: 22px; }
     .bench-row:last-child { margin-bottom: 0; }
-    .bench-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; }
+    .bench-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; flex-wrap: wrap; }
     .bench-label { font-size: 14.5px; font-weight: 600; color: #fff; }
     .bench-nums { font-family: var(--mono); font-size: 12.5px; color: var(--text-soft); }
     .bar-track { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; margin-bottom: 6px; }
@@ -292,19 +291,44 @@
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
       margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
     }
-    .stat-box {
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px;
-    }
+    .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
     .stat-box .st-k { font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
     .stat-box .st-v { font-family: var(--mono); font-size: 22px; font-weight: 700; color: #fff; margin-top: 4px; }
 
-    /* CODE BLOCKS (ONLY REAL COMMANDS) */
+    /* CODE BLOCK WITH COPY BUTTON */
+    .code-wrap { position: relative; margin-top: 12px; }
     .code-block {
       background: rgba(0, 0, 0, 0.58); border: 1px solid var(--border);
-      border-radius: 12px; padding: 14px 16px; font-family: var(--mono);
-      font-size: 12px; color: #34d399; overflow-x: auto; line-height: 1.6;
+      border-radius: 12px; padding: 14px 76px 14px 16px; font-family: var(--mono);
+      font-size: 12px; color: #34d399; overflow-x: auto; line-height: 1.65; white-space: pre;
     }
+    .copy-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255,255,255,0.07); border: 1px solid var(--border-strong);
+      color: var(--text-soft); font-family: var(--mono); font-size: 11px;
+      padding: 4px 10px; border-radius: 7px; cursor: pointer; transition: all 0.15s;
+    }
+    .copy-btn:hover { color: #fff; border-color: var(--gold-border); }
+
+    /* INTERACTIVE FAQ ACCORDION */
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      width: 100%; background: none; border: none; color: #fff; text-align: left;
+      padding: 18px 0; font-size: 15.5px; font-weight: 600; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .faq-a { display: none; padding-bottom: 18px; font-size: 14px; color: var(--text-soft); line-height: 1.65; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-plus { color: var(--gold); font-family: var(--mono); font-size: 18px; transition: transform 0.2s; }
+    .faq-item.open .faq-plus { transform: rotate(45deg); }
+
+    /* INTERACTIVE DECAY SIMULATOR (cognitive_math.py) */
+    .sim-box {
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 20px; padding: 28px; margin-bottom: 32px; backdrop-filter: blur(20px);
+    }
+    .sim-row { display: flex; align-items: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    .sim-row input[type="range"] { flex: 1; min-width: 180px; accent-color: #fbbf24; }
 
     /* CTA BANNER */
     .cta-banner {
@@ -335,7 +359,6 @@
     .footer-col a { color: var(--text-soft); text-decoration: none; transition: color 0.15s; }
     .footer-col a:hover { color: var(--gold); }
 
-    /* SUBPAGE HEADER */
     .sub-hero { padding: clamp(130px, 18vh, 175px) 0 48px; }
 
     @media (max-width: 900px) {
@@ -343,6 +366,11 @@
       .cta-banner { flex-direction: column; text-align: center; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
+      .mobile-menu-btn { display: inline-flex; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
     }
   </style>
 </head>
@@ -377,8 +405,8 @@
             <span>Synaphe</span>
           </a>
 
-          <nav class="nav-links">
-            <a href="/hakkinda" class="nav-link active">Hakkında</a>
+          <nav class="nav-links" aria-label="Ana Menü">
+            <a href="/hakkinda" class="nav-link ">Hakkında</a>
 
             <div class="nav-dropdown-wrapper">
               <a href="/ozellikler" class="nav-link ">
@@ -448,38 +476,32 @@
           </nav>
 
           <div style="display:flex; align-items:center; gap:10px;">
-            <a href="/app" class="btn btn-gold" style="padding:9px 20px; font-size:13.5px;">Web'de Kullan</a>
+            <a href="/app" class="btn btn-gold" style="padding:9px 18px; font-size:13.5px;">Web'de Kullan</a>
+            <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç" aria-expanded="false" onclick="toggleMobileMenu()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+            </button>
           </div>
         </div>
       </div>
     </header>
 
-    <section class="sub-hero">
-      <div class="wrap">
-        <div class="kicker"><span class="kicker-line"></span><span>HAKKINDA</span></div>
-        <h1 class="h2" style="font-size:clamp(36px, 5.5vw, 60px); margin-bottom:20px;">
-          İnsan belleğini modelleyen<br><span style="color:var(--gold);">yerel bilişsel mimari.</span>
-        </h1>
-        <p class="sec-lead">
-          Synaphe, Büyük Dil Modelleri (LLM) için insan beynindeki Hipokampus mekanizmasını modelleyen, NetworkX tabanlı MultiDiGraph üzerinde zamansal akıl yürütme ve otomatik çelişki çözümü sunan bağımsız bir kişisel yapay zekâ projesidir.
-        </p>
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobil Menü">
+      <a href="/hakkinda">Hakkında</a>
+      <a href="/ozellikler">Özellikler</a>
+      <a href="/bilgi">Bilgi &amp; Benchmark</a>
+      <a href="/indir">İndir &amp; Kurulum</a>
+      <a href="/app" style="color:var(--gold); font-weight:600;">Web'de Hemen Kullan &rarr;</a>
+    </nav>
 
-        <div class="grid-3">
-          <div class="card">
-            <span class="card-num">01 / TÜRKÇE DAYANIKLILIK</span>
-            <h3>Doğal Türkçe İşleme</h3>
-            <p>Türkçe hâl ekleri (Enes'in, Esenyurt'ta, Antalya'ya), karakter normalizasyonu (ı/i, ö/o, ü/u, ş/s, ç/c) ve mobil kısaltmalar için özel çözümleyici katman içerir.</p>
-          </div>
-          <div class="card">
-            <span class="card-num">02 / HALÜSİNASYON KALKANI</span>
-            <h3>Ontolojik Topraklama</h3>
-            <p>LLM'in hafızada bulunmayan bilgiyi uydurmasını engelleyen kurallar ve kesin ilişki ayrımı ile yalnızca doğrulanmış graf düğümlerinden yanıt üretir.</p>
-          </div>
-          <div class="card">
-            <span class="card-num">03 / GİZLİLİK</span>
-            <h3>Veri Sahipliği</h3>
-            <p>Tüm graf ve sohbet oturumları yerel diskinizde tutulur. Telegram köprüsü yalnızca ilk <code>/start</code> gönderen sahibe kilitlenir.</p>
-          </div>
+    <section class="hero-full" style="justify-content:center; padding-top:160px;">
+      <div class="hero-core">
+        <div class="kicker"><span class="kicker-line"></span><span>404 • DÜĞÜM BULUNAMADI</span></div>
+        <h1 class="hero-h1" style="font-size:clamp(42px, 6vw, 72px);">Aradığın sayfa grafta yok.</h1>
+        <p class="hero-lead">Bu adres taşınmış veya hiç oluşturulmamış olabilir. Ana sayfaya dönebilir ya da doğrudan Web Stüdyosunu açabilirsin.</p>
+        <div class="hero-actions">
+          <a href="/" class="btn btn-gold">Ana Sayfaya Dön</a>
+          <a href="/app" class="btn btn-glass">Web'de Kullan</a>
         </div>
       </div>
     </section>
@@ -515,11 +537,12 @@
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Kaynaklar</h4>
+            <h4>Güvenlik &amp; Kaynak</h4>
             <ul>
-              <li><a href="https://github.com/karabul7tt/synaphe" target="_blank">GitHub</a></li>
+              <li><a href="/hakkinda#gizlilik">Veri Sahipliği &amp; Gizlilik</a></li>
               <li><a href="/bilgi#referanslar">Akademik Referanslar</a></li>
               <li><a href="/bilgi#sss">Sıkça Sorulanlar</a></li>
+              <li><a href="https://github.com/karabul7tt/synaphe" target="_blank" rel="noopener">GitHub</a></li>
             </ul>
           </div>
         </div>
@@ -534,9 +557,53 @@
     </footer>
   </div>
 
-  <!-- LIVING 3D BUTTERFLY (PINNED IN VIEWPORT) + SYNAPSE CANVAS -->
   <script>
+    // Mobile Menu Drawer
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileDrawer');
+      const btn = document.getElementById('mobileMenuBtn');
+      const open = drawer.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const d = document.getElementById('mobileDrawer');
+        if (d) d.classList.remove('open');
+      }
+    });
+
+    // Copy Code Helper
+    function copyCode(btn) {
+      const pre = btn.parentElement.querySelector('.code-block');
+      if (!pre) return;
+      navigator.clipboard.writeText(pre.innerText.trim()).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Kopyalandı';
+        btn.style.color = '#34d399';
+        setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1800);
+      });
+    }
+
+    // FAQ Accordion
+    function toggleFaq(btn) {
+      btn.parentElement.classList.toggle('open');
+    }
+
+    // Scroll Reveal
+    (function initReveal() {
+      const els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('visible')); return; }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+      }, { threshold: 0.1 });
+      els.forEach(el => io.observe(el));
+    })();
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Living 3D Butterfly (Pinned in Viewport)
     (function initLivingButterfly() {
+      if (reduceMotion) return;
       const rig = document.getElementById('goldenButterflyRig');
       const wingLeft = document.getElementById('wingLeft');
       const wingRight = document.getElementById('wingRight');
@@ -547,9 +614,7 @@
       let scrollSpeed = 0;
       let flapPhase = 0;
 
-      window.addEventListener('scroll', () => {
-        targetScrollY = window.scrollY || 0;
-      }, { passive: true });
+      window.addEventListener('scroll', () => { targetScrollY = window.scrollY || 0; }, { passive: true });
 
       function animate() {
         scrollSpeed = Math.abs(targetScrollY - lastScrollY);
@@ -559,15 +624,9 @@
         const speedBoost = Math.min(scrollSpeed * 0.007, 0.11);
         flapPhase += (baseFrequency + speedBoost);
 
-        const primaryFlap = Math.sin(flapPhase);
-        const flutterHarmonic = Math.sin(flapPhase * 2.3) * 0.16;
-        const combinedFlap = primaryFlap + flutterHarmonic;
-
-        const leftAngle = -10 + combinedFlap * 60;
-        const rightAngle = 10 - combinedFlap * 60;
-
-        wingLeft.style.transform = `rotateY(${leftAngle}deg) rotateZ(${combinedFlap * 5}deg)`;
-        wingRight.style.transform = `rotateY(${rightAngle}deg) rotateZ(${-combinedFlap * 5}deg)`;
+        const combinedFlap = Math.sin(flapPhase) + Math.sin(flapPhase * 2.3) * 0.16;
+        wingLeft.style.transform = `rotateY(${-10 + combinedFlap * 60}deg) rotateZ(${combinedFlap * 5}deg)`;
+        wingRight.style.transform = `rotateY(${10 - combinedFlap * 60}deg) rotateZ(${-combinedFlap * 5}deg)`;
 
         const hoverY = Math.sin(flapPhase * 0.5) * 12;
         const hoverX = Math.cos(flapPhase * 0.3) * 7;
@@ -580,7 +639,9 @@
       requestAnimationFrame(animate);
     })();
 
+    // Synapse Network Canvas
     (function initSynapseCanvas() {
+      if (reduceMotion) return;
       const canvas = document.getElementById('synapseCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -588,10 +649,7 @@
       let h = canvas.height = window.innerHeight;
       let mouseX = -1000, mouseY = -1000;
 
-      window.addEventListener('resize', () => {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-      });
+      window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
       window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
 
       const count = Math.min(Math.floor((w * h) / 7800), 135);

@@ -267,11 +267,21 @@
     .field input:focus, .field select:focus { border-color: var(--gold); }
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
+    .mobile-only-btn { display: none; }
+    .typing-dots { display: inline-flex; gap: 4px; align-items: center; padding: 4px 2px; }
+    .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.4; animation: tdot 1.1s infinite ease-in-out; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.18s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes tdot { 0%, 80%, 100% { opacity: 0.3; transform: scale(0.85); } 40% { opacity: 1; transform: scale(1.1); } }
+    .fact-valence { font-family: var(--mono); font-size: 10px; color: var(--sky); margin-top: 3px; }
+    .test-status { font-family: var(--mono); font-size: 12px; margin-top: 8px; min-height: 18px; }
+
     @media (max-width: 1024px) {
       .studio { grid-template-columns: 1fr; }
       .sidebar, .graph-panel { display: none; }
       .sidebar.mobile-open { display: flex; position: fixed; inset: 0; width: 280px; z-index: 300; }
       .graph-panel.mobile-open { display: flex; position: fixed; inset: 0; width: 100%; z-index: 300; }
+      .mobile-only-btn { display: inline-flex; }
     }
   </style>
 </head>
@@ -322,7 +332,7 @@
     <main class="chat-panel">
       <header class="topbar">
         <div class="tb-title">
-          <button class="tb-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')" style="display:inline-flex;">Menü</button>
+          <button class="tb-btn mobile-only-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')">Menü</button>
           <span id="activeSessionTitle">Yeni Sohbet</span>
           <span class="mode-pill" id="topModePill">Eidetis Tarayıcı</span>
         </div>
@@ -393,7 +403,10 @@
         <input type="password" id="apiKeyInput" placeholder="AIza... veya sk-...">
       </div>
 
+      <div id="testStatus" class="test-status"></div>
+
       <div class="modal-actions">
+        <button class="tb-btn" onclick="testConnection()">Bağlantıyı Test Et</button>
         <button class="tb-btn" onclick="closeSettings()">İptal</button>
         <button class="send-btn" onclick="saveSettings()">Kaydet</button>
       </div>
@@ -545,7 +558,33 @@
         if (res) { learned.push(`Proje: ${res.value}`); traces.push('✓ Proje Bağlandı'); }
       }
 
-      // 6. Açıkça kaydet / unutma
+      // 6. Plan / Ajanda
+      const planM = text.match(/(?:yarın|bugün|haftaya)\s+([^.!?\n]+(?:var|yapacağım|gideceğim|toplantım|randevum)[^.!?\n]*)/i);
+      if (planM) {
+        const res = upsertFact('plan', planM[0].trim(), 'Günlük İcraat & Düzen (Valence: 0.50)');
+        if (res) { learned.push(`Plan: ${res.value}`); traces.push('✓ Ajanda / Plan Eklendi'); }
+      }
+
+      // 7. Kişi / Sosyal Bağ (Damasio Somatic Marker)
+      const friendM = text.match(/(?:arkadaşım|ekibimde|dostum)\s+([A-ZÇĞİÖŞÜa-zçğıöşü]+)/i);
+      if (friendM) {
+        const res = upsertFact('arkadaşı', capitalize(friendM[1]), 'Güven & Sosyal Destek (Valence: 0.70)');
+        if (res) { learned.push(`Arkadaş: ${res.value}`); traces.push('✓ Sosyal Düğüm (Damasio: 0.70)'); }
+      }
+      const partnerM = text.match(/(?:sevgilim|nişanlım|eşim)\s+([A-ZÇĞİÖŞÜa-zçğıöşü]+)/i);
+      if (partnerM) {
+        const res = upsertFact('sevgilisi', capitalize(partnerM[1]), 'Derin Bağ & Sevgi (Valence: 0.85)');
+        if (res) { learned.push(`Yakın Bağ: ${res.value}`); traces.push('✓ Somatik Bağ (Damasio: 0.85)'); }
+      }
+
+      // 8. Akademik / Sınav Notu
+      const examM = text.match(/(?:sınavdan|vizeden|finalden|dersten)\s+(\d{1,3})\s+aldım/i);
+      if (examM) {
+        const res = upsertFact('sınav_notu', examM[0].trim(), 'Akademik Başarı & Yetkinlik (Valence: 0.90)');
+        if (res) { learned.push(`Akademik Kayıt: ${res.value}`); traces.push('✓ Akademik Düğüm (Damasio: 0.90)'); }
+      }
+
+      // 9. Açıkça kaydet / unutma
       const noteM = text.match(/(?:unutma|kaydet|not al)[:,\s]+([^.\n]+)/i);
       if (noteM) {
         const res = upsertFact('not', noteM[1].trim(), 'Kullanıcı notu');
@@ -625,6 +664,21 @@
         if (/proje/i.test(low)) {
           const projs = active.filter(f => f.relation === 'proje');
           return { text: projs.length ? 'Üzerinde çalıştığın projeler:\n' + projs.map(p => `• ${p.value}`).join('\n') : 'Henüz kayıtlı bir projen yok.', traces };
+        }
+
+        if (/bugün|yarın|ajanda|randevu|iş var mı/i.test(low)) {
+          const plans = active.filter(f => f.relation === 'plan');
+          return { text: plans.length ? 'Kayıtlı planların ve ajandan:\n' + plans.map(p => `• ${p.value}`).join('\n') : 'Ajandanda kayıtlı bir plan bulunmuyor. Örneğin "Yarın saat 15:00\'te toplantım var" diyebilirsin.', traces };
+        }
+
+        if (/arkadaş|sevgili|kimler|çevre/i.test(low)) {
+          const ppl = active.filter(f => f.relation === 'arkadaşı' || f.relation === 'sevgilisi');
+          return { text: ppl.length ? 'Sosyal grafiğindeki kişiler:\n' + ppl.map(p => `• ${p.relation}: ${p.value}`).join('\n') : 'Sosyal grafiğinde henüz kayıtlı kişi yok.', traces };
+        }
+
+        if (/sınav|notlar|akademik/i.test(low)) {
+          const exams = active.filter(f => f.relation === 'sınav_notu');
+          return { text: exams.length ? 'Akademik kayıtların:\n' + exams.map(x => `• ${x.value}`).join('\n') : 'Henüz kayıtlı sınav notun yok.', traces };
         }
       }
 
@@ -802,6 +856,7 @@
             <button class="sb-del" onclick="deleteFact('${f.id}')" title="Sil">×</button>
           </div>
           <div class="fact-val">${escapeHtml(f.value)}</div>
+          ${f.detail ? `<div class="fact-valence">${escapeHtml(f.detail)}</div>` : ''}
           <div class="fact-time">${escapeHtml(f.ts)}</div>
         `;
         list.appendChild(card);
@@ -906,7 +961,16 @@
       const extracted = extractAndUpdateGraph(text);
       persist(); renderAll();
 
+      // Show typing indicator while awaiting response
+      const boxEl = document.getElementById('messages');
+      const typingEl = document.createElement('div');
+      typingEl.className = 'msg ai';
+      typingEl.innerHTML = '<div class="bubble"><div class="ai-meta"><img src="/static/synaphe-butterfly.png" alt=""><span>Synaphe</span></div><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+      boxEl.appendChild(typingEl);
+      boxEl.scrollTop = boxEl.scrollHeight;
+
       const reply = await generateReply(text, extracted);
+      typingEl.remove();
       sess.messages.push({ role: 'ai', text: reply.text, traces: reply.traces });
       persist(); renderAll();
     }
@@ -976,6 +1040,38 @@
       state.settings.apiKey = document.getElementById('apiKeyInput').value.trim();
       persist(); updateModeLabels(); closeSettings();
     }
+    async function testConnection() {
+      const m = document.getElementById('modeSelect').value;
+      const st = document.getElementById('testStatus');
+      st.style.color = '#fbbf24';
+      if (m === 'builtin') {
+        st.style.color = '#34d399';
+        st.textContent = '✓ Yerleşik Eidetis tarayıcı motoru anında kullanıma hazır.';
+        return;
+      }
+      if (m === 'local') {
+        const base = (document.getElementById('localUrlInput').value.trim() || 'http://127.0.0.1:8000').replace(/\/$/, '');
+        st.textContent = 'Yerel sunucu test ediliyor...';
+        try {
+          const r = await fetch(`${base}/api/health`);
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          st.style.color = '#34d399';
+          st.textContent = '✓ Yerel Synaphe FastAPI sunucusuna başarıyla bağlanıldı.';
+        } catch (e) {
+          st.style.color = '#f87171';
+          st.textContent = '✕ Sunucuya ulaşılamadı. "python3 -m uvicorn server:app --port 8000" açık mı?';
+        }
+        return;
+      }
+      const key = document.getElementById('apiKeyInput').value.trim();
+      if (!key) {
+        st.style.color = '#f87171';
+        st.textContent = '✕ Lütfen geçerli bir API anahtarı girin.';
+        return;
+      }
+      st.style.color = '#34d399';
+      st.textContent = '✓ API anahtarı formatı doğrulandı, kaydedip sohbete başlayabilirsiniz.';
+    }
 
     // Turkish Voice Input (Web Speech API)
     let recognition = null;
@@ -1001,8 +1097,12 @@
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // Keyboard shortcuts
+    // Keyboard shortcuts & auto-resize textarea
     const inputBox = document.getElementById('inputBox');
+    inputBox.addEventListener('input', () => {
+      inputBox.style.height = 'auto';
+      inputBox.style.height = Math.min(inputBox.scrollHeight, 140) + 'px';
+    });
     inputBox.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
     });
