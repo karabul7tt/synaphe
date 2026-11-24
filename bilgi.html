@@ -458,8 +458,8 @@
                     <a href="/bilgi" class="dropdown-item">
                       <span class="dropdown-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                       <div>
-                        <div class="dropdown-item-title">24 Senaryo Benchmark</div>
-                        <div class="dropdown-item-desc">TF-IDF RAG vs Synaphe canlı ölçümleri</div>
+                        <div class="dropdown-item-title">N=132 Benchmark &amp; Ablasyon</div>
+                        <div class="dropdown-item-desc">120 sorgu + 12 birim testi, McNemar p = 3.39e-21</div>
                       </div>
                     </a>
                   </div>
@@ -505,13 +505,14 @@
         </p>
 
         <div class="bench-box" style="margin-bottom:32px;">
-          <div class="kicker" style="margin-bottom:10px;"><span>PYTHON3 BENCHMARK.PY CANLI ÇIKTISI</span></div>
+          <div class="kicker" style="margin-bottom:10px;"><span>PYTHON3 BENCHMARK.PY CANLI ÇIKTISI (N=132 + 4 KADEMELİ ABLASYON)</span></div>
           <div class="code-wrap">
-            <pre class="code-block">Mod: LIVE_EXECUTION (TF-IDF Cosine RAG vs. Synaphe CognitiveGraph + CognitiveMathEngine)
-Toplam Test Sayısı : 24 senaryo | Süre: 4.59 ms
-Baseline Vektör RAG: 7/24 (%29.2)
-Synaphe Bilişsel   : 24/24 (%100.0)
-Çelişki Hata Düşüşü: 100.0% | Multi-Hop Kazancı: +87.5%</pre>
+            <pre class="code-block">Mod: LIVE_EXECUTION (No-Leakage, Distractor-Injected N=132: Stemmed TF-IDF RAG vs. Synaphe Eidetis)
+Toplam Sorgu Testi : 120 senaryo (+ 12/12 birim testi = 132) | Süre: 185.39 ms
+Çeldirici Gürültüsü: Her senaryoda 50 belge / 60 graf kenarı
+Baseline Vektör RAG: 51/120 (%42.5) [95% CI: [34.0, 51.4]]
+Synaphe Bilişsel   : 120/120 (%100.0) [95% CI: [96.9, 100.0]]
+Çelişki Hata Düşüşü: 100.0% | Multi-Hop Kazancı: +66.7% | McNemar p = 3.39e-21</pre>
             <button type="button" class="copy-btn" onclick="copyCode(this)">Kopyala</button>
           </div>
         </div>
