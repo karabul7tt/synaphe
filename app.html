@@ -321,9 +321,9 @@
       </div>
 
       <div class="sb-foot">
-        <button class="mode-btn" onclick="openSettings()">
-          <span><span class="dot-live"></span><span id="sidebarModeLabel">Eidetis Web Motoru</span></span>
-          <span style="color:var(--gold); font-size:11px;">Ayarlar</span>
+        <button class="mode-btn" onclick="openAccountModal()">
+          <span><span class="dot-live"></span><span id="sidebarUserLabel">Hesap</span></span>
+          <span style="color:var(--gold); font-size:11px;">Hesap</span>
         </button>
       </div>
     </aside>
@@ -334,11 +334,11 @@
         <div class="tb-title">
           <button class="tb-btn mobile-only-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')">Menü</button>
           <span id="activeSessionTitle">Yeni Sohbet</span>
-          <span class="mode-pill" id="topModePill">Eidetis Tarayıcı</span>
+          <span class="mode-pill" id="topModePill">Synaphe AI</span>
         </div>
         <div style="display:flex; gap:8px;">
           <button class="tb-btn" onclick="toggleGraphPanel()">Bilişsel Graf</button>
-          <button class="tb-btn" onclick="openSettings()">Model / API</button>
+          <button class="tb-btn" onclick="openAccountModal()">Hesap</button>
         </div>
       </header>
 
@@ -346,13 +346,13 @@
 
       <div class="composer-wrap">
         <div class="composer">
-          <textarea id="inputBox" rows="1" placeholder="Synaphe'ye bir şey anlat veya hafızandan sor..."></textarea>
+          <textarea id="inputBox" rows="1" placeholder="Synaphe'ye bir şey anlat veya sor..."></textarea>
           <button class="icon-btn" id="micBtn" title="Sesli Giriş (Türkçe)" onclick="toggleVoice()">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           </button>
           <button class="send-btn" onclick="handleSend()">Gönder</button>
         </div>
-        <div class="composer-hint">Tüm hafıza düğümleri yalnızca kendi tarayıcınızda (<code>localStorage</code>) saklanır. Gerçek LLM için sağ üstten Model / API bağlayabilirsiniz.</div>
+        <div class="composer-hint">Ekstra API anahtarı gerekmez — Synaphe AI + Eidetis Bilişsel Hafıza hesabına özel çalışır.</div>
       </div>
     </main>
 
@@ -377,69 +377,78 @@
     </aside>
   </div>
 
-  <!-- SETTINGS MODAL -->
-  <div class="modal-bg" id="settingsModal">
+  <!-- ACCOUNT / LOGIN MODAL (ZERO API KEY REQUIRED) -->
+  <div class="modal-bg" id="accountModal">
     <div class="modal">
-      <h2>Synaphe Motor &amp; Model Ayarları</h2>
-      <p>Varsayılan olarak Eidetis Bilişsel Hafıza Motoru doğrudan tarayıcınızda çalışır. İsterseniz kendi yerel Synaphe sunucunuza veya Gemini / OpenAI API anahtarınıza bağlayabilirsiniz.</p>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width:28px; height:28px;">
+        <h2 style="margin:0;">Synaphe Hesabın</h2>
+      </div>
+      <p>Hesabınla giriş yap — her kullanıcının bilişsel hafıza grafiği ve sohbetleri tamamen kendisine özeldir. Hiçbir API anahtarı girmen gerekmez.</p>
 
       <div class="field">
-        <label>Çalışma Modu</label>
-        <select id="modeSelect" onchange="updateModalFields()">
-          <option value="builtin">Yerleşik Eidetis Bilişsel Motoru (Kurulumsuz)</option>
-          <option value="local">Yerel Synaphe FastAPI Sunucusu (http://127.0.0.1:8000)</option>
-          <option value="gemini">Eidetis Hafıza + Google Gemini API</option>
-          <option value="openai">Eidetis Hafıza + OpenAI API</option>
+        <label>Adın</label>
+        <input type="text" id="accNameInput" placeholder="Örn: Mehmet">
+      </div>
+      <div class="field">
+        <label>E-posta (Hesap Kimliği)</label>
+        <input type="email" id="accEmailInput" placeholder="ornek@email.com">
+      </div>
+      <div class="field">
+        <label>Bağlantı Modu</label>
+        <select id="accModeSelect">
+          <option value="cloud">Synaphe AI Bulut (Otomatik — Anahtarsız)</option>
+          <option value="local">Yerel Synaphe Sunucum (http://127.0.0.1:8000)</option>
         </select>
       </div>
 
-      <div class="field" id="localUrlField" style="display:none;">
-        <label>Yerel Sunucu Adresi</label>
-        <input type="text" id="localUrlInput" value="http://127.0.0.1:8000">
-      </div>
-
-      <div class="field" id="apiKeyField" style="display:none;">
-        <label>API Anahtarı (Yalnızca tarayıcınızda saklanır)</label>
-        <input type="password" id="apiKeyInput" placeholder="AIza... veya sk-...">
-      </div>
-
-      <div id="testStatus" class="test-status"></div>
+      <div id="accStatus" class="test-status"></div>
 
       <div class="modal-actions">
-        <button class="tb-btn" onclick="testConnection()">Bağlantıyı Test Et</button>
-        <button class="tb-btn" onclick="closeSettings()">İptal</button>
-        <button class="send-btn" onclick="saveSettings()">Kaydet</button>
+        <button class="tb-btn" id="accCancelBtn" onclick="closeAccountModal()">Kapat</button>
+        <button class="send-btn" onclick="loginOrSwitchAccount()">Giriş Yap &amp; Başla</button>
       </div>
     </div>
   </div>
 
   <script>
     // =========================================================================
-    // SYNAPHE CLIENT-SIDE EIDETIS COGNITIVE ENGINE (MultiDiGraph + AGM Revision)
+    // SYNAPHE ACCOUNT-SCOPED EIDETIS ENGINE (ZERO USER API KEY REQUIRED)
     // =========================================================================
-    const STORE_KEY = 'synaphe_web_state_v1';
+    const ACCOUNT_KEY = 'synaphe_current_account_v2';
+    let currentAccount = JSON.parse(localStorage.getItem(ACCOUNT_KEY) || 'null');
 
-    let state = JSON.parse(localStorage.getItem(STORE_KEY) || 'null') || {
-      settings: { mode: 'builtin', localUrl: 'http://127.0.0.1:8000', apiKey: '' },
-      activeSessionId: 's1',
-      sessions: [
-        {
-          id: 's1',
-          title: 'İlk Bilişsel Oturum',
-          messages: [
-            {
-              role: 'ai',
-              text: 'Merhaba, ben Synaphe. Eidetis bilişsel bellek motorum şu an tarayıcında aktif.\n\nBana kendinle, yaşadığın şehirle, hedeflerinle veya kararlarınla ilgili bir şeyler anlatabilirsin. Fikrini değiştirdiğinde eski bilgiyi silmeden arşive alır, güncel gerçeği sağdaki canlı grafta anında güncellerim.',
-              traces: ['Eidetis MultiDiGraph Hazır', 'AGM İnanç Revizyonu Aktif']
-            }
-          ]
-        }
-      ],
-      facts: [] // { id, relation, value, status: 'active'|'archived', ts, detail }
-    };
+    function getStoreKey() {
+      const id = currentAccount?.email ? currentAccount.email.toLowerCase().replace(/[^a-z0-9@._-]/g, '') : 'guest';
+      return 'synaphe_web_state_' + id;
+    }
+
+    function createDefaultState(name) {
+      const greetName = name ? ` ${name}` : '';
+      return {
+        settings: { mode: currentAccount?.mode || 'cloud', localUrl: 'http://127.0.0.1:8000' },
+        activeSessionId: 's1',
+        sessions: [
+          {
+            id: 's1',
+            title: 'İlk Bilişsel Oturum',
+            messages: [
+              {
+                role: 'ai',
+                text: `Merhaba${greetName}, ben Synaphe. Eidetis bilişsel bellek motorum hesabına özel olarak hazır.\n\nBana her konuda soru sorabilir, kod yazdırabilir veya kendinle, hedeflerinle, planlarınla ilgili bilgileri paylaşabilirsin. Fikrini değiştirdiğinde eski bilgiyi silmeden arşive alır, güncel gerçeği sağdaki canlı grafta anında güncellerim.`,
+                traces: ['Synaphe AI Hazır', 'AGM İnanç Revizyonu Aktif']
+              }
+            ]
+          }
+        ],
+        facts: []
+      };
+    }
+
+    let state = JSON.parse(localStorage.getItem(getStoreKey()) || 'null') || createDefaultState(currentAccount?.name || '');
 
     function persist() {
-      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      localStorage.setItem(getStoreKey(), JSON.stringify(state));
     }
 
     function trLower(s) {
@@ -696,16 +705,19 @@
     }
 
     async function generateReply(userText, extracted) {
-      const mode = state.settings.mode;
+      const mode = currentAccount?.mode || state.settings.mode || 'cloud';
+      const userName = currentAccount?.name || 'Kullanıcı';
+      const sess = getActiveSession();
+      const history = sess.messages.slice(-14).map(m => ({ role: m.role, text: m.text }));
 
-      // 1. Yerel FastAPI Sunucusu
+      // 1. Yerel FastAPI Sunucusu (Kullanıcı kendi bilgisayarında server.py çalıştırıyorsa)
       if (mode === 'local') {
         try {
           const base = (state.settings.localUrl || 'http://127.0.0.1:8000').replace(/\/$/, '');
           const res = await fetch(`${base}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userText })
+            body: JSON.stringify({ message: userText, user: userName })
           });
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const data = await res.json();
@@ -715,62 +727,51 @@
           };
         } catch (err) {
           return {
-            text: `Yerel Synaphe sunucusuna (${state.settings.localUrl}) ulaşılamadı. Terminalde "python3 -m uvicorn server:app --port 8000" komutunun çalıştığından emin olun.\n\nTarayıcı içi Eidetis yanıtı:\n` + builtinAnswer(userText, extracted).text,
+            text: `Yerel Synaphe sunucusuna ulaşılamadı. Bulut moduna geçebilir veya terminalde "python3 -m uvicorn server:app --port 8000" çalıştırabilirsin.\n\n` + builtinAnswer(userText, extracted).text,
             traces: ['Yerel Sunucu Çevrimdışı → Yedek Motor']
           };
         }
       }
 
-      // 2. Gemini API + Eidetis Context
-      if (mode === 'gemini' && state.settings.apiKey) {
-        try {
-          const sys = `Sen Synaphe'sin (Eidetis Bilişsel Bellek Mimarisi). Kullanıcının doğrulanmış hafıza grafiği aşağıdadır. Sadece gerçek kayıtlara dayan, halüsinasyon üretme, Türkçe ve net yanıt ver.\n\n${buildMemoryContext()}`;
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(state.settings.apiKey)}`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: sys }] },
-              contents: [{ role: 'user', parts: [{ text: userText }] }]
-            })
-          });
-          const data = await res.json();
-          const out = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (!out) throw new Error(data?.error?.message || 'Boş yanıt');
-          return { text: out, traces: ['Eidetis + Gemini API', ...extracted.traces] };
-        } catch (err) {
-          return { text: `Gemini API hatası: ${err.message}`, traces: ['API Hatası'] };
+      // 2. Varsayılan: Synaphe Bulut Serverless AI (/api/chat — Kullanıcıdan API anahtarı istemez!)
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: userText,
+            userName,
+            memoryContext: buildMemoryContext(),
+            history
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.reply) {
+          const aiTraces = [...extracted.traces];
+          // Sunucu yapay zekâsının çıkardığı ek bilişsel olguları da AGM ile grafa işle
+          if (Array.isArray(data.facts)) {
+            data.facts.forEach(f => {
+              if (f && f.relation && f.value) {
+                const r = upsertFact(String(f.relation).toLowerCase(), String(f.value), f.detail || 'Synaphe AI Çıkarımı');
+                if (r && r.conflictResolved && !aiTraces.some(t => t.includes('AGM'))) {
+                  aiTraces.push('↻ AGM Çelişki Çözüldü');
+                }
+              }
+            });
+          }
+          if (!aiTraces.length) aiTraces.push(`Synaphe AI (${data.model || 'Eidetis'})`);
+          return { text: data.reply, traces: aiTraces };
         }
+        // Eğer Vercel'de GEMINI_API_KEY henüz eklenmemişse kesintisiz yerleşik Eidetis motoruna düş
+        if (res.status === 503 && data.configured === false) {
+          const fallback = builtinAnswer(userText, extracted);
+          fallback.traces.push('Eidetis Yerleşik Mod');
+          return fallback;
+        }
+      } catch (_) {
+        // Ağ hatasında yerleşik Eidetis motoru kesintisiz çalışmaya devam eder
       }
 
-      // 3. OpenAI API + Eidetis Context
-      if (mode === 'openai' && state.settings.apiKey) {
-        try {
-          const sys = `Sen Synaphe'sin (Eidetis Bilişsel Bellek Mimarisi). Kullanıcının doğrulanmış hafıza grafiği:\n${buildMemoryContext()}\nTürkçe, doğal ve tutarlı yanıt ver.`;
-          const res = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${state.settings.apiKey}`
-            },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              messages: [
-                { role: 'system', content: sys },
-                { role: 'user', content: userText }
-              ]
-            })
-          });
-          const data = await res.json();
-          const out = data?.choices?.[0]?.message?.content;
-          if (!out) throw new Error(data?.error?.message || 'Boş yanıt');
-          return { text: out, traces: ['Eidetis + OpenAI API', ...extracted.traces] };
-        } catch (err) {
-          return { text: `OpenAI API hatası: ${err.message}`, traces: ['API Hatası'] };
-        }
-      }
-
-      // Default: Built-in Eidetis Engine
       return builtinAnswer(userText, extracted);
     }
 
@@ -927,15 +928,12 @@
     }
 
     function updateModeLabels() {
-      const map = {
-        builtin: ['Eidetis Web Motoru', 'Eidetis Tarayıcı'],
-        local: ['Yerel Sunucu :8000', 'FastAPI :8000'],
-        gemini: ['Eidetis + Gemini', 'Gemini API'],
-        openai: ['Eidetis + OpenAI', 'OpenAI API']
-      };
-      const pair = map[state.settings.mode] || map.builtin;
-      document.getElementById('sidebarModeLabel').textContent = pair[0];
-      document.getElementById('topModePill').textContent = pair[1];
+      const name = currentAccount?.name || 'Misafir';
+      const mode = currentAccount?.mode || state.settings.mode || 'cloud';
+      const sbLbl = document.getElementById('sidebarUserLabel');
+      const tpPill = document.getElementById('topModePill');
+      if (sbLbl) sbLbl.textContent = name;
+      if (tpPill) tpPill.textContent = mode === 'local' ? 'Yerel Sunucu :8000' : 'Synaphe AI';
     }
 
     function renderAll() {
@@ -1020,57 +1018,28 @@
       setTimeout(drawGraph, 50);
     }
 
-    // Settings modal
-    function openSettings() {
-      document.getElementById('modeSelect').value = state.settings.mode;
-      document.getElementById('localUrlInput').value = state.settings.localUrl || 'http://127.0.0.1:8000';
-      document.getElementById('apiKeyInput').value = state.settings.apiKey || '';
-      updateModalFields();
-      document.getElementById('settingsModal').classList.add('open');
+    // Account modal (Zero API key required)
+    function openAccountModal() {
+      document.getElementById('accNameInput').value = currentAccount?.name || '';
+      document.getElementById('accEmailInput').value = currentAccount?.email || '';
+      document.getElementById('accModeSelect').value = currentAccount?.mode || 'cloud';
+      document.getElementById('accStatus').textContent = '';
+      document.getElementById('accountModal').classList.add('open');
     }
-    function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
-    function updateModalFields() {
-      const m = document.getElementById('modeSelect').value;
-      document.getElementById('localUrlField').style.display = m === 'local' ? 'block' : 'none';
-      document.getElementById('apiKeyField').style.display = (m === 'gemini' || m === 'openai') ? 'block' : 'none';
+    function closeAccountModal() {
+      document.getElementById('accountModal').classList.remove('open');
     }
-    function saveSettings() {
-      state.settings.mode = document.getElementById('modeSelect').value;
-      state.settings.localUrl = document.getElementById('localUrlInput').value.trim();
-      state.settings.apiKey = document.getElementById('apiKeyInput').value.trim();
-      persist(); updateModeLabels(); closeSettings();
-    }
-    async function testConnection() {
-      const m = document.getElementById('modeSelect').value;
-      const st = document.getElementById('testStatus');
-      st.style.color = '#fbbf24';
-      if (m === 'builtin') {
-        st.style.color = '#34d399';
-        st.textContent = '✓ Yerleşik Eidetis tarayıcı motoru anında kullanıma hazır.';
-        return;
-      }
-      if (m === 'local') {
-        const base = (document.getElementById('localUrlInput').value.trim() || 'http://127.0.0.1:8000').replace(/\/$/, '');
-        st.textContent = 'Yerel sunucu test ediliyor...';
-        try {
-          const r = await fetch(`${base}/api/health`);
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          st.style.color = '#34d399';
-          st.textContent = '✓ Yerel Synaphe FastAPI sunucusuna başarıyla bağlanıldı.';
-        } catch (e) {
-          st.style.color = '#f87171';
-          st.textContent = '✕ Sunucuya ulaşılamadı. "python3 -m uvicorn server:app --port 8000" açık mı?';
-        }
-        return;
-      }
-      const key = document.getElementById('apiKeyInput').value.trim();
-      if (!key) {
-        st.style.color = '#f87171';
-        st.textContent = '✕ Lütfen geçerli bir API anahtarı girin.';
-        return;
-      }
-      st.style.color = '#34d399';
-      st.textContent = '✓ API anahtarı formatı doğrulandı, kaydedip sohbete başlayabilirsiniz.';
+    function loginOrSwitchAccount() {
+      const name = document.getElementById('accNameInput').value.trim() || 'Misafir';
+      const email = document.getElementById('accEmailInput').value.trim().toLowerCase() || (name.toLowerCase() + '@synaphe.local');
+      const mode = document.getElementById('accModeSelect').value;
+      currentAccount = { name, email, mode };
+      localStorage.setItem(ACCOUNT_KEY, JSON.stringify(currentAccount));
+      state = JSON.parse(localStorage.getItem(getStoreKey()) || 'null') || createDefaultState(name);
+      state.settings.mode = mode;
+      persist();
+      renderAll();
+      closeAccountModal();
     }
 
     // Turkish Voice Input (Web Speech API)
@@ -1112,6 +1081,7 @@
     window.addEventListener('resize', drawGraph);
 
     renderAll();
+    if (!currentAccount) { openAccountModal(); }
   </script>
 </body>
 </html>
