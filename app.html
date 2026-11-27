@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="48x48" href="/static/favicon-48x48.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
   <meta name="theme-color" content="#06070b">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async defer></script>
 
   <style>
     :root {
@@ -378,11 +380,63 @@
     .modal-bg.open { display: flex; }
     .modal {
       background: var(--surface); border: 1px solid var(--border-strong);
-      border-radius: 18px; max-width: 440px; width: 100%; padding: 24px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+      border-radius: 20px; max-width: 440px; width: 100%; padding: 24px;
+      box-shadow: 0 28px 70px rgba(0,0,0,0.88); max-height: 92dvh; overflow-y: auto;
     }
-    .modal h2 { font-size: 17px; color: #fff; margin-bottom: 6px; }
-    .modal p { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; line-height: 1.5; }
+    .modal h2 { font-size: 18px; color: #fff; margin-bottom: 4px; }
+    .modal p { font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5; }
+    .auth-social-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    #googleBtnWrap { display: flex; justify-content: center; min-height: 42px; }
+    .btn-apple {
+      width: 100%; height: 42px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18);
+      background: #ffffff; color: #050608; font-weight: 600; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px;
+      transition: opacity 0.15s;
+    }
+    .btn-apple:hover { opacity: 0.92; }
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px; margin: 14px 0;
+      font-size: 11.5px; color: var(--text-faint); font-family: var(--mono); text-transform: uppercase;
+    }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .auth-tabs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px;
+      background: #07080d; padding: 4px; border-radius: 11px; border: 1px solid var(--border);
+    }
+    .auth-tab {
+      padding: 8px; border-radius: 8px; border: none; background: transparent;
+      color: var(--text-soft); font-size: 12.5px; font-weight: 500; cursor: pointer;
+    }
+    .auth-tab.active { background: var(--surface-2); color: #fff; }
+    .auth-status { font-size: 12.5px; min-height: 18px; margin-top: 8px; line-height: 1.45; }
+    .auth-status.err { color: var(--rose); }
+    .auth-status.ok { color: var(--emerald); }
+    .user-avatar-sm {
+      width: 24px; height: 24px; border-radius: 50%; object-fit: cover;
+      border: 1px solid var(--gold-border); flex-shrink: 0;
+    }
+    .user-avatar-fallback {
+      width: 24px; height: 24px; border-radius: 50%; background: var(--gold-dim);
+      border: 1px solid var(--gold-border); color: var(--gold);
+      font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .profile-card {
+      display: flex; align-items: center; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 14px; margin-bottom: 16px;
+    }
+    .profile-card img, .profile-card .pc-init {
+      width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+    }
+    .profile-card .pc-init {
+      background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold);
+      display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;
+    }
+    .provider-badge {
+      display: inline-block; font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 999px; background: var(--gold-dim); color: var(--gold);
+      border: 1px solid var(--gold-border); margin-top: 4px;
+    }
     .field { margin-bottom: 14px; }
     .field label { display: block; font-size: 12px; color: var(--text-soft); margin-bottom: 6px; font-weight: 500; }
     .field select, .field input {
@@ -464,9 +518,12 @@
       </div>
 
       <div class="sb-foot">
-        <button class="profile-btn" onclick="openSettingsModal()">
-          <span><span class="dot-live"></span><span id="sidebarUserLabel">Synaphe AI</span></span>
-          <span style="font-size:11.5px; color:var(--text-faint);">Ayarlar</span>
+        <button class="profile-btn" onclick="openAuthModal()">
+          <span style="display:inline-flex; align-items:center; gap:9px; min-width:0;">
+            <span id="sidebarAvatarSlot"><span class="dot-live" style="margin-right:0;"></span></span>
+            <span id="sidebarUserLabel" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Giriş Yap</span>
+          </span>
+          <span id="sidebarActionLabel" style="font-size:11.5px; color:var(--gold);">Hesap</span>
         </button>
       </div>
     </aside>
@@ -504,7 +561,7 @@
             <span>Hafıza</span>
             <span class="mem-count-dot" id="memCountBadge">0</span>
           </button>
-          <button class="tb-btn" onclick="openSettingsModal()">Ayarlar</button>
+          <button class="tb-btn" id="topAuthBtn" onclick="openAuthModal()">Giriş Yap</button>
         </div>
       </header>
 
@@ -570,30 +627,111 @@
     </aside>
   </div>
 
-  <!-- OPTIONAL SETTINGS MODAL (NEVER FORCED ON ENTRY) -->
-  <div class="modal-bg" id="settingsModal" onclick="if(event.target===this) closeSettingsModal()">
+  <!-- REAL MULTI-PROVIDER AUTH & ACCOUNT MODAL (GOOGLE, APPLE, EMAIL, PHONE) -->
+  <div class="modal-bg" id="authModal" onclick="if(event.target===this) closeAuthModal()">
     <div class="modal">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-        <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width:24px; height:24px;">
-        <h2 style="margin:0;">Synaphe Ayarları</h2>
-      </div>
-      <p>İsteğe bağlı olarak adını kişiselleştirebilir veya yerel Synaphe sunucuna bağlanabilirsin.</p>
-
-      <div class="field">
-        <label>Adın (İsteğe Bağlı)</label>
-        <input type="text" id="accNameInput" placeholder="Örn: Mehmet">
-      </div>
-      <div class="field">
-        <label>Çalışma Modu</label>
-        <select id="accModeSelect">
-          <option value="cloud">Synaphe Bulut AI (Otomatik)</option>
-          <option value="local">Yerel Synaphe Sunucum (http://127.0.0.1:8000)</option>
-        </select>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:9px;">
+          <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width:24px; height:24px;">
+          <h2 style="margin:0;" id="authModalTitle">Synaphe'ye Giriş Yap</h2>
+        </div>
+        <button type="button" class="tb-btn" onclick="closeAuthModal()" style="padding:4px 9px;" aria-label="Kapat">×</button>
       </div>
 
-      <div class="modal-actions">
-        <button class="tb-btn" onclick="closeSettingsModal()">Vazgeç</button>
-        <button class="btn-primary" onclick="saveSettings()">Kaydet</button>
+      <!-- LOGGED-IN PROFILE VIEW -->
+      <div id="authLoggedInView" style="display:none;">
+        <div class="profile-card">
+          <div id="profileCardAvatar"></div>
+          <div style="min-width:0; flex:1;">
+            <div id="profileCardName" style="font-weight:600; color:#fff; font-size:15px;"></div>
+            <div id="profileCardContact" style="font-size:12.5px; color:var(--text-soft); overflow:hidden; text-overflow:ellipsis;"></div>
+            <span id="profileCardProvider" class="provider-badge"></span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Çalışma Modu</label>
+          <select id="loggedInModeSelect" onchange="updateModeFromModal(this.value)">
+            <option value="cloud">Synaphe Bulut AI (Otomatik)</option>
+            <option value="local">Yerel Synaphe Sunucum (http://127.0.0.1:8000)</option>
+          </select>
+        </div>
+
+        <div class="modal-actions" style="justify-content:space-between;">
+          <button type="button" class="tb-btn" onclick="logoutUser()" style="color:var(--rose);">Çıkış Yap</button>
+          <button type="button" class="btn-primary" onclick="closeAuthModal()">Tamam</button>
+        </div>
+      </div>
+
+      <!-- LOGGED-OUT AUTH VIEW -->
+      <div id="authLoggedOutView">
+        <p>Google, Apple, e-posta veya telefonunla giriş yap; profil bilgilerin ve hafıza grafiğin hesabına özel saklansın.</p>
+
+        <div class="auth-social-stack">
+          <div id="googleBtnWrap"></div>
+          <button type="button" class="btn-apple" onclick="startAppleSignIn()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2.02.6-2.66 1.35-.57.65-1.07 1.71-.93 2.74 1.01.08 2.06-.52 2.58-1.24z"/></svg>
+            <span>Apple ile Devam Et</span>
+          </button>
+        </div>
+
+        <div class="auth-divider">veya</div>
+
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" id="tabEmail" onclick="switchAuthTab('email')">E-posta</button>
+          <button type="button" class="auth-tab" id="tabPhone" onclick="switchAuthTab('phone')">Telefon (SMS)</button>
+        </div>
+
+        <!-- EMAIL FORM -->
+        <div id="authEmailForm">
+          <div class="field" id="emailNameField" style="display:none;">
+            <label>Ad Soyad</label>
+            <input type="text" id="authEmailName" placeholder="Örn: Mehmet Karabulut">
+          </div>
+          <div class="field">
+            <label>E-posta Adresi</label>
+            <input type="email" id="authEmailInput" placeholder="ornek@email.com">
+          </div>
+          <div class="field">
+            <label>Şifre</label>
+            <input type="password" id="authPasswordInput" placeholder="En az 6 karakter">
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:14px;">
+            <button type="button" class="tb-btn" id="toggleRegisterBtn" onclick="toggleEmailRegisterMode()">Hesap Oluştur</button>
+            <button type="button" class="btn-primary" id="emailSubmitBtn" onclick="submitEmailAuth()">Giriş Yap</button>
+          </div>
+        </div>
+
+        <!-- PHONE SMS OTP FORM -->
+        <div id="authPhoneForm" style="display:none;">
+          <div class="field">
+            <label>Telefon Numarası</label>
+            <input type="tel" id="authPhoneInput" placeholder="05XX XXX XX XX">
+          </div>
+          <div id="phoneOtpStep" style="display:none;">
+            <div class="field">
+              <label>Adın (İsteğe Bağlı)</label>
+              <input type="text" id="authPhoneName" placeholder="Örn: Mehmet">
+            </div>
+            <div class="field">
+              <label>6 Haneli SMS Doğrulama Kodu</label>
+              <input type="text" id="authOtpInput" inputmode="numeric" maxlength="6" placeholder="123456">
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+            <button type="button" class="btn-primary" id="phoneActionBtn" onclick="submitPhoneAuth()">Doğrulama Kodu Gönder</button>
+          </div>
+        </div>
+
+        <div id="authStatus" class="auth-status"></div>
+
+        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <span style="font-size:12px; color:var(--text-faint);">Sunucu Modu</span>
+          <select id="guestModeSelect" onchange="updateModeFromModal(this.value)" style="padding:6px 10px; border-radius:8px; background:#07080d; border:1px solid var(--border); color:#fff; font-size:12px;">
+            <option value="cloud">Synaphe Bulut AI</option>
+            <option value="local">Yerel Sunucu (:8000)</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -603,31 +741,42 @@
     // SYNAPHE WEB STUDIO — ZERO-FRICTION FLAGSHIP PERSONAL AI
     // =========================================================================
     const PROFILE_KEY = 'synaphe_profile_v3';
-    const STATE_KEY = 'synaphe_studio_state_v3';
+    const AUTH_TOKEN_KEY = 'synaphe_auth_token_v3';
+    const AUTH_USER_KEY = 'synaphe_auth_user_v3';
 
     function safeJsonParse(raw, fallback = null) {
       try { return raw ? JSON.parse(raw) : fallback; } catch (_) { return fallback; }
     }
 
+    let authConfig = { googleClientId: '', appleClientId: '', smsConfigured: false };
+    let authUser = safeJsonParse(localStorage.getItem(AUTH_USER_KEY), null);
+    let authToken = localStorage.getItem(AUTH_TOKEN_KEY) || '';
     let profile = safeJsonParse(localStorage.getItem(PROFILE_KEY), { name: '', mode: 'cloud', localUrl: 'http://127.0.0.1:8000' });
     let currentFactFilter = 'all';
     let isSending = false;
+    let isEmailRegister = false;
+    let phoneChallenge = '';
+
+    function getStateKey() {
+      return authUser && authUser.id ? `synaphe_studio_state_${authUser.id}` : 'synaphe_studio_state_guest';
+    }
 
     function createDefaultState() {
+      const id = 's_' + Date.now();
       return {
-        activeSessionId: 's_' + Date.now(),
-        sessions: [{ id: 's_' + Date.now(), title: 'Yeni Sohbet', messages: [] }],
+        activeSessionId: id,
+        sessions: [{ id, title: 'Yeni Sohbet', messages: [] }],
         facts: []
       };
     }
 
-    let state = safeJsonParse(localStorage.getItem(STATE_KEY), null) || createDefaultState();
+    let state = safeJsonParse(localStorage.getItem(getStateKey()), null) || createDefaultState();
     if (!Array.isArray(state.sessions) || !state.sessions.length) state = createDefaultState();
 
     function persist() {
       try {
         localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-        localStorage.setItem(STATE_KEY, JSON.stringify(state));
+        localStorage.setItem(getStateKey(), JSON.stringify(state));
       } catch (_) {}
     }
 
@@ -938,8 +1087,31 @@
     }
 
     function updateProfileLabels() {
+      const displayName = authUser?.name || profile.name || '';
       const sbLbl = document.getElementById('sidebarUserLabel');
-      if (sbLbl) sbLbl.textContent = profile.name || (profile.mode === 'local' ? 'Yerel :8000' : 'Synaphe AI');
+      const sbAct = document.getElementById('sidebarActionLabel');
+      const sbAv = document.getElementById('sidebarAvatarSlot');
+      const topBtn = document.getElementById('topAuthBtn');
+      const greet = document.getElementById('heroGreeting');
+
+      if (greet) {
+        greet.textContent = displayName ? `Merhaba ${displayName.split(' ')[0]}, nasıl yardımcı olabilirim?` : 'Sana nasıl yardımcı olabilirim?';
+      }
+      if (authUser) {
+        const init = (authUser.name || authUser.email || 'S').charAt(0).toUpperCase();
+        const avHtml = authUser.avatar
+          ? `<img src="${escapeHtml(authUser.avatar)}" alt="" class="user-avatar-sm" referrerpolicy="no-referrer">`
+          : `<span class="user-avatar-fallback">${escapeHtml(init)}</span>`;
+        if (sbAv) sbAv.innerHTML = avHtml;
+        if (sbLbl) sbLbl.textContent = authUser.name || authUser.email || authUser.phone;
+        if (sbAct) sbAct.textContent = 'Profil';
+        if (topBtn) topBtn.innerHTML = `${avHtml}<span>${escapeHtml((authUser.name || 'Hesap').split(' ')[0])}</span>`;
+      } else {
+        if (sbAv) sbAv.innerHTML = '<span class="dot-live" style="margin-right:0;"></span>';
+        if (sbLbl) sbLbl.textContent = 'Giriş Yap';
+        if (sbAct) sbAct.textContent = 'Hesap';
+        if (topBtn) topBtn.textContent = 'Giriş Yap';
+      }
     }
 
     function renderAll() {
@@ -1054,18 +1226,245 @@
       setTimeout(drawGraph, 60);
     }
 
-    function openSettingsModal() {
-      document.getElementById('accNameInput').value = profile.name || '';
-      document.getElementById('accModeSelect').value = profile.mode || 'cloud';
-      document.getElementById('settingsModal').classList.add('open');
+    async function loadAuthConfig() {
+      try {
+        const res = await fetch('/api/auth?action=config');
+        if (res.ok) authConfig = await res.json();
+      } catch (_) {}
+      // Verify stored token silently if present
+      if (authToken) {
+        try {
+          const me = await fetch('/api/auth?action=me', { headers: { Authorization: 'Bearer ' + authToken } });
+          if (me.ok) {
+            const d = await me.json();
+            if (d.user) {
+              authUser = d.user;
+              profile.name = d.user.name || profile.name;
+              localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
+              renderAll();
+            }
+          }
+        } catch (_) {}
+      }
     }
-    function closeSettingsModal() {
-      document.getElementById('settingsModal').classList.remove('open');
+
+    function setAuthStatus(msg, isErr = false) {
+      const el = document.getElementById('authStatus');
+      if (!el) return;
+      el.textContent = msg || '';
+      el.className = 'auth-status ' + (msg ? (isErr ? 'err' : 'ok') : '');
     }
-    function saveSettings() {
-      profile.name = document.getElementById('accNameInput').value.trim();
-      profile.mode = document.getElementById('accModeSelect').value;
-      persist(); renderAll(); closeSettingsModal();
+
+    function applyAuthenticatedUser(user, token) {
+      authUser = user;
+      authToken = token || '';
+      profile.name = user.name || profile.name;
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+      if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+      // Load this account's own isolated memory & sessions
+      state = safeJsonParse(localStorage.getItem(getStateKey()), null) || createDefaultState();
+      if (!Array.isArray(state.sessions) || !state.sessions.length) state = createDefaultState();
+      persist();
+      renderAll();
+      closeAuthModal();
+    }
+
+    function renderGoogleButton() {
+      const wrap = document.getElementById('googleBtnWrap');
+      if (!wrap) return;
+      if (!window.google || !window.google.accounts || !authConfig.googleClientId) {
+        wrap.innerHTML = `<button type="button" class="tb-btn" style="width:100%; justify-content:center; height:42px;" onclick="renderGoogleButton()">Google ile Devam Et (Yükleniyor...)</button>`;
+        return;
+      }
+      wrap.innerHTML = '';
+      window.google.accounts.id.initialize({
+        client_id: authConfig.googleClientId,
+        callback: handleGoogleCredential
+      });
+      window.google.accounts.id.renderButton(wrap, {
+        theme: 'filled_black',
+        size: 'large',
+        shape: 'rectangular',
+        text: 'continue_with',
+        width: 380,
+        locale: 'tr'
+      });
+    }
+
+    async function handleGoogleCredential(response) {
+      if (!response || !response.credential) return;
+      setAuthStatus('Google hesabı doğrulanıyor...');
+      try {
+        const res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'google', credential: response.credential })
+        });
+        const data = await res.json();
+        if (!res.ok) return setAuthStatus(data.error || 'Google girişi başarısız.', true);
+        applyAuthenticatedUser(data.user, data.token);
+      } catch (_) {
+        setAuthStatus('Sunucuya bağlanılamadı.', true);
+      }
+    }
+
+    async function startAppleSignIn() {
+      if (!window.AppleID || !authConfig.appleClientId) {
+        return setAuthStatus('Apple kimlik doğrulama modülü henüz yüklenmedi. Birkaç saniye sonra tekrar dene.', true);
+      }
+      setAuthStatus('Apple penceresi açılıyor...');
+      try {
+        window.AppleID.auth.init({
+          clientId: authConfig.appleClientId,
+          scope: 'name email',
+          redirectURI: window.location.origin + '/app',
+          usePopup: true
+        });
+        const resp = await window.AppleID.auth.signIn();
+        const idToken = resp?.authorization?.id_token;
+        if (!idToken) return setAuthStatus('Apple kimlik belirteci alınamadı.', true);
+        const res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'apple', id_token: idToken, user: resp.user || null })
+        });
+        const data = await res.json();
+        if (!res.ok) return setAuthStatus(data.error || 'Apple girişi doğrulanamadı.', true);
+        applyAuthenticatedUser(data.user, data.token);
+      } catch (err) {
+        if (err && err.error === 'popup_closed_by_user') return setAuthStatus('');
+        setAuthStatus('Apple ile giriş tamamlanamadı. (Apple Developer konsolunda synapheai.com.tr domain doğrulaması gereklidir.)', true);
+      }
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById('tabEmail').classList.toggle('active', tab === 'email');
+      document.getElementById('tabPhone').classList.toggle('active', tab === 'phone');
+      document.getElementById('authEmailForm').style.display = tab === 'email' ? 'block' : 'none';
+      document.getElementById('authPhoneForm').style.display = tab === 'phone' ? 'block' : 'none';
+      setAuthStatus('');
+    }
+
+    function toggleEmailRegisterMode() {
+      isEmailRegister = !isEmailRegister;
+      document.getElementById('emailNameField').style.display = isEmailRegister ? 'block' : 'none';
+      document.getElementById('emailSubmitBtn').textContent = isEmailRegister ? 'Hesap Oluştur' : 'Giriş Yap';
+      document.getElementById('toggleRegisterBtn').textContent = isEmailRegister ? 'Zaten Hesabım Var' : 'Hesap Oluştur';
+      setAuthStatus('');
+    }
+
+    async function submitEmailAuth() {
+      const email = document.getElementById('authEmailInput').value.trim();
+      const password = document.getElementById('authPasswordInput').value;
+      const name = document.getElementById('authEmailName').value.trim();
+      setAuthStatus('Doğrulanıyor...');
+      try {
+        const res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: isEmailRegister ? 'email_register' : 'email_login',
+            email, password, name
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) return setAuthStatus(data.error || 'Giriş başarısız.', true);
+        applyAuthenticatedUser(data.user, data.token);
+      } catch (_) {
+        setAuthStatus('Bağlantı hatası, tekrar deneyin.', true);
+      }
+    }
+
+    async function submitPhoneAuth() {
+      const phone = document.getElementById('authPhoneInput').value.trim();
+      if (!phoneChallenge) {
+        setAuthStatus('SMS doğrulama kodu gönderiliyor...');
+        try {
+          const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'phone_send_otp', phone })
+          });
+          const data = await res.json();
+          if (!res.ok) return setAuthStatus(data.error || 'SMS gönderilemedi.', true);
+          phoneChallenge = data.challenge;
+          document.getElementById('phoneOtpStep').style.display = 'block';
+          document.getElementById('phoneActionBtn').textContent = 'Kodu Doğrula ve Giriş Yap';
+          setAuthStatus(`${data.phone} numarasına 6 haneli kod gönderildi.`);
+        } catch (_) {
+          setAuthStatus('Bağlantı hatası.', true);
+        }
+      } else {
+        const code = document.getElementById('authOtpInput').value.trim();
+        const name = document.getElementById('authPhoneName').value.trim();
+        setAuthStatus('Kod doğrulanıyor...');
+        try {
+          const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'phone_verify_otp', challenge: phoneChallenge, code, name })
+          });
+          const data = await res.json();
+          if (!res.ok) return setAuthStatus(data.error || 'Kod hatalı.', true);
+          phoneChallenge = '';
+          applyAuthenticatedUser(data.user, data.token);
+        } catch (_) {
+          setAuthStatus('Bağlantı hatası.', true);
+        }
+      }
+    }
+
+    function openAuthModal() {
+      setAuthStatus('');
+      const modal = document.getElementById('authModal');
+      const inView = document.getElementById('authLoggedInView');
+      const outView = document.getElementById('authLoggedOutView');
+      const title = document.getElementById('authModalTitle');
+
+      if (authUser) {
+        title.textContent = 'Synaphe Hesabın';
+        inView.style.display = 'block';
+        outView.style.display = 'none';
+        const init = (authUser.name || authUser.email || 'S').charAt(0).toUpperCase();
+        document.getElementById('profileCardAvatar').innerHTML = authUser.avatar
+          ? `<img src="${escapeHtml(authUser.avatar)}" alt="" referrerpolicy="no-referrer">`
+          : `<div class="pc-init">${escapeHtml(init)}</div>`;
+        document.getElementById('profileCardName').textContent = authUser.name || 'Kullanıcı';
+        document.getElementById('profileCardContact').textContent = authUser.email || authUser.phone || '';
+        const pMap = { google: 'Google Hesabı', apple: 'Apple ID', email: 'E-posta Hesabı', phone: 'Telefon Doğrulamalı' };
+        document.getElementById('profileCardProvider').textContent = pMap[authUser.provider] || authUser.provider;
+        document.getElementById('loggedInModeSelect').value = profile.mode || 'cloud';
+      } else {
+        title.textContent = "Synaphe'ye Giriş Yap";
+        inView.style.display = 'none';
+        outView.style.display = 'block';
+        document.getElementById('guestModeSelect').value = profile.mode || 'cloud';
+        renderGoogleButton();
+      }
+      modal.classList.add('open');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('open');
+    }
+
+    function updateModeFromModal(mode) {
+      profile.mode = mode;
+      persist();
+      updateProfileLabels();
+    }
+
+    function logoutUser() {
+      authUser = null;
+      authToken = '';
+      profile.name = '';
+      localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      state = safeJsonParse(localStorage.getItem(getStateKey()), null) || createDefaultState();
+      if (!Array.isArray(state.sessions) || !state.sessions.length) state = createDefaultState();
+      persist();
+      renderAll();
+      closeAuthModal();
     }
 
     let recognition = null;
@@ -1119,11 +1518,12 @@
     });
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); createNewSession(); }
-      if (e.key === 'Escape') { closeSettingsModal(); closeMobilePanels(); }
+      if (e.key === 'Escape') { closeAuthModal(); closeMobilePanels(); }
     });
     window.addEventListener('resize', drawGraph);
 
     renderAll();
+    loadAuthConfig();
   </script>
 </body>
 </html>
