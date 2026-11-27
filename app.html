@@ -123,33 +123,37 @@
         var(--bg);
     }
 
-    /* LIVING 3D AMBIENT BUTTERFLY BEHIND CHAT */
+    /* LIVING GOLDEN BUTTERFLY AURA BEHIND CHAT (APPLE DARK GLASS STYLE) */
     .chat-butterfly-bg {
       position: absolute; inset: 0; pointer-events: none; z-index: 0;
       display: flex; align-items: center; justify-content: center;
-      perspective: 1100px; overflow: hidden;
+      overflow: hidden;
     }
-    .chat-butterfly-rig {
-      position: relative;
-      width: clamp(200px, 26vw, 310px);
-      height: clamp(138px, 18vw, 214px);
-      transform-style: preserve-3d;
-      opacity: 0.16;
-      filter: drop-shadow(0 0 36px rgba(251, 191, 36, 0.42));
-      transition: opacity 0.4s ease, transform 0.4s ease;
+    .chat-butterfly-bg::before {
+      content: "";
+      position: absolute;
+      width: 440px; height: 440px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.11) 0%, rgba(245, 158, 11, 0.035) 46%, transparent 72%);
+      filter: blur(30px);
+      animation: bfHalo 7s ease-in-out infinite alternate;
     }
-    .chat-panel.is-hero .chat-butterfly-rig { opacity: 0.24; }
-    .bf-wing {
-      position: absolute; top: 0; width: 50%; height: 100%;
-      transform-style: preserve-3d; will-change: transform;
+    .chat-butterfly-bg img {
+      width: min(370px, 60%); max-width: 390px; height: auto;
+      opacity: 0.13;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 34px rgba(251, 191, 36, 0.55));
+      animation: bfFloat 6.5s ease-in-out infinite;
+      transition: opacity 0.4s ease;
     }
-    .bf-wing-l { left: 0; transform-origin: 100% 50%; }
-    .bf-wing-r { right: 0; transform-origin: 0% 50%; }
-    .bf-body {
-      position: absolute; left: 45%; top: 15%; width: 10%; height: 70%;
-      display: flex; align-items: center; justify-content: center; z-index: 2;
+    .chat-panel.is-hero .chat-butterfly-bg img { opacity: 0.19; }
+    @keyframes bfFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-12px) scale(1.025); }
     }
-    .bf-wing img, .bf-body img { width: 100%; height: 100%; object-fit: contain; }
+    @keyframes bfHalo {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.08); opacity: 1; }
+    }
 
     /* TOPBAR */
     .topbar {
@@ -379,36 +383,80 @@
     }
     .modal-bg.open { display: flex; }
     .modal {
-      background: var(--surface); border: 1px solid var(--border-strong);
-      border-radius: 20px; max-width: 440px; width: 100%; padding: 24px;
-      box-shadow: 0 28px 70px rgba(0,0,0,0.88); max-height: 92dvh; overflow-y: auto;
+      background: linear-gradient(180deg, rgba(16, 19, 29, 0.98) 0%, rgba(10, 12, 19, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px; max-width: 416px; width: 100%; padding: 28px 26px 24px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(251, 191, 36, 0.08);
+      max-height: 92dvh; overflow-y: auto; position: relative;
     }
-    .modal h2 { font-size: 18px; color: #fff; margin-bottom: 4px; }
-    .modal p { font-size: 13px; color: var(--text-soft); margin-bottom: 16px; line-height: 1.5; }
-    .auth-social-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    #googleBtnWrap { display: flex; justify-content: center; min-height: 42px; }
+    .modal-close-x {
+      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--text-soft);
+      font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .modal-close-x:hover { color: #fff; background: rgba(255,255,255,0.1); border-color: var(--border-strong); }
+    .auth-header { text-align: center; margin-bottom: 22px; }
+    .auth-header img {
+      width: 40px; height: 40px; object-fit: contain; margin-bottom: 12px;
+      filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.5));
+    }
+    .modal h2 { font-size: 21px; font-weight: 600; letter-spacing: -0.025em; color: #fff; margin-bottom: 6px; }
+    .modal p { font-size: 13.5px; color: var(--text-soft); margin-bottom: 0; line-height: 1.5; }
+    .auth-social-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    #googleBtnWrap { display: flex; justify-content: center; min-height: 44px; width: 100%; }
     .btn-apple {
-      width: 100%; height: 42px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18);
-      background: #ffffff; color: #050608; font-weight: 600; font-size: 14px;
+      width: 100%; height: 44px; border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06); color: #ffffff;
+      font-weight: 600; font-size: 14px; letter-spacing: -0.01em;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px;
-      transition: opacity 0.15s;
+      transition: all 0.18s ease;
     }
-    .btn-apple:hover { opacity: 0.92; }
+    .btn-apple:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.28); }
     .auth-divider {
-      display: flex; align-items: center; gap: 12px; margin: 14px 0;
-      font-size: 11.5px; color: var(--text-faint); font-family: var(--mono); text-transform: uppercase;
+      display: flex; align-items: center; gap: 12px; margin: 16px 0;
+      font-size: 11px; color: var(--text-faint); font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
     }
     .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .auth-tabs {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px;
-      background: #07080d; padding: 4px; border-radius: 11px; border: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.035); padding: 4px; border-radius: 12px; border: 1px solid var(--border);
     }
     .auth-tab {
-      padding: 8px; border-radius: 8px; border: none; background: transparent;
-      color: var(--text-soft); font-size: 12.5px; font-weight: 500; cursor: pointer;
+      padding: 8px; border-radius: 9px; border: none; background: transparent;
+      color: var(--text-soft); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
     }
-    .auth-tab.active { background: var(--surface-2); color: #fff; }
-    .auth-status { font-size: 12.5px; min-height: 18px; margin-top: 8px; line-height: 1.45; }
+    .auth-tab.active { background: rgba(255, 255, 255, 0.1); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .field { margin-bottom: 13px; }
+    .field label { display: block; font-size: 12px; color: var(--text-soft); margin-bottom: 6px; font-weight: 500; }
+    .field select, .field input {
+      width: 100%; height: 42px; padding: 0 13px; border-radius: 11px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.11);
+      color: #fff; font-size: 14px; outline: none; transition: border-color 0.15s, background 0.15s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--gold); background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+    }
+    .btn-primary-full {
+      width: 100%; height: 44px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #050608;
+      font-weight: 600; font-size: 14.5px; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(251, 191, 36, 0.26); transition: all 0.18s;
+      margin-top: 6px;
+    }
+    .btn-primary-full:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(251, 191, 36, 0.38); }
+    .auth-switch-link {
+      text-align: center; margin-top: 14px; font-size: 13px; color: var(--text-soft);
+    }
+    .auth-switch-link button {
+      background: none; border: none; color: var(--gold); font-weight: 600;
+      font-size: 13px; cursor: pointer; padding: 0 2px;
+    }
+    .auth-switch-link button:hover { text-decoration: underline; }
+    .auth-status { font-size: 12.5px; min-height: 18px; margin-top: 10px; text-align: center; line-height: 1.45; }
     .auth-status.err { color: var(--rose); }
     .auth-status.ok { color: var(--emerald); }
     .user-avatar-sm {
@@ -422,7 +470,7 @@
     }
     .profile-card {
       display: flex; align-items: center; gap: 12px; padding: 14px;
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      background: rgba(255,255,255,0.035); border: 1px solid var(--border);
       border-radius: 14px; margin-bottom: 16px;
     }
     .profile-card img, .profile-card .pc-init {
@@ -530,19 +578,9 @@
 
     <!-- CENTER WORKSPACE -->
     <main class="chat-panel is-hero" id="chatPanel">
-      <!-- LIVING 3D BUTTERFLY BEHIND CHAT -->
+      <!-- LIVING GOLDEN BUTTERFLY BEHIND CHAT -->
       <div class="chat-butterfly-bg" aria-hidden="true">
-        <div class="chat-butterfly-rig" id="chatButterflyRig">
-          <div class="bf-wing bf-wing-l" id="chatWingL">
-            <img src="/static/wing_left_3d.png" alt="">
-          </div>
-          <div class="bf-wing bf-wing-r" id="chatWingR">
-            <img src="/static/wing_right_3d.png" alt="">
-          </div>
-          <div class="bf-body">
-            <img src="/static/body_center_3d.png" alt="">
-          </div>
-        </div>
+        <img src="/static/synaphe-butterfly.png" alt="">
       </div>
 
       <header class="topbar">
@@ -630,12 +668,12 @@
   <!-- REAL MULTI-PROVIDER AUTH & ACCOUNT MODAL (GOOGLE, APPLE, EMAIL, PHONE) -->
   <div class="modal-bg" id="authModal" onclick="if(event.target===this) closeAuthModal()">
     <div class="modal">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:9px;">
-          <img src="/static/synaphe-butterfly.png" alt="Synaphe" style="width:24px; height:24px;">
-          <h2 style="margin:0;" id="authModalTitle">Synaphe'ye Giriş Yap</h2>
-        </div>
-        <button type="button" class="tb-btn" onclick="closeAuthModal()" style="padding:4px 9px;" aria-label="Kapat">×</button>
+      <button type="button" class="modal-close-x" onclick="closeAuthModal()" aria-label="Kapat">×</button>
+
+      <div class="auth-header">
+        <img src="/static/synaphe-butterfly.png" alt="Synaphe">
+        <h2 id="authModalTitle">Synaphe'ye Hoş Geldin</h2>
+        <p id="authModalSubtitle">Kişisel hafızan ve sohbetlerin için hesabınla devam et.</p>
       </div>
 
       <!-- LOGGED-IN PROFILE VIEW -->
@@ -665,8 +703,6 @@
 
       <!-- LOGGED-OUT AUTH VIEW -->
       <div id="authLoggedOutView">
-        <p>Google, Apple, e-posta veya telefonunla giriş yap; profil bilgilerin ve hafıza grafiğin hesabına özel saklansın.</p>
-
         <div class="auth-social-stack">
           <div id="googleBtnWrap"></div>
           <button type="button" class="btn-apple" onclick="startAppleSignIn()">
@@ -696,9 +732,10 @@
             <label>Şifre</label>
             <input type="password" id="authPasswordInput" placeholder="En az 6 karakter">
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:14px;">
-            <button type="button" class="tb-btn" id="toggleRegisterBtn" onclick="toggleEmailRegisterMode()">Hesap Oluştur</button>
-            <button type="button" class="btn-primary" id="emailSubmitBtn" onclick="submitEmailAuth()">Giriş Yap</button>
+          <button type="button" class="btn-primary-full" id="emailSubmitBtn" onclick="submitEmailAuth()">Giriş Yap</button>
+          <div class="auth-switch-link">
+            <span id="authSwitchHint">Hesabın yok mu?</span>
+            <button type="button" id="toggleRegisterBtn" onclick="toggleEmailRegisterMode()">Hesap oluştur</button>
           </div>
         </div>
 
@@ -718,20 +755,10 @@
               <input type="text" id="authOtpInput" inputmode="numeric" maxlength="6" placeholder="123456">
             </div>
           </div>
-          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
-            <button type="button" class="btn-primary" id="phoneActionBtn" onclick="submitPhoneAuth()">Doğrulama Kodu Gönder</button>
-          </div>
+          <button type="button" class="btn-primary-full" id="phoneActionBtn" onclick="submitPhoneAuth()">Doğrulama Kodu Gönder</button>
         </div>
 
         <div id="authStatus" class="auth-status"></div>
-
-        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px;">
-          <span style="font-size:12px; color:var(--text-faint);">Sunucu Modu</span>
-          <select id="guestModeSelect" onchange="updateModeFromModal(this.value)" style="padding:6px 10px; border-radius:8px; background:#07080d; border:1px solid var(--border); color:#fff; font-size:12px;">
-            <option value="cloud">Synaphe Bulut AI</option>
-            <option value="local">Yerel Sunucu (:8000)</option>
-          </select>
-        </div>
       </div>
     </div>
   </div>
@@ -1282,11 +1309,11 @@
         callback: handleGoogleCredential
       });
       window.google.accounts.id.renderButton(wrap, {
-        theme: 'filled_black',
+        theme: 'outline',
         size: 'large',
-        shape: 'rectangular',
+        shape: 'pill',
         text: 'continue_with',
-        width: 380,
+        width: 364,
         locale: 'tr'
       });
     }
@@ -1349,7 +1376,8 @@
       isEmailRegister = !isEmailRegister;
       document.getElementById('emailNameField').style.display = isEmailRegister ? 'block' : 'none';
       document.getElementById('emailSubmitBtn').textContent = isEmailRegister ? 'Hesap Oluştur' : 'Giriş Yap';
-      document.getElementById('toggleRegisterBtn').textContent = isEmailRegister ? 'Zaten Hesabım Var' : 'Hesap Oluştur';
+      document.getElementById('authSwitchHint').textContent = isEmailRegister ? 'Zaten hesabın var mı?' : 'Hesabın yok mu?';
+      document.getElementById('toggleRegisterBtn').textContent = isEmailRegister ? 'Giriş yap' : 'Hesap oluştur';
       setAuthStatus('');
     }
 
@@ -1421,8 +1449,10 @@
       const outView = document.getElementById('authLoggedOutView');
       const title = document.getElementById('authModalTitle');
 
+      const sub = document.getElementById('authModalSubtitle');
       if (authUser) {
         title.textContent = 'Synaphe Hesabın';
+        if (sub) sub.textContent = 'Profil bilgilerin ve çalışma tercihin.';
         inView.style.display = 'block';
         outView.style.display = 'none';
         const init = (authUser.name || authUser.email || 'S').charAt(0).toUpperCase();
@@ -1435,10 +1465,10 @@
         document.getElementById('profileCardProvider').textContent = pMap[authUser.provider] || authUser.provider;
         document.getElementById('loggedInModeSelect').value = profile.mode || 'cloud';
       } else {
-        title.textContent = "Synaphe'ye Giriş Yap";
+        title.textContent = "Synaphe'ye Hoş Geldin";
+        if (sub) sub.textContent = 'Kişisel hafızan ve sohbetlerin için hesabınla devam et.';
         inView.style.display = 'none';
         outView.style.display = 'block';
-        document.getElementById('guestModeSelect').value = profile.mode || 'cloud';
         renderGoogleButton();
       }
       modal.classList.add('open');
