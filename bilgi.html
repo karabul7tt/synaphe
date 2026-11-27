@@ -110,18 +110,14 @@
     }
     #synapseCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.85; }
 
-    /* 3D LIVING BUTTERFLY — SMOOTHLY FADES ON SCROLL SO IT NEVER CLASHES WITH TEXT */
-    .butterfly-stage { position: fixed; inset: 0; z-index: 3; pointer-events: none; perspective: 1200px; transition: opacity 0.35s ease; }
-    .butterfly-stage.subpage-ambient { opacity: 0.22; }
+    /* 3D LIVING BUTTERFLY — ALWAYS ALIVE & FLYING WITH SCROLL */
+    .butterfly-stage { position: fixed; inset: 0; z-index: 3; pointer-events: none; perspective: 1200px; }
     .golden-butterfly-3d-rig {
-      position: absolute; top: 21%; left: 50%;
+      position: absolute; top: 23%; left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: clamp(150px, 18vw, 240px); height: clamp(102px, 12.4vw, 166px);
-      transform-style: preserve-3d; will-change: transform, opacity; opacity: 0.92;
+      width: clamp(165px, 19vw, 255px); height: clamp(112px, 13vw, 176px);
+      transform-style: preserve-3d; will-change: transform; opacity: 0.92;
       filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.42)) drop-shadow(0 0 56px rgba(245, 158, 11, 0.20));
-    }
-    .butterfly-stage.subpage-ambient .golden-butterfly-3d-rig {
-      top: 18%; left: 82%; width: clamp(120px, 14vw, 185px); height: clamp(82px, 9.6vw, 128px);
     }
     .wing-3d-wrap { position: absolute; top: 0; width: 50%; height: 100%; transform-style: preserve-3d; will-change: transform; }
     .wing-left-wrap { left: 0; transform-origin: 100% 50%; }
@@ -435,7 +431,7 @@
     <div class="bloom-vignette"></div>
   </div>
   <canvas id="synapseCanvas" aria-hidden="true"></canvas>
-  <div class="butterfly-stage subpage-ambient" id="butterflyStage" aria-hidden="true">
+  <div class="butterfly-stage" id="butterflyStage" aria-hidden="true">
     <div class="golden-butterfly-3d-rig" id="goldenButterflyRig" aria-hidden="true">
       <div class="wing-3d-wrap wing-left-wrap" id="wingLeft">
         <img src="/static/wing_left_3d.png" alt="" class="wing-img">
@@ -784,32 +780,22 @@ Synaphe Bilişsel   : 120/120 (%100.0) [95% CI: [96.9, 100.0]]
 
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Living 3D Butterfly (gracefully fades to ambient watermark on scroll so text stays crisp)
+    // Living 3D Butterfly (Pinned & Alive in Viewport)
     (function initLivingButterfly() {
       if (reduceMotion) return;
-      const stage = document.getElementById('butterflyStage');
       const rig = document.getElementById('goldenButterflyRig');
       const wingLeft = document.getElementById('wingLeft');
       const wingRight = document.getElementById('wingRight');
       if (!rig || !wingLeft || !wingRight) return;
 
-      const isSubpage = stage && stage.classList.contains('subpage-ambient');
       let targetScrollY = window.scrollY || 0;
       let lastScrollY = targetScrollY;
       let scrollSpeed = 0;
       let flapPhase = 0;
 
-      function updateButterflyOpacity() {
-        if (!stage || isSubpage) return;
-        const progress = Math.min(Math.max(targetScrollY / 380, 0), 1);
-        stage.style.opacity = String(0.95 - progress * 0.80);
-      }
-
       window.addEventListener('scroll', () => {
         targetScrollY = window.scrollY || 0;
-        updateButterflyOpacity();
       }, { passive: true });
-      updateButterflyOpacity();
 
       function animate() {
         scrollSpeed = Math.abs(targetScrollY - lastScrollY);
