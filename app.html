@@ -45,10 +45,47 @@
       width: 100%;
       position: relative;
     }
-    .studio.show-graph { grid-template-columns: 260px minmax(0, 1fr) 330px; }
+    .studio.mode-split { grid-template-columns: 260px minmax(0, 1fr) 350px; }
+    .studio.mode-memory { grid-template-columns: 260px minmax(0, 1fr); }
     .studio.sidebar-collapsed { grid-template-columns: 0px minmax(0, 1fr); }
-    .studio.sidebar-collapsed.show-graph { grid-template-columns: 0px minmax(0, 1fr) 330px; }
+    .studio.sidebar-collapsed.mode-split { grid-template-columns: 0px minmax(0, 1fr) 350px; }
     .studio.sidebar-collapsed .sidebar { border-right: none; opacity: 0; pointer-events: none; }
+    .studio.mode-memory .chat-stage { display: none; }
+    .studio.mode-memory .graph-panel {
+      display: flex; border-left: none; background: transparent;
+      max-width: 1080px; width: 100%; margin: 0 auto; padding: 8px 20px 20px;
+    }
+    .studio.mode-memory .gp-canvas-wrap { height: 340px; border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; }
+    .studio.mode-memory .gp-head { display: none; }
+    .studio.mode-memory .gp-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); align-content: start; gap: 12px; padding: 14px 0; }
+    .studio.mode-memory .gp-filter-bar { padding: 0; flex-direction: row; align-items: center; gap: 12px; }
+    .studio.mode-memory .gp-search { max-width: 320px; }
+    .studio.mode-memory .gp-tabs { width: 240px; }
+    .studio.mode-memory .gp-foot { border-top: 1px solid var(--border); padding: 12px 0 0; max-width: 340px; }
+    .studio.mode-split .graph-panel { display: flex; }
+
+    /* VIEW MODE SEGMENTED SWITCHER */
+    .view-switcher {
+      display: inline-flex; align-items: center; gap: 2px; padding: 3px;
+      background: rgba(255, 255, 255, 0.045); border: 1px solid var(--border);
+      border-radius: 11px;
+    }
+    .vs-btn {
+      padding: 5px 11px; border-radius: 8px; border: none; background: transparent;
+      color: var(--text-soft); font-size: 12px; font-weight: 500; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; white-space: nowrap;
+    }
+    .vs-btn:hover { color: #fff; }
+    .vs-btn.active {
+      background: rgba(251, 191, 36, 0.15); color: var(--gold);
+      box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.32);
+    }
+    .fact-del-btn {
+      background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.25);
+      color: var(--rose); font-size: 11px; font-weight: 500; padding: 2px 8px;
+      border-radius: 6px; cursor: pointer; transition: all 0.15s;
+    }
+    .fact-del-btn:hover { background: rgba(248, 113, 113, 0.22); color: #fff; }
 
     /* LEFT SIDEBAR */
     .sidebar {
@@ -323,12 +360,11 @@
     .send-btn:hover { transform: translateY(-1px); opacity: 0.94; }
     .send-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-    /* RIGHT MEMORY GRAPH DRAWER (HIDDEN BY DEFAULT) */
+    /* RIGHT MEMORY GRAPH DRAWER (VISIBLE IN SPLIT OR FULL MEMORY MODE) */
     .graph-panel {
       display: none; flex-direction: column; height: 100%; overflow: hidden;
       background: var(--surface); border-left: 1px solid var(--border);
     }
-    .studio.show-graph .graph-panel { display: flex; }
     .gp-head {
       height: 58px; padding: 0 16px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
@@ -514,17 +550,22 @@
     .mobile-only-btn { display: none; }
 
     @media (max-width: 1024px) {
-      .studio, .studio.show-graph, .studio.sidebar-collapsed { grid-template-columns: 1fr; }
-      .sidebar, .graph-panel { display: none !important; }
+      .studio, .studio.mode-split, .studio.mode-memory, .studio.sidebar-collapsed { grid-template-columns: 1fr; }
+      .sidebar { display: none !important; }
+      .studio.mode-split .graph-panel { display: none; }
+      .studio.mode-memory .graph-panel { display: flex !important; }
       .sidebar.mobile-open {
         display: flex !important; position: fixed; top: 0; left: 0; bottom: 0;
         width: min(285px, 85vw); z-index: 300; box-shadow: 20px 0 60px rgba(0,0,0,0.8);
       }
       .graph-panel.mobile-open {
-        display: flex !important; position: fixed; inset: 0; width: 100%; z-index: 300;
+        display: flex !important; position: fixed; inset: 0; width: 100%; z-index: 300; background: var(--surface);
       }
       .mobile-only-btn { display: inline-flex; }
       .desktop-only-btn { display: none; }
+      .vs-split-btn { display: none; }
+      .studio.mode-memory .gp-filter-bar { flex-direction: column; align-items: stretch; }
+      .studio.mode-memory .gp-search, .studio.mode-memory .gp-tabs { max-width: none; width: 100%; }
     }
     @media (max-width: 600px) {
       .topbar { padding: 0 12px; height: 54px; }
@@ -595,18 +636,21 @@
         </div>
 
         <div class="tb-actions">
-          <button class="tb-btn" id="graphToggleBtn" onclick="toggleGraphPanel()">
-            <span>Hafıza</span>
-            <span class="mem-count-dot" id="memCountBadge">0</span>
-          </button>
+          <div class="view-switcher" role="tablist" aria-label="Görünüm Modu">
+            <button type="button" class="vs-btn active" id="vsChat" onclick="setViewMode('chat')">Sohbet</button>
+            <button type="button" class="vs-btn vs-split-btn" id="vsSplit" onclick="setViewMode('split')">Beraber</button>
+            <button type="button" class="vs-btn" id="vsMemory" onclick="setViewMode('memory')">
+              <span>Bilişsel Bellek</span>
+              <span class="mem-count-dot" id="memCountBadge">0</span>
+            </button>
+          </div>
           <button class="tb-btn" id="topAuthBtn" onclick="openAuthModal()">Giriş Yap</button>
         </div>
       </header>
 
       <div class="chat-stage">
-        <!-- CENTERED WELCOME HERO (NEW CHAT) -->
+        <!-- CENTERED WELCOME HERO (NEW CHAT — CLEAN, NO DUPLICATE SMALL BUTTERFLY) -->
         <div class="hero-welcome" id="heroWelcome">
-          <img src="/static/synaphe-butterfly.png" alt="Synaphe" class="hero-emblem">
           <h1 class="hero-heading" id="heroGreeting">Sana nasıl yardımcı olabilirim?</h1>
           <p class="hero-sub">Fikirlerini geliştir, kod yaz, plan yap veya aklındakileri paylaş — önemli detayları senin için unutmadan hatırlarım.</p>
         </div>
@@ -636,11 +680,11 @@
       </div>
     </main>
 
-    <!-- RIGHT PANEL: MEMORY GRAPH (COLLAPSED BY DEFAULT) -->
+    <!-- RIGHT PANEL: COGNITIVE MEMORY GRAPH (SPLIT OR FULL MEMORY VIEW) -->
     <aside class="graph-panel" id="graphPanel">
       <div class="gp-head">
-        <h3>Kişisel Hafıza Grafı</h3>
-        <button class="tb-btn" onclick="toggleGraphPanel()" style="padding:4px 9px; font-size:11.5px;">Kapat</button>
+        <h3>Bilişsel Bellek Grafı</h3>
+        <button class="tb-btn" onclick="setViewMode('chat')" style="padding:4px 9px; font-size:11.5px;">Kapat</button>
       </div>
       <div class="gp-canvas-wrap">
         <canvas id="graphCanvas"></canvas>
@@ -1046,7 +1090,7 @@
         card.innerHTML = `
           <div class="fact-top">
             <span class="fact-rel">${escapeHtml(f.relation)} ${f.status === 'archived' ? '(ARŞİV)' : ''}</span>
-            <button class="sb-del" onclick="deleteFact('${f.id}')" title="Sil">×</button>
+            <button type="button" class="fact-del-btn" onclick="deleteFact('${f.id}')" title="Bu belleği sil">Sil</button>
           </div>
           <div class="fact-val">${escapeHtml(f.value)}</div>
           <div class="fact-time">${escapeHtml(f.ts)}</div>
@@ -1240,17 +1284,29 @@
       document.getElementById('studio').classList.toggle('sidebar-collapsed');
       setTimeout(drawGraph, 80);
     }
-    function toggleGraphPanel() {
-      const btn = document.getElementById('graphToggleBtn');
-      if (window.innerWidth <= 1024) {
-        const open = document.getElementById('graphPanel').classList.toggle('mobile-open');
-        document.getElementById('sidebar').classList.remove('mobile-open');
-        document.getElementById('mobileBackdrop').classList.toggle('open', open);
+    let currentViewMode = 'chat';
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const studio = document.getElementById('studio');
+      const gp = document.getElementById('graphPanel');
+      const chatPanel = document.getElementById('chatPanel');
+      studio.classList.remove('mode-split', 'mode-memory');
+      gp.classList.remove('mobile-open');
+
+      if (mode === 'split') {
+        studio.classList.add('mode-split');
+        if (gp.parentElement !== studio) studio.appendChild(gp);
+      } else if (mode === 'memory') {
+        studio.classList.add('mode-memory');
+        if (gp.parentElement !== chatPanel) chatPanel.appendChild(gp);
       } else {
-        const shown = document.getElementById('studio').classList.toggle('show-graph');
-        if (btn) btn.classList.toggle('active', shown);
+        if (gp.parentElement !== studio) studio.appendChild(gp);
       }
-      setTimeout(drawGraph, 60);
+
+      document.getElementById('vsChat')?.classList.toggle('active', mode === 'chat');
+      document.getElementById('vsSplit')?.classList.toggle('active', mode === 'split');
+      document.getElementById('vsMemory')?.classList.toggle('active', mode === 'memory');
+      setTimeout(drawGraph, 70);
     }
 
     async function loadAuthConfig() {

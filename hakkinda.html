@@ -350,13 +350,13 @@
       justify-content: space-between; gap: 28px; backdrop-filter: blur(22px);
     }
 
-    /* GIANT FOOTER WORDMARK */
+    /* GIANT FOOTER WORDMARK + BUTTERFLY LANDING PERCH */
     .lml-wordmark {
       font-size: clamp(42px, 14.5vw, 188px); font-weight: 700; letter-spacing: -0.05em;
       line-height: 0.88; text-align: center; max-width: 100%; overflow: hidden;
-      background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, transparent 90%);
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.24) 0%, rgba(251, 191, 36, 0.04) 92%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      user-select: none; margin: 40px 0 20px;
+      user-select: none; margin: 44px 0 128px;
     }
 
     /* FOOTER */
@@ -683,7 +683,8 @@
 
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Living 3D Butterfly (Pinned & Alive in Viewport)
+    // Living 3D Butterfly: Follows mouse smoothly, weaves left-right down the page on scroll,
+    // and lands centered right beneath the giant SYNAPHE wordmark at the bottom!
     (function initLivingButterfly() {
       if (reduceMotion) return;
       const rig = document.getElementById('goldenButterflyRig');
@@ -691,33 +692,95 @@
       const wingRight = document.getElementById('wingRight');
       if (!rig || !wingLeft || !wingRight) return;
 
+      // Anchor rig at top-left (0,0) so we can glide smoothly anywhere in the viewport via translate3d
+      rig.style.top = '0px';
+      rig.style.left = '0px';
+
+      let vw = window.innerWidth;
+      let vh = window.innerHeight;
+      let mouseX = vw * 0.5;
+      let mouseY = vh * 0.23;
+      let hasMouse = false;
+
+      let currX = vw * 0.5;
+      let currY = vh * 0.23;
       let targetScrollY = window.scrollY || 0;
       let lastScrollY = targetScrollY;
       let scrollSpeed = 0;
       let flapPhase = 0;
 
+      window.addEventListener('resize', () => {
+        vw = window.innerWidth;
+        vh = window.innerHeight;
+      });
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        hasMouse = true;
+      }, { passive: true });
       window.addEventListener('scroll', () => {
         targetScrollY = window.scrollY || 0;
       }, { passive: true });
 
       function animate() {
+        const docH = Math.max(document.documentElement.scrollHeight - vh, 1);
+        const scrollP = Math.min(Math.max(targetScrollY / docH, 0), 1);
         scrollSpeed = Math.abs(targetScrollY - lastScrollY);
         lastScrollY = targetScrollY;
 
-        const baseFrequency = 0.052;
-        const speedBoost = Math.min(scrollSpeed * 0.007, 0.11);
+        const baseFrequency = 0.056;
+        const speedBoost = Math.min(scrollSpeed * 0.008, 0.12);
         flapPhase += (baseFrequency + speedBoost);
 
         const combinedFlap = Math.sin(flapPhase) + Math.sin(flapPhase * 2.3) * 0.16;
         wingLeft.style.transform = `rotateY(${-10 + combinedFlap * 60}deg) rotateZ(${combinedFlap * 5}deg)`;
         wingRight.style.transform = `rotateY(${10 - combinedFlap * 60}deg) rotateZ(${-combinedFlap * 5}deg)`;
 
-        const hoverY = Math.sin(flapPhase * 0.5) * 12;
-        const hoverX = Math.cos(flapPhase * 0.3) * 7;
-        const tiltPitch = Math.sin(flapPhase * 0.5) * 4;
-        const rollYaw = Math.cos(flapPhase * 0.35) * 3.5;
+        // Determine target (X, Y) in viewport
+        let targetX = vw * 0.5;
+        let targetY = vh * 0.23;
+        let scale = 1.0;
 
-        rig.style.transform = `translate3d(calc(-50% + ${hoverX}px), calc(-50% + ${hoverY}px), 0px) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg)`;
+        const wordmark = document.querySelector('.lml-wordmark');
+        const wmRect = wordmark ? wordmark.getBoundingClientRect() : null;
+        const atFooterPerch = wmRect && wmRect.bottom > 0 && wmRect.bottom < vh - 20 && scrollP > 0.84;
+
+        if (atFooterPerch) {
+          // Gracefully land centered right underneath the giant SYNAPHE wordmark!
+          targetX = vw * 0.5 + (hasMouse ? (mouseX - vw * 0.5) * 0.06 : 0);
+          targetY = Math.min(wmRect.bottom + 54, vh - 86);
+          scale = 0.92;
+        } else if (scrollP < 0.06) {
+          // Top hero: gently follow mouse around hero center
+          const mx = hasMouse ? mouseX : vw * 0.5;
+          const my = hasMouse ? mouseY : vh * 0.23;
+          targetX = vw * 0.5 + (mx - vw * 0.5) * 0.42;
+          targetY = vh * 0.23 + (my - vh * 0.23) * 0.32;
+          scale = 1.0;
+        } else {
+          // Scrolling down: graceful left-right S-curve weave + gentle mouse attraction
+          const waveAmp = Math.min(vw * 0.30, 340);
+          const waveX = Math.sin(scrollP * Math.PI * 2.5) * waveAmp;
+          const baseX = vw * 0.5 + waveX;
+          const baseY = vh * (0.24 + scrollP * 0.46);
+          targetX = hasMouse ? baseX + (mouseX - baseX) * 0.26 : baseX;
+          targetY = hasMouse ? baseY + (mouseY - baseY) * 0.20 : baseY;
+          scale = 0.86;
+        }
+
+        // Smooth organic spring interpolation
+        const dx = targetX - currX;
+        const dy = targetY - currY;
+        currX += dx * 0.065;
+        currY += dy * 0.065;
+
+        const hoverY = Math.sin(flapPhase * 0.5) * 10;
+        const hoverX = Math.cos(flapPhase * 0.3) * 6;
+        const bankZ = Math.max(-22, Math.min(22, dx * 0.09));
+        const tiltPitch = Math.max(-14, Math.min(14, -dy * 0.06 + Math.sin(flapPhase * 0.5) * 4));
+        const rollYaw = Math.max(-18, Math.min(18, dx * 0.07 + Math.cos(flapPhase * 0.35) * 3.5));
+
+        rig.style.transform = `translate3d(calc(${currX + hoverX}px - 50%), calc(${currY + hoverY}px - 50%), 0px) scale(${scale}) rotateX(${tiltPitch}deg) rotateY(${rollYaw}deg) rotateZ(${bankZ}deg)`;
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
