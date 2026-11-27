@@ -28,17 +28,27 @@ function parseJsonResilient(raw) {
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
+
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      ok: true,
+      service: 'Synaphe Eidetis Cloud API',
+      configured: Boolean(apiKey)
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
   if (!apiKey) {
     return res.status(503).json({
       configured: false,
@@ -105,14 +115,20 @@ Sadece geçerli JSON döndür:
       }
     };
 
+    let lastStatus = 0;
     for (const model of MODELS) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 18000);
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
         const resp = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: controller.signal
         });
+        clearTimeout(timer);
+        lastStatus = resp.status;
         if (!resp.ok) continue;
         const data = await resp.json();
         const parts = data?.candidates?.[0]?.content?.parts || [];
@@ -128,11 +144,16 @@ Sadece geçerli JSON döndür:
           });
         }
       } catch (_) {
+        clearTimeout(timer);
         continue;
       }
     }
 
-    return res.status(502).json({ configured: true, error: 'Model yanıt üretemedi, lütfen tekrar deneyin.' });
+    return res.status(502).json({
+      configured: true,
+      lastStatus,
+      error: 'Model yanıt üretemedi, lütfen tekrar deneyin.'
+    });
   } catch (err) {
     return res.status(500).json({ error: 'Sunucu hatası', detail: String(err?.message || err) });
   }

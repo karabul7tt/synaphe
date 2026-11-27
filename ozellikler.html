@@ -92,30 +92,36 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-    html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: var(--sans); }
-    body { min-height: 100vh; overflow-x: hidden; position: relative; background: var(--bg); line-height: 1.5; }
+    html { scroll-behavior: smooth; background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: clip; }
+    body { min-height: 100vh; overflow-x: clip; position: relative; background: var(--bg); line-height: 1.5; }
+    code { font-family: var(--mono); font-size: 0.9em; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 5px; word-break: break-word; }
+    pre code { background: none; padding: 0; border-radius: 0; }
 
     /* BACKGROUND LAYERS */
     .bloom-art-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
     .bg-bloom-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: center 30%;
-      opacity: 0.52; filter: contrast(1.18) brightness(0.90) saturate(1.12); transform: scale(1.02);
+      opacity: 0.48; filter: contrast(1.18) brightness(0.88) saturate(1.12); transform: scale(1.02);
     }
     .bloom-vignette {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 40%, rgba(245, 158, 11, 0.04) 0%, rgba(5, 6, 8, 0.38) 62%, rgba(5, 6, 8, 0.72) 100%);
+      background: radial-gradient(circle at 50% 38%, rgba(245, 158, 11, 0.04) 0%, rgba(5, 6, 8, 0.46) 60%, rgba(5, 6, 8, 0.82) 100%);
     }
-    #synapseCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.92; }
+    #synapseCanvas { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.85; }
 
-    /* 3D LIVING BUTTERFLY — PINNED IN VIEWPORT */
-    .butterfly-stage { position: fixed; inset: 0; z-index: 3; pointer-events: none; perspective: 1200px; }
+    /* 3D LIVING BUTTERFLY — SMOOTHLY FADES ON SCROLL SO IT NEVER CLASHES WITH TEXT */
+    .butterfly-stage { position: fixed; inset: 0; z-index: 3; pointer-events: none; perspective: 1200px; transition: opacity 0.35s ease; }
+    .butterfly-stage.subpage-ambient { opacity: 0.22; }
     .golden-butterfly-3d-rig {
-      position: absolute; top: 23%; left: 50%;
+      position: absolute; top: 21%; left: 50%;
       transform: translate3d(-50%, -50%, 0);
-      width: clamp(165px, 19vw, 255px); height: clamp(112px, 13vw, 176px);
-      transform-style: preserve-3d; will-change: transform; opacity: 0.92;
+      width: clamp(150px, 18vw, 240px); height: clamp(102px, 12.4vw, 166px);
+      transform-style: preserve-3d; will-change: transform, opacity; opacity: 0.92;
       filter: drop-shadow(0 0 28px rgba(251, 191, 36, 0.42)) drop-shadow(0 0 56px rgba(245, 158, 11, 0.20));
+    }
+    .butterfly-stage.subpage-ambient .golden-butterfly-3d-rig {
+      top: 18%; left: 82%; width: clamp(120px, 14vw, 185px); height: clamp(82px, 9.6vw, 128px);
     }
     .wing-3d-wrap { position: absolute; top: 0; width: 50%; height: 100%; transform-style: preserve-3d; will-change: transform; }
     .wing-left-wrap { left: 0; transform-origin: 100% 50%; }
@@ -184,17 +190,24 @@
       display: none; width: 38px; height: 38px; border-radius: 10px;
       border: 1px solid var(--border-strong); background: rgba(255,255,255,0.05);
       color: #fff; cursor: pointer; align-items: center; justify-content: center;
+      touch-action: manipulation;
     }
+    .mobile-drawer-backdrop {
+      display: none; position: fixed; inset: 0; top: 68px; z-index: 135;
+      background: rgba(0, 0, 0, 0.58); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    .mobile-drawer-backdrop.open { display: block; }
     .mobile-drawer {
       display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 140;
-      background: rgba(8, 10, 16, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--gold-border); padding: 18px 24px 24px;
-      flex-direction: column; gap: 12px;
+      background: rgba(8, 10, 16, 0.98); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--gold-border); padding: 14px 20px 22px;
+      flex-direction: column; gap: 4px; box-shadow: 0 24px 50px rgba(0,0,0,0.8);
     }
     .mobile-drawer.open { display: flex; }
     .mobile-drawer a {
-      color: #e4e4e7; text-decoration: none; font-size: 15px; font-weight: 500;
-      padding: 10px 4px; border-bottom: 1px solid var(--border);
+      color: #e4e4e7; text-decoration: none; font-size: 15.5px; font-weight: 500;
+      padding: 13px 6px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
     .mobile-drawer a:last-child { border-bottom: none; }
 
@@ -203,6 +216,7 @@
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       padding: 11px 22px; border-radius: 999px; font-size: 14px; font-weight: 600;
       text-decoration: none; cursor: pointer; border: none; transition: all 0.2s ease;
+      touch-action: manipulation;
     }
     .btn-gold {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
@@ -217,54 +231,56 @@
 
     /* FULL-VIEWPORT EDITORIAL HERO */
     .hero-full {
-      min-height: calc(100vh - 68px);
+      min-height: calc(100svh - 68px);
       display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      text-align: center; padding: clamp(185px, 27vh, 250px) 24px 36px;
+      text-align: center; padding: clamp(195px, 28vh, 260px) 24px 36px;
     }
-    .hero-core { max-width: 760px; margin: 0 auto; }
+    .hero-core { max-width: 760px; margin: 0 auto; width: 100%; }
     .kicker {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center;
       font-family: var(--mono); font-size: 11px; font-weight: 600;
       letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
     }
-    .kicker-line { width: 18px; height: 1px; background: var(--gold); }
+    .kicker-line { width: 18px; height: 1px; background: var(--gold); flex-shrink: 0; }
     .hero-h1 {
-      font-size: clamp(54px, 8vw, 96px); font-weight: 700; letter-spacing: -0.045em; line-height: 0.96;
+      font-size: clamp(46px, 8vw, 96px); font-weight: 700; letter-spacing: -0.045em; line-height: 0.98;
       background: linear-gradient(180deg, #ffffff 30%, #d4d4d8 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 22px;
     }
     .hero-lead {
-      font-size: clamp(16px, 1.8vw, 19.5px); color: var(--text-soft);
-      line-height: 1.65; max-width: 640px; margin: 0 auto 36px; font-weight: 400;
+      font-size: clamp(15.5px, 1.8vw, 19.5px); color: var(--text-soft);
+      line-height: 1.65; max-width: 640px; margin: 0 auto 34px; font-weight: 400;
     }
     .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .scroll-cue {
       display: inline-flex; flex-direction: column; align-items: center; gap: 8px;
       color: var(--text-faint); font-size: 12px; font-family: var(--mono);
       letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
-      margin-top: 48px; transition: color 0.2s;
+      margin-top: 40px; transition: color 0.2s;
     }
     .scroll-cue:hover { color: var(--gold); }
 
     /* EDITORIAL SECTIONS & SCROLL REVEAL */
-    .sec { padding: clamp(72px, 9vw, 116px) 0; border-top: 1px solid var(--border); scroll-margin-top: 76px; }
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .sec { padding: clamp(64px, 8.5vw, 112px) 0; border-top: 1px solid var(--border); scroll-margin-top: 76px; }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .h2 {
-      font-size: clamp(28px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em;
+      font-size: clamp(26px, 4vw, 44px); font-weight: 600; letter-spacing: -0.03em;
       color: #ffffff; line-height: 1.15; margin-bottom: 14px;
     }
-    .sec-lead { font-size: 16px; color: var(--text-soft); max-width: 680px; line-height: 1.65; margin-bottom: 44px; }
+    .sec-lead { font-size: clamp(14.5px, 1.5vw, 16px); color: var(--text-soft); max-width: 680px; line-height: 1.65; margin-bottom: 40px; }
 
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .grid-3 > *, .grid-2 > *, .grid-4 > *, .stat-strip > *, .footer-grid > * { min-width: 0; }
 
     .card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 18px; padding: 28px 26px;
+      border-radius: 18px; padding: 26px 24px;
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       transition: border-color 0.2s ease, transform 0.2s ease;
+      overflow-wrap: break-word;
     }
     .card:hover { border-color: var(--gold-border); transform: translateY(-2px); }
     .card-num { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 12px; display: block; }
@@ -340,17 +356,17 @@
 
     /* GIANT FOOTER WORDMARK */
     .lml-wordmark {
-      font-size: clamp(64px, 15vw, 188px); font-weight: 700; letter-spacing: -0.05em;
-      line-height: 0.85; text-align: center;
+      font-size: clamp(42px, 14.5vw, 188px); font-weight: 700; letter-spacing: -0.05em;
+      line-height: 0.88; text-align: center; max-width: 100%; overflow: hidden;
       background: linear-gradient(180deg, rgba(251, 191, 36, 0.18) 0%, transparent 90%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      user-select: none; margin: 48px 0 24px;
+      user-select: none; margin: 40px 0 20px;
     }
 
     /* FOOTER */
     .footer {
       border-top: 1px solid var(--border); padding: 48px 0 32px;
-      background: rgba(5, 6, 8, 0.35); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: rgba(5, 6, 8, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       color: var(--text-soft); font-size: 13.5px;
     }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 36px; }
@@ -359,14 +375,51 @@
     .footer-col a { color: var(--text-soft); text-decoration: none; transition: color 0.15s; }
     .footer-col a:hover { color: var(--gold); }
 
-    .sub-hero { padding: clamp(130px, 18vh, 175px) 0 48px; }
+    .sub-hero { padding: clamp(56px, 9vh, 108px) 0 48px; }
+    .sub-hero .kicker { justify-content: flex-start; }
 
-    @media (max-width: 900px) {
-      .grid-3, .grid-2, .grid-4, .stat-strip { grid-template-columns: 1fr; }
-      .cta-banner { flex-direction: column; text-align: center; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 960px) {
+      .grid-3, .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cta-banner { flex-direction: column; text-align: center; align-items: stretch; }
+      .cta-banner > div:last-child { justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
       .nav-links { display: none; }
       .mobile-menu-btn { display: inline-flex; }
+    }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 0 16px; }
+      .nav-inner { height: 62px; }
+      .nav-brand { font-size: 16.5px; gap: 8px; }
+      .nav-brand img { width: 24px; height: 24px; }
+      .nav-cta-btn { padding: 8px 14px !important; font-size: 12.5px !important; }
+      .mobile-drawer, .mobile-drawer-backdrop { top: 62px; }
+      .golden-butterfly-3d-rig {
+        top: 15.5%; width: 138px; height: 95px;
+      }
+      .butterfly-stage.subpage-ambient .golden-butterfly-3d-rig {
+        top: 14%; left: 84%; width: 96px; height: 66px;
+      }
+      .hero-full {
+        padding: 150px 16px 28px;
+        min-height: calc(100svh - 62px);
+      }
+      .hero-h1 { font-size: clamp(42px, 13vw, 56px); margin-bottom: 16px; }
+      .hero-lead { font-size: 15px; margin-bottom: 28px; }
+      .hero-actions { flex-direction: column; width: 100%; max-width: 320px; margin: 0 auto; gap: 10px; }
+      .hero-actions .btn { width: 100%; }
+      .card { padding: 20px 18px; border-radius: 15px; }
+      .bench-box { padding: 20px 16px; border-radius: 16px; }
+      .sim-box { padding: 20px 16px; border-radius: 16px; }
+      .sim-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .sim-row input[type="range"] { width: 100%; min-width: 0; }
+      .stat-strip { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-box { padding: 12px; }
+      .stat-box .st-v { font-size: 18px; }
+      .code-block { font-size: 11.5px; padding: 40px 12px 14px 12px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .sub-hero { padding: 40px 0 36px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -382,7 +435,7 @@
     <div class="bloom-vignette"></div>
   </div>
   <canvas id="synapseCanvas" aria-hidden="true"></canvas>
-  <div class="butterfly-stage" aria-hidden="true">
+  <div class="butterfly-stage subpage-ambient" id="butterflyStage" aria-hidden="true">
     <div class="golden-butterfly-3d-rig" id="goldenButterflyRig" aria-hidden="true">
       <div class="wing-3d-wrap wing-left-wrap" id="wingLeft">
         <img src="/static/wing_left_3d.png" alt="" class="wing-img">
@@ -476,7 +529,7 @@
           </nav>
 
           <div style="display:flex; align-items:center; gap:10px;">
-            <a href="/app" class="btn btn-gold" style="padding:9px 18px; font-size:13.5px;">Web'de Kullan</a>
+            <a href="/app" class="btn btn-gold nav-cta-btn" style="padding:9px 18px; font-size:13.5px;">Web'de Kullan</a>
             <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü Aç" aria-expanded="false" onclick="toggleMobileMenu()">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
             </button>
@@ -486,12 +539,13 @@
     </header>
 
     <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileMenu()"></div>
     <nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobil Menü">
-      <a href="/hakkinda">Hakkında</a>
-      <a href="/ozellikler">Özellikler</a>
-      <a href="/bilgi">Bilgi &amp; Benchmark</a>
-      <a href="/indir">İndir &amp; Kurulum</a>
-      <a href="/app" style="color:var(--gold); font-weight:600;">Web'de Hemen Kullan &rarr;</a>
+      <a href="/hakkinda" onclick="closeMobileMenu()">Hakkında</a>
+      <a href="/ozellikler" onclick="closeMobileMenu()">Özellikler</a>
+      <a href="/bilgi" onclick="closeMobileMenu()">Bilgi &amp; Benchmark</a>
+      <a href="/indir" onclick="closeMobileMenu()">İndir &amp; Kurulum</a>
+      <a href="/app" onclick="closeMobileMenu()" style="color:var(--gold); font-weight:600;">Web'de Hemen Kullan &rarr;</a>
     </nav>
 
     <section class="sub-hero">
@@ -592,17 +646,27 @@
 
   <script>
     // Mobile Menu Drawer
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      const btn = document.getElementById('mobileMenuBtn');
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
     function toggleMobileMenu() {
       const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
       const btn = document.getElementById('mobileMenuBtn');
       const open = drawer.classList.toggle('open');
+      if (backdrop) backdrop.classList.toggle('open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const d = document.getElementById('mobileDrawer');
-        if (d) d.classList.remove('open');
-      }
+      if (e.key === 'Escape') closeMobileMenu();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 960) closeMobileMenu();
     });
 
     // Copy Code Helper
@@ -622,32 +686,51 @@
       btn.parentElement.classList.toggle('open');
     }
 
-    // Scroll Reveal
+    // Scroll Reveal (low threshold so tall mobile sections always trigger)
     (function initReveal() {
       const els = document.querySelectorAll('.reveal');
       if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('visible')); return; }
       const io = new IntersectionObserver((entries) => {
         entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.01, rootMargin: '0px 0px -24px 0px' });
       els.forEach(el => io.observe(el));
+      // Safety fallback for elements already in viewport
+      setTimeout(() => {
+        els.forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight) el.classList.add('visible');
+        });
+      }, 200);
     })();
 
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Living 3D Butterfly (Pinned in Viewport)
+    // Living 3D Butterfly (gracefully fades to ambient watermark on scroll so text stays crisp)
     (function initLivingButterfly() {
       if (reduceMotion) return;
+      const stage = document.getElementById('butterflyStage');
       const rig = document.getElementById('goldenButterflyRig');
       const wingLeft = document.getElementById('wingLeft');
       const wingRight = document.getElementById('wingRight');
       if (!rig || !wingLeft || !wingRight) return;
 
+      const isSubpage = stage && stage.classList.contains('subpage-ambient');
       let targetScrollY = window.scrollY || 0;
       let lastScrollY = targetScrollY;
       let scrollSpeed = 0;
       let flapPhase = 0;
 
-      window.addEventListener('scroll', () => { targetScrollY = window.scrollY || 0; }, { passive: true });
+      function updateButterflyOpacity() {
+        if (!stage || isSubpage) return;
+        const progress = Math.min(Math.max(targetScrollY / 380, 0), 1);
+        stage.style.opacity = String(0.95 - progress * 0.80);
+      }
+
+      window.addEventListener('scroll', () => {
+        targetScrollY = window.scrollY || 0;
+        updateButterflyOpacity();
+      }, { passive: true });
+      updateButterflyOpacity();
 
       function animate() {
         scrollSpeed = Math.abs(targetScrollY - lastScrollY);

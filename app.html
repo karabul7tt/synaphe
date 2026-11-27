@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Synaphe Web Stüdyosu — Bilişsel Hafıza &amp; Yapay Zekâ</title>
   <meta name="description" content="Synaphe Web Stüdyosu: Eidetis bilişsel hafıza grafiği ile doğrudan tarayıcıda sohbet edin.">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -36,11 +36,12 @@
 
     .studio {
       display: grid;
-      grid-template-columns: 260px 1fr 340px;
+      grid-template-columns: 260px minmax(0, 1fr) 340px;
       height: 100vh;
-      width: 100vw;
+      height: 100dvh;
+      width: 100%;
     }
-    .studio.hide-graph { grid-template-columns: 260px 1fr; }
+    .studio.hide-graph { grid-template-columns: 260px minmax(0, 1fr); }
     .studio.hide-graph .graph-panel { display: none; }
 
     /* LEFT SIDEBAR */
@@ -48,7 +49,7 @@
       background: var(--surface);
       border-right: 1px solid var(--border);
       display: flex; flex-direction: column;
-      height: 100vh; overflow: hidden;
+      height: 100%; overflow: hidden;
     }
     .sb-head {
       height: 60px; padding: 0 16px;
@@ -111,24 +112,25 @@
 
     /* CENTER CHAT */
     .chat-panel {
-      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column; height: 100%; min-width: 0; overflow: hidden;
       background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.05), transparent 45%), var(--bg);
     }
     .topbar {
-      height: 60px; padding: 0 20px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      background: rgba(7, 8, 13, 0.85); backdrop-filter: blur(16px);
+      height: 60px; padding: 0 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: rgba(7, 8, 13, 0.88); backdrop-filter: blur(16px); flex-shrink: 0;
     }
-    .tb-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .tb-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+    #activeSessionTitle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
     .mode-pill {
       font-family: var(--mono); font-size: 11px; color: var(--gold);
       background: var(--gold-dim); border: 1px solid var(--gold-border);
-      padding: 3px 9px; border-radius: 999px;
+      padding: 3px 9px; border-radius: 999px; flex-shrink: 0;
     }
     .tb-btn {
       background: rgba(255,255,255,0.05); border: 1px solid var(--border);
       color: var(--text-soft); padding: 6px 12px; border-radius: 8px;
-      font-size: 12.5px; cursor: pointer;
+      font-size: 12.5px; cursor: pointer; white-space: nowrap; touch-action: manipulation;
     }
     .tb-btn:hover { color: #fff; border-color: var(--border-strong); }
 
@@ -155,10 +157,40 @@
       color: #e2e8f0; border-bottom-left-radius: 4px;
     }
     .ai-meta {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px;
       font-size: 12px; font-weight: 600; color: var(--gold);
     }
+    .ai-meta-left { display: inline-flex; align-items: center; gap: 7px; }
     .ai-meta img { width: 15px; height: 15px; }
+    .msg-copy-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-faint);
+      font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 6px; cursor: pointer;
+    }
+    .msg-copy-btn:hover { color: #fff; border-color: var(--gold-border); }
+    .bubble pre {
+      background: #07080d; border: 1px solid var(--border-strong); border-radius: 10px;
+      padding: 10px 12px; overflow-x: auto; margin: 8px 0; font-family: var(--mono); font-size: 12.5px; color: #34d399;
+    }
+    .bubble code {
+      font-family: var(--mono); font-size: 0.88em; background: rgba(255,255,255,0.08);
+      padding: 1px 5px; border-radius: 5px; color: #fde68a;
+    }
+    .bubble pre code { background: none; padding: 0; color: inherit; }
+    .bubble strong { color: #fff; font-weight: 600; }
+    .gp-filter-bar {
+      padding: 10px 14px 0; display: flex; flex-direction: column; gap: 8px;
+    }
+    .gp-search {
+      width: 100%; padding: 7px 10px; border-radius: 8px; font-size: 12px;
+      background: #07080d; border: 1px solid var(--border); color: #fff; outline: none;
+    }
+    .gp-search:focus { border-color: var(--gold-border); }
+    .gp-tabs { display: flex; gap: 6px; }
+    .gp-tab {
+      flex: 1; padding: 5px 6px; border-radius: 7px; font-size: 11px; font-family: var(--mono);
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-soft); cursor: pointer;
+    }
+    .gp-tab.active { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold); }
     .trace-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
     .trace-tag {
       font-family: var(--mono); font-size: 10.5px; padding: 3px 8px; border-radius: 999px;
@@ -204,7 +236,7 @@
     .graph-panel {
       background: var(--surface);
       border-left: 1px solid var(--border);
-      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column; height: 100%; overflow: hidden;
     }
     .gp-head {
       height: 60px; padding: 0 16px; border-bottom: 1px solid var(--border);
@@ -276,16 +308,39 @@
     .fact-valence { font-family: var(--mono); font-size: 10px; color: var(--sky); margin-top: 3px; }
     .test-status { font-family: var(--mono); font-size: 12px; margin-top: 8px; min-height: 18px; }
 
+    .mobile-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(4px); z-index: 280;
+    }
+    .mobile-backdrop.open { display: block; }
+
     @media (max-width: 1024px) {
-      .studio { grid-template-columns: 1fr; }
+      .studio, .studio.hide-graph { grid-template-columns: 1fr; }
       .sidebar, .graph-panel { display: none; }
-      .sidebar.mobile-open { display: flex; position: fixed; inset: 0; width: 280px; z-index: 300; }
-      .graph-panel.mobile-open { display: flex; position: fixed; inset: 0; width: 100%; z-index: 300; }
+      .sidebar.mobile-open {
+        display: flex; position: fixed; top: 0; left: 0; bottom: 0;
+        width: min(290px, 85vw); z-index: 300; box-shadow: 20px 0 60px rgba(0,0,0,0.75);
+      }
+      .graph-panel.mobile-open {
+        display: flex; position: fixed; inset: 0; width: 100%; z-index: 300;
+      }
       .mobile-only-btn { display: inline-flex; }
+    }
+    @media (max-width: 600px) {
+      .topbar { padding: 0 12px; height: 56px; }
+      .tb-btn { padding: 6px 9px; font-size: 12px; }
+      .mode-pill { display: none; }
+      .messages { padding: 18px 12px; gap: 14px; }
+      .msg { max-width: 92%; }
+      .bubble { padding: 11px 14px; font-size: 14px; }
+      .composer-wrap { padding: 10px 12px calc(12px + env(safe-area-inset-bottom)); }
+      .composer-hint { font-size: 10.5px; }
+      .send-btn { padding: 0 13px; font-size: 13px; }
     }
   </style>
 </head>
 <body>
+  <div class="mobile-backdrop" id="mobileBackdrop" onclick="closeMobilePanels()"></div>
   <div class="studio" id="studio">
     <!-- LEFT SIDEBAR -->
     <aside class="sidebar" id="sidebar">
@@ -294,7 +349,10 @@
           <img src="/static/synaphe-butterfly.png" alt="Synaphe">
           <span>Synaphe</span>
         </a>
-        <a href="/" class="sb-home">Ana Sayfa</a>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <a href="/" class="sb-home">Ana Sayfa</a>
+          <button type="button" class="tb-btn mobile-only-btn" onclick="closeMobilePanels()" style="padding:4px 9px;" aria-label="Menüyü Kapat">×</button>
+        </div>
       </div>
 
       <div class="sb-body">
@@ -332,7 +390,7 @@
     <main class="chat-panel">
       <header class="topbar">
         <div class="tb-title">
-          <button class="tb-btn mobile-only-btn" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')">Menü</button>
+          <button class="tb-btn mobile-only-btn" onclick="toggleMobileSidebar()">Menü</button>
           <span id="activeSessionTitle">Yeni Sohbet</span>
           <span class="mode-pill" id="topModePill">Synaphe AI</span>
         </div>
@@ -367,6 +425,14 @@
         <div class="gp-stats">
           <span id="statNodes">Düğüm: 1</span>
           <span id="statEdges">Aktif: 0 • Arşiv: 0</span>
+        </div>
+      </div>
+      <div class="gp-filter-bar">
+        <input type="search" id="factSearchInput" class="gp-search" placeholder="Hafızada ara..." oninput="renderFacts()">
+        <div class="gp-tabs">
+          <button type="button" class="gp-tab active" data-filter="all" onclick="setFactFilter('all', this)">Tümü</button>
+          <button type="button" class="gp-tab" data-filter="active" onclick="setFactFilter('active', this)">Aktif</button>
+          <button type="button" class="gp-tab" data-filter="archived" onclick="setFactFilter('archived', this)">Arşiv</button>
         </div>
       </div>
       <div class="gp-facts" id="factsList"></div>
@@ -404,9 +470,12 @@
 
       <div id="accStatus" class="test-status"></div>
 
-      <div class="modal-actions">
-        <button class="tb-btn" id="accCancelBtn" onclick="closeAccountModal()">Kapat</button>
-        <button class="send-btn" onclick="loginOrSwitchAccount()">Giriş Yap &amp; Başla</button>
+      <div class="modal-actions" style="justify-content:space-between;">
+        <button class="tb-btn" type="button" onclick="logoutAccount()" style="color:var(--rose);">Çıkış Yap</button>
+        <div style="display:flex; gap:10px;">
+          <button class="tb-btn" id="accCancelBtn" onclick="closeAccountModal()">Kapat</button>
+          <button class="send-btn" onclick="loginOrSwitchAccount()">Giriş Yap &amp; Başla</button>
+        </div>
       </div>
     </div>
   </div>
@@ -416,7 +485,11 @@
     // SYNAPHE ACCOUNT-SCOPED EIDETIS ENGINE (ZERO USER API KEY REQUIRED)
     // =========================================================================
     const ACCOUNT_KEY = 'synaphe_current_account_v2';
-    let currentAccount = JSON.parse(localStorage.getItem(ACCOUNT_KEY) || 'null');
+    function safeJsonParse(raw, fallback = null) {
+      try { return raw ? JSON.parse(raw) : fallback; } catch (_) { return fallback; }
+    }
+    let currentAccount = safeJsonParse(localStorage.getItem(ACCOUNT_KEY), null);
+    let currentFactFilter = 'all';
 
     function getStoreKey() {
       const id = currentAccount?.email ? currentAccount.email.toLowerCase().replace(/[^a-z0-9@._-]/g, '') : 'guest';
@@ -699,7 +772,7 @@
       }
 
       return {
-        text: 'Mesajını aldım. Bilişsel hafızaya işlenebilir bir bilgi ("İstanbul\'da yaşıyorum", "İzmir\'e taşındım", "Hedefim ...", "Unutma ...") paylaştığında graf otomatik güncellenir.\n\nGenel sohbet ve açık uçlu yapay zekâ yanıtları için sağ üstteki "Model / API" menüsünden yerel Ollama sunucunu veya Gemini / OpenAI anahtarını bağlayabilirsin.',
+        text: 'Mesajını aldım. Bilişsel hafızaya işlenebilir bir bilgi ("İstanbul\'da yaşıyorum", "İzmir\'e taşındım", "Hedefim ...", "Unutma ...") paylaştığında graf otomatik güncellenir.\n\nBulut yapay zekâ bağlantısı geçici olarak meşgulse sağ üstteki "Hesap" menüsünden yerel Synaphe sunucuna (:8000) geçebilir veya tekrar deneyebilirsin.',
         traces: ['Eidetis Tarayıcı Motoru']
       };
     }
@@ -827,7 +900,8 @@
               `<span class="trace-tag ${t.includes('AGM') ? 'conflict' : ''}">${escapeHtml(t)}</span>`
             ).join('') + '</div>';
           }
-          el.innerHTML = `<div class="bubble"><div class="ai-meta"><img src="/static/synaphe-butterfly.png" alt=""><span>Synaphe</span></div>${escapeHtml(m.text)}${traceHtml}</div>`;
+          el.innerHTML = `<div class="bubble"><div class="ai-meta"><span class="ai-meta-left"><img src="/static/synaphe-butterfly.png" alt=""><span>Synaphe</span></span><button type="button" class="msg-copy-btn" onclick="copyMessageText(this)">Kopyala</button></div><div class="msg-body">${renderMarkdown(m.text)}</div>${traceHtml}</div>`;
+          el.querySelector('.msg-copy-btn').dataset.raw = m.text;
         } else {
           el.innerHTML = `<div class="bubble">${escapeHtml(m.text)}</div>`;
         }
@@ -843,12 +917,19 @@
       document.getElementById('statNodes').textContent = `Düğüm: ${state.facts.length + 1}`;
       document.getElementById('statEdges').textContent = `Aktif: ${activeCount} • Arşiv: ${archCount}`;
 
-      if (!state.facts.length) {
-        list.innerHTML = '<div style="font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 10px;">Henüz bellek düğümü yok. Sol menüdeki hızlı testlerden birine tıklayarak grafın nasıl oluştuğunu görebilirsin.</div>';
+      const q = (document.getElementById('factSearchInput')?.value || '').trim().toLowerCase();
+      const filtered = state.facts.filter(f => {
+        if (currentFactFilter !== 'all' && f.status !== currentFactFilter) return false;
+        if (q && !(f.value.toLowerCase().includes(q) || f.relation.toLowerCase().includes(q) || (f.detail || '').toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = `<div style="font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 10px;">${state.facts.length ? 'Filtreye uygun bellek kaydı bulunamadı.' : 'Henüz bellek düğümü yok. Sol menüdeki hızlı testlerden birine tıklayarak grafın nasıl oluştuğunu görebilirsin.'}</div>`;
         return;
       }
       list.innerHTML = '';
-      state.facts.forEach(f => {
+      filtered.forEach(f => {
         const card = document.createElement('div');
         card.className = 'fact-card' + (f.status === 'archived' ? ' archived' : '');
         card.innerHTML = `
@@ -944,10 +1025,15 @@
       requestAnimationFrame(drawGraph);
     }
 
+    let isSending = false;
     async function handleSend() {
+      if (isSending) return;
       const box = document.getElementById('inputBox');
       const text = box.value.trim();
       if (!text) return;
+      isSending = true;
+      const sendBtn = document.querySelector('.send-btn');
+      if (sendBtn) sendBtn.disabled = true;
       box.value = '';
       box.style.height = 'auto';
 
@@ -967,16 +1053,33 @@
       boxEl.appendChild(typingEl);
       boxEl.scrollTop = boxEl.scrollHeight;
 
-      const reply = await generateReply(text, extracted);
-      typingEl.remove();
-      sess.messages.push({ role: 'ai', text: reply.text, traces: reply.traces });
-      persist(); renderAll();
+      try {
+        const reply = await generateReply(text, extracted);
+        typingEl.remove();
+        sess.messages.push({ role: 'ai', text: reply.text, traces: reply.traces });
+        persist(); renderAll();
+      } finally {
+        isSending = false;
+        if (sendBtn) sendBtn.disabled = false;
+      }
+    }
+
+    function closeMobilePanels() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      document.getElementById('graphPanel').classList.remove('mobile-open');
+      document.getElementById('mobileBackdrop').classList.remove('open');
+    }
+    function toggleMobileSidebar() {
+      const sb = document.getElementById('sidebar');
+      const open = sb.classList.toggle('mobile-open');
+      document.getElementById('graphPanel').classList.remove('mobile-open');
+      document.getElementById('mobileBackdrop').classList.toggle('open', open);
     }
 
     function quickSend(txt) {
       document.getElementById('inputBox').value = txt;
+      closeMobilePanels();
       handleSend();
-      document.getElementById('sidebar').classList.remove('mobile-open');
     }
 
     function createNewSession() {
@@ -1011,7 +1114,10 @@
 
     function toggleGraphPanel() {
       if (window.innerWidth <= 1024) {
-        document.getElementById('graphPanel').classList.toggle('mobile-open');
+        const gp = document.getElementById('graphPanel');
+        const open = gp.classList.toggle('mobile-open');
+        document.getElementById('sidebar').classList.remove('mobile-open');
+        document.getElementById('mobileBackdrop').classList.toggle('open', open);
       } else {
         document.getElementById('studio').classList.toggle('hide-graph');
       }
@@ -1060,6 +1166,43 @@
       };
       recognition.onend = () => { recognition = null; btn.classList.remove('recording'); };
       recognition.start();
+    }
+
+    function setFactFilter(filter, btn) {
+      currentFactFilter = filter;
+      document.querySelectorAll('.gp-tab').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderFacts();
+    }
+
+    function copyMessageText(btn) {
+      const raw = btn.dataset.raw || '';
+      if (!raw || !navigator.clipboard) return;
+      navigator.clipboard.writeText(raw).then(() => {
+        btn.textContent = 'Kopyalandı';
+        btn.style.color = '#34d399';
+        setTimeout(() => { btn.textContent = 'Kopyala'; btn.style.color = ''; }, 1600);
+      });
+    }
+
+    function renderMarkdown(str) {
+      let s = escapeHtml(str);
+      // Fenced code blocks
+      s = s.replace(/```([a-zA-Z0-9_-]*)\n?([\s\S]*?)```/g, (_, _lang, code) => `<pre><code>${code.trim()}</code></pre>`);
+      // Inline code
+      s = s.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      // Bold & Italic
+      s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+      return s;
+    }
+
+    function logoutAccount() {
+      localStorage.removeItem(ACCOUNT_KEY);
+      currentAccount = null;
+      state = safeJsonParse(localStorage.getItem(getStoreKey()), null) || createDefaultState('');
+      renderAll();
+      openAccountModal();
     }
 
     function escapeHtml(str) {
