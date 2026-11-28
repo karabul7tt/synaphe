@@ -268,7 +268,7 @@ export default async function handler(req, res) {
     for (const att of attachments) {
       if (!att || !att.data) continue;
       const mime = String(att.mimeType || '');
-      if (mime.startsWith('image/')) {
+      if (mime.startsWith('image/') || mime === 'application/pdf') {
         userParts.push({
           inlineData: {
             mimeType: mime,
@@ -292,6 +292,97 @@ export default async function handler(req, res) {
 
     const modelQueue = thinkingMode === 'deep' ? DEEP_MODELS : BALANCED_MODELS;
     const thinkingBudget = thinkingMode === 'deep' ? 8192 : 3072;
+    const wantStream = Boolean(body.stream);
+
+    // REAL-TIME SSE STREAMING MODE
+    if (wantStream) {
+      for (const model of modelQueue) {
+        const generationConfig = {
+          temperature: deep ? 0.35 : 0.45,
+          topP: 0.92,
+          maxOutputTokens: 8192
+        };
+        if (deep && model === 'gemini-2.5-flash') {
+          generationConfig.thinkingConfig = { thinkingBudget };
+        }
+        const reqBody = {
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          contents,
+          generationConfig
+        };
+        if (liveSearch) reqBody.tools = [{ googleSearch: {} }];
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+        let resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqBody)
+        }).catch(() => null);
+
+        if ((!resp || !resp.ok) && (liveSearch || deep)) {
+          delete reqBody.tools;
+          delete reqBody.generationConfig.thinkingConfig;
+          resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqBody)
+          }).catch(() => null);
+        }
+
+        if (!resp || !resp.ok || !resp.body) continue;
+
+        res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+        res.setHeader('Cache-Control', 'no-cache, no-transform');
+        res.setHeader('Connection', 'keep-alive');
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let sseBuf = '';
+        let fullText = '';
+        let emittedLen = 0;
+        let sources = [];
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          sseBuf += decoder.decode(value, { stream: true });
+          const lines = sseBuf.split('\n');
+          sseBuf = lines.pop() || '';
+          for (const line of lines) {
+            if (!line.startsWith('data:')) continue;
+            const jsonStr = line.slice(5).trim();
+            if (!jsonStr || jsonStr === '[DONE]') continue;
+            try {
+              const chunk = JSON.parse(jsonStr);
+              const sList = extractGroundingSources(chunk);
+              if (sList.length) sources = sList;
+              const parts = chunk?.candidates?.[0]?.content?.parts || [];
+              for (const p of parts) {
+                if (!p.thought && typeof p.text === 'string' && p.text) {
+                  fullText += p.text;
+                }
+              }
+              // Stream safe visible prefix (hold back if '<synaphe_memory' tag starts forming)
+              const tagIdx = fullText.indexOf('<synaphe_memory');
+              const safeEnd = tagIdx >= 0 ? tagIdx : Math.max(0, fullText.length - 18);
+              if (safeEnd > emittedLen) {
+                const delta = fullText.slice(emittedLen, safeEnd);
+                emittedLen = safeEnd;
+                res.write(`data: ${JSON.stringify({ type: 'delta', text: delta })}\n\n`);
+              }
+            } catch (_) {}
+          }
+        }
+
+        const { reply, facts } = extractMemoryTag(fullText);
+        if (reply.length > emittedLen) {
+          res.write(`data: ${JSON.stringify({ type: 'delta', text: reply.slice(emittedLen) })}\n\n`);
+        }
+        res.write(`data: ${JSON.stringify({ type: 'done', reply, facts, sources, model })}\n\n`);
+        return res.end();
+      }
+      return res.status(502).json({ error: 'Akış başlatılamadı.' });
+    }
 
     let lastStatus = 0;
     for (const model of modelQueue) {
