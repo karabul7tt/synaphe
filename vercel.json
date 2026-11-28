@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" },
+    { "source": "/download/macos", "destination": "/static/Synaphe.dmg" },
     { "source": "/download/windows", "destination": "/static/Synaphe-Windows.zip" }
   ],
   "headers": [
