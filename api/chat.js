@@ -24,11 +24,12 @@ const DEEP_MODELS = [
   'gemini-2.5-flash'
 ];
 
-function needsDeepReasoning(msg, mode) {
+function needsDeepReasoning(msg, mode, attachmentsCount = 0) {
   if (mode === 'deep') return true;
+  if (attachmentsCount > 0) return true;
   const s = msg.toLowerCase();
-  if (msg.length > 260) return true;
-  return /\b(kod|code|python|javascript|typescript|swift|sql|react|fastapi|html|css|oyun|web sitesi|uygulama|dashboard|mimari|algoritma|hata|bug|debug|refactor|kanıt|ispat|teorem|analiz|strateji|karşılaştır|planla|optimize|matematik|integral|türev|api|veritabanı|sistem tasarımı|neden|nasıl çalışır|detaylı|kapsamlı|incele)\b/i.test(s);
+  if (msg.length > 220) return true;
+  return /\b(kod|code|python|javascript|typescript|swift|sql|react|fastapi|html|css|oyun|web sitesi|uygulama|dashboard|mimari|algoritma|hata|bug|debug|refactor|kanıt|ispat|teorem|analiz|strateji|karşılaştır|planla|optimize|matematik|integral|türev|api|veritabanı|sistem tasarımı|neden|nasıl çalışır|detaylı|kapsamlı|incele|makale|rapor|tez|bitirme|tübitak)\b/i.test(s);
 }
 
 function needsLiveSearch(msg) {
@@ -74,15 +75,17 @@ async function fetchReferencedUrls(msg) {
   return blocks.join('\n\n');
 }
 
-function extractMemoryTag(rawText) {
+function extractMetaTags(rawText) {
   let reply = String(rawText || '').trim();
   let facts = [];
-  const tagRegex = /<synaphe_memory>([\s\S]*?)<\/synaphe_memory>/i;
-  const match = reply.match(tagRegex);
-  if (match) {
-    reply = reply.replace(tagRegex, '').trim();
+  let imagePrompt = '';
+
+  const memRegex = /<synaphe_memory>([\s\S]*?)<\/synaphe_memory>/i;
+  const memMatch = reply.match(memRegex);
+  if (memMatch) {
+    reply = reply.replace(memRegex, '').trim();
     try {
-      const parsed = JSON.parse(match[1].trim());
+      const parsed = JSON.parse(memMatch[1].trim());
       if (Array.isArray(parsed)) {
         facts = parsed.filter(f => f && f.relation && f.value);
       }
@@ -90,7 +93,15 @@ function extractMemoryTag(rawText) {
       facts = [];
     }
   }
-  return { reply, facts };
+
+  const imgRegex = /<synaphe_image>([\s\S]*?)<\/synaphe_image>/i;
+  const imgMatch = reply.match(imgRegex);
+  if (imgMatch) {
+    reply = reply.replace(imgRegex, '').trim();
+    imagePrompt = String(imgMatch[1] || '').trim().slice(0, 600);
+  }
+
+  return { reply, facts, imagePrompt };
 }
 
 function extractGroundingSources(data) {
@@ -153,6 +164,11 @@ ${memoryContext}
    - Hafızadaki **AKTİF** kayıtları bugünkü gerçek, **[eski] ARŞİV** kayıtlarını geçmiş tarihçe, **gelecek_konum / plan** kayıtlarını yaklaşan gelecek olarak netçe ayır.
    - Asla "Eidetis belleğin boş", "hafıza grafiğine kaydedildi", "veritabanına eklendi" gibi robotik ifadeler kullanma.
 7. **Uzunluk Kalibrasyonu:** Gündelik sohbete 1–3 akıcı cümle; teknik, yaratıcı veya analitik görevlere yapılandırılmış, derinlikli ve profesyonel yanıt ver.
+
+GİZLİ OTOMATİK GÖRSEL ÜRETİMİ (SEN KARAR VER):
+Kullanıcı doğrudan veya dolaylı olarak bir resim, görsel, fotoğraf, illüstrasyon, karakter, sahne, afiş veya logo oluşturmanı istiyorsa (ör. "kung fu panda ama elinde adana kebap olan", "mars'ta kahve içen astronot", "bana modern bir logo tasarla"), sadece metinle tarif etmek yerine kısa ve doğal bir Türkçe cümle yaz (ör. "Görselini hemen oluşturuyorum:") ve yanıtının sonuna şu gizli etiketi ekle:
+<synaphe_image>Vivid, cinematic, ultra-detailed English image prompt here</synaphe_image>
+- Normal sohbet, bilgi veya kod sorularında <synaphe_image> etiketini HİÇ EKLEME.
 
 GİZLİ HAFIZA ÇIKARIMI (YALNIZCA YENİ KİŞİSEL BİLGİ VARSA):
 Kullanıcı bu mesajında kendisi hakkında YENİ ve kalıcı bir kişisel gerçek paylaştıysa (adı, konumu, taşınma planı, mesleği/bölümü, hedefleri, tercihleri, projeleri, ilişkileri, sınav notu, önemli planı), yanıtının EN SONUNA şu gizli etiketi ekle:
@@ -258,7 +274,7 @@ export default async function handler(req, res) {
       dateStyle: 'full',
       timeStyle: 'short'
     });
-    const deep = needsDeepReasoning(message, thinkingMode);
+    const deep = needsDeepReasoning(message, thinkingMode, attachments.length);
     const urlContext = await fetchReferencedUrls(message);
     const liveSearch = !attachments.length && !urlContext && needsLiveSearch(message);
     const systemInstruction = buildSystemInstruction(userName, memoryContext, nowStr, deep, persona, customInstructions);
@@ -306,8 +322,8 @@ export default async function handler(req, res) {
       contents.shift();
     }
 
-    const modelQueue = thinkingMode === 'deep' ? DEEP_MODELS : BALANCED_MODELS;
-    const thinkingBudget = thinkingMode === 'deep' ? 8192 : 3072;
+    const modelQueue = deep ? DEEP_MODELS : BALANCED_MODELS;
+    const thinkingBudget = deep ? 8192 : 3072;
     const wantStream = Boolean(body.stream);
 
     // REAL-TIME SSE STREAMING MODE
@@ -378,8 +394,12 @@ export default async function handler(req, res) {
                   fullText += p.text;
                 }
               }
-              // Stream safe visible prefix (hold back if '<synaphe_memory' tag starts forming)
-              const tagIdx = fullText.indexOf('<synaphe_memory');
+              // Stream safe visible prefix (hold back if '<synaphe_memory' or '<synaphe_image' tag starts forming)
+              const memIdx = fullText.indexOf('<synaphe_memory');
+              const imgIdx = fullText.indexOf('<synaphe_image');
+              let tagIdx = -1;
+              if (memIdx >= 0 && imgIdx >= 0) tagIdx = Math.min(memIdx, imgIdx);
+              else tagIdx = Math.max(memIdx, imgIdx);
               const safeEnd = tagIdx >= 0 ? tagIdx : Math.max(0, fullText.length - 18);
               if (safeEnd > emittedLen) {
                 const delta = fullText.slice(emittedLen, safeEnd);
@@ -390,11 +410,11 @@ export default async function handler(req, res) {
           }
         }
 
-        const { reply, facts } = extractMemoryTag(fullText);
+        const { reply, facts, imagePrompt } = extractMetaTags(fullText);
         if (reply.length > emittedLen) {
           res.write(`data: ${JSON.stringify({ type: 'delta', text: reply.slice(emittedLen) })}\n\n`);
         }
-        res.write(`data: ${JSON.stringify({ type: 'done', reply, facts, sources, model })}\n\n`);
+        res.write(`data: ${JSON.stringify({ type: 'done', reply, facts, imagePrompt, usedDeep: deep, sources, model })}\n\n`);
         return res.end();
       }
       return res.status(502).json({ error: 'Akış başlatılamadı.' });
@@ -429,14 +449,16 @@ export default async function handler(req, res) {
 
       lastStatus = result.status || lastStatus;
       if (result.ok && result.text) {
-        const { reply, facts } = extractMemoryTag(result.text);
-        if (reply) {
+        const { reply, facts, imagePrompt } = extractMetaTags(result.text);
+        if (reply || imagePrompt) {
           return res.status(200).json({
             configured: true,
             model,
+            usedDeep: deep,
             facts,
+            imagePrompt,
             sources: result.sources || [],
-            reply
+            reply: reply || 'Görselin hazır.'
           });
         }
       }
