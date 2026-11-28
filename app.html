@@ -153,7 +153,10 @@
       transition: all 0.15s;
     }
     .profile-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--border); color: #fff; }
-    .dot-live { width: 7px; height: 7px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 8px var(--emerald); display: inline-block; margin-right: 8px; }
+    .studio.is-installed-app #installAppBtn,
+    .studio.is-installed-app .sb-home { display: none !important; }
+    .studio.is-desktop-mac .sb-head { padding-left: 14px; }
+    .studio.is-desktop-mac .topbar { padding-left: 18px; }
 
     /* CENTER CHAT WORKSPACE */
     .chat-panel {
@@ -621,7 +624,7 @@
         </button>
         <button class="profile-btn" onclick="openAuthModal()">
           <span style="display:inline-flex; align-items:center; gap:9px; min-width:0;">
-            <span id="sidebarAvatarSlot"><span class="dot-live" style="margin-right:0;"></span></span>
+            <span id="sidebarAvatarSlot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.75;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
             <span id="sidebarUserLabel" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Giriş Yap</span>
           </span>
           <span id="sidebarActionLabel" style="font-size:11.5px; color:var(--gold);">Hesap</span>
@@ -1190,7 +1193,7 @@
         if (sbAct) sbAct.textContent = 'Profil';
         if (topBtn) topBtn.innerHTML = `${avHtml}<span>${escapeHtml((authUser.name || 'Hesap').split(' ')[0])}</span>`;
       } else {
-        if (sbAv) sbAv.innerHTML = '<span class="dot-live" style="margin-right:0;"></span>';
+        if (sbAv) sbAv.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.75;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
         if (sbLbl) sbLbl.textContent = 'Giriş Yap';
         if (sbAct) sbAct.textContent = 'Hesap';
         if (topBtn) topBtn.textContent = 'Giriş Yap';
@@ -1630,10 +1633,11 @@
         navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
       });
     }
-    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const isDesktopMacApp = navigator.userAgent.includes('SynapheDesktop');
+    const isStandaloneApp = isDesktopMacApp || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     if (isStandaloneApp) {
-      const ib = document.getElementById('installAppBtn');
-      if (ib) ib.style.display = 'none';
+      document.getElementById('studio')?.classList.add('is-installed-app');
+      if (isDesktopMacApp) document.getElementById('studio')?.classList.add('is-desktop-mac');
     }
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
