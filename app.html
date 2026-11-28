@@ -318,12 +318,36 @@
       position: absolute; top: 8px; left: 12px; font-family: var(--mono); font-size: 10px;
       color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; pointer-events: none;
     }
+    .code-actions {
+      position: absolute; top: 6px; right: 8px; display: inline-flex; gap: 6px; align-items: center;
+    }
     .code-copy-mini {
-      position: absolute; top: 6px; right: 8px; background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border); color: var(--text-soft); font-family: var(--mono);
-      font-size: 10px; padding: 3px 8px; border-radius: 6px; cursor: pointer;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-soft);
+      font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 6px; cursor: pointer;
     }
     .code-copy-mini:hover { color: #fff; border-color: var(--gold-border); }
+    .code-preview-mini {
+      background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold);
+      font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 6px; cursor: pointer;
+    }
+    .code-preview-mini:hover { background: rgba(251, 191, 36, 0.22); color: #fff; }
+    .preview-modal-card {
+      background: #0b0d14; border: 1px solid var(--gold-border); border-radius: 18px;
+      width: min(1040px, 94vw); height: min(760px, 88dvh); display: flex; flex-direction: column;
+      overflow: hidden; box-shadow: 0 32px 90px rgba(0,0,0,0.92);
+    }
+    .preview-head {
+      height: 50px; padding: 0 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; background: var(--surface);
+    }
+    .preview-iframe { flex: 1; width: 100%; border: none; background: #fff; }
+    .chat-panel.drag-over::after {
+      content: "Dosyaları veya görselleri buraya bırak";
+      position: absolute; inset: 16px; z-index: 40; border: 2px dashed var(--gold);
+      border-radius: 20px; background: rgba(6, 7, 11, 0.82); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 17px; font-weight: 600; pointer-events: none;
+    }
     .bubble code {
       font-family: var(--mono); font-size: 0.88em; background: rgba(255,255,255,0.08);
       padding: 2px 6px; border-radius: 5px; color: #fde68a;
@@ -780,6 +804,20 @@
         <button onclick="resetMemory()" style="color:var(--rose);">Sıfırla</button>
       </div>
     </aside>
+  </div>
+
+  <!-- LIVE ARTIFACT PREVIEW MODAL -->
+  <div class="modal-bg" id="artifactPreviewModal" onclick="if(event.target===this) closeArtifactPreview()">
+    <div class="preview-modal-card">
+      <div class="preview-head">
+        <span style="font-size:13.5px; font-weight:600; color:#fff;">Synaphe Canlı Önizleme</span>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="tb-btn" onclick="downloadCurrentArtifact()">HTML İndir</button>
+          <button type="button" class="tb-btn" onclick="closeArtifactPreview()">Kapat</button>
+        </div>
+      </div>
+      <iframe id="artifactFrame" class="preview-iframe" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+    </div>
   </div>
 
   <!-- REAL MULTI-PROVIDER AUTH & ACCOUNT MODAL (GOOGLE, APPLE, EMAIL, PHONE) -->
@@ -1715,7 +1753,7 @@
     }
 
     function copyCodeBlock(btn) {
-      const code = btn.parentElement.querySelector('code');
+      const code = btn.closest('.code-box-wrap').querySelector('code');
       if (!code || !navigator.clipboard) return;
       navigator.clipboard.writeText(code.innerText).then(() => {
         btn.textContent = 'Kopyalandı';
@@ -1724,14 +1762,51 @@
       });
     }
 
+    function downloadCodeBlock(btn, lang) {
+      const code = btn.closest('.code-box-wrap').querySelector('code');
+      if (!code) return;
+      const extMap = { html: 'html', python: 'py', py: 'py', javascript: 'js', js: 'js', typescript: 'ts', ts: 'ts', css: 'css', json: 'json', sql: 'sql', swift: 'swift', bash: 'sh', sh: 'sh', md: 'md', csv: 'csv' };
+      const ext = extMap[(lang || '').toLowerCase()] || 'txt';
+      const blob = new Blob([code.innerText], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `synaphe_code.${ext}`;
+      a.click();
+    }
+
+    let currentArtifactHtml = '';
+    function openArtifactPreview(btn) {
+      const code = btn.closest('.code-box-wrap').querySelector('code');
+      if (!code) return;
+      currentArtifactHtml = code.innerText;
+      const frame = document.getElementById('artifactFrame');
+      frame.srcdoc = currentArtifactHtml;
+      document.getElementById('artifactPreviewModal').classList.add('open');
+    }
+    function closeArtifactPreview() {
+      document.getElementById('artifactPreviewModal').classList.remove('open');
+      document.getElementById('artifactFrame').srcdoc = '';
+    }
+    function downloadCurrentArtifact() {
+      if (!currentArtifactHtml) return;
+      const blob = new Blob([currentArtifactHtml], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'synaphe_app.html';
+      a.click();
+    }
+
     function renderMarkdown(str) {
       const codeBlocks = [];
       let s = escapeHtml(str);
       // Extract fenced code blocks first so inner markdown isn't touched
       s = s.replace(/```([a-zA-Z0-9_+-]*)\n?([\s\S]*?)```/g, (_, lang, code) => {
         const idx = codeBlocks.length;
+        const cleanLang = (lang || '').toLowerCase();
         const label = lang ? `<span class="code-lang">${lang}</span>` : '';
-        codeBlocks.push(`<div class="code-box-wrap">${label}<button type="button" class="code-copy-mini" onclick="copyCodeBlock(this)">Kopyala</button><pre><code>${code.trim()}</code></pre></div>`);
+        const isHtml = cleanLang === 'html' || cleanLang === 'svg' || code.trim().startsWith('&lt;!DOCTYPE') || code.trim().startsWith('&lt;html');
+        const previewBtn = isHtml ? `<button type="button" class="code-preview-mini" onclick="openArtifactPreview(this)">▶ Canlı Önizle</button>` : '';
+        codeBlocks.push(`<div class="code-box-wrap">${label}<div class="code-actions">${previewBtn}<button type="button" class="code-copy-mini" onclick="downloadCodeBlock(this,'${cleanLang}')">İndir</button><button type="button" class="code-copy-mini" onclick="copyCodeBlock(this)">Kopyala</button></div><pre><code>${code.trim()}</code></pre></div>`);
         return `@@CODEBLOCK_${idx}@@`;
       });
       // Headings
@@ -1770,8 +1845,31 @@
     });
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); createNewSession(); }
-      if (e.key === 'Escape') { closeAuthModal(); closeMobilePanels(); }
+      if (e.key === 'Escape') { closeAuthModal(); closeArtifactPreview(); closeMobilePanels(); }
     });
+    // Clipboard screenshot paste (Cmd+V / Ctrl+V) + Drag & Drop files
+    document.addEventListener('paste', (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      const files = [];
+      for (const it of items) {
+        if (it.kind === 'file') {
+          const f = it.getAsFile();
+          if (f) files.push(f);
+        }
+      }
+      if (files.length) handleFileSelect(files);
+    });
+    const chatPanelEl = document.getElementById('chatPanel');
+    if (chatPanelEl) {
+      chatPanelEl.addEventListener('dragover', (e) => { e.preventDefault(); chatPanelEl.classList.add('drag-over'); });
+      chatPanelEl.addEventListener('dragleave', () => chatPanelEl.classList.remove('drag-over'));
+      chatPanelEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        chatPanelEl.classList.remove('drag-over');
+        if (e.dataTransfer?.files?.length) handleFileSelect(e.dataTransfer.files);
+      });
+    }
     window.addEventListener('resize', drawGraph);
 
     renderAll();

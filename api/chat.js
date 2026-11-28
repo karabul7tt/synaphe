@@ -1,10 +1,11 @@
 // Vercel Serverless Function: POST /api/chat
-// Synaphe AI v3 — Frontier Multimodal & Cognitive Memory Engine:
-//   - Deep Reasoning with Gemini thinkingConfig + Derin / Dengeli mode
-//   - Multimodal Vision & File Analysis (images + code/text attachments)
-//   - Live Google Search Grounding with real clickable web source citations
-//   - Elite multi-domain System Instruction + Eidetis Temporal/AGM Memory Protocol
-//   - Unconstrained 8192-token Markdown + hidden <synaphe_memory> extraction
+// Synaphe AI v4 — Frontier Agentic, Multimodal & Cognitive Memory Engine:
+//   - Principal-Engineer System Architecture (code, debugging, artifacts, data analysis, strategy)
+//   - Deep Mode -> Gemini 2.5 Pro + Gemini 2.5 Flash (thinkingBudget: 8192)
+//   - Live URL Reader (automatically fetches & reads https:// links pasted by user)
+//   - Live Google Search Grounding + clickable web source citations
+//   - Multimodal Vision & Multi-File Analysis (up to 6 images/code/data files)
+//   - Self-contained Live HTML Artifact generation + Eidetis AGM Memory Graph
 
 const BALANCED_MODELS = [
   'gemini-2.5-flash',
@@ -14,8 +15,8 @@ const BALANCED_MODELS = [
 ];
 
 const DEEP_MODELS = [
-  'gemini-2.5-flash',
   'gemini-2.5-pro',
+  'gemini-2.5-flash',
   'gemini-3-flash-preview',
   'gemini-2.5-flash-lite'
 ];
@@ -24,12 +25,50 @@ function needsDeepReasoning(msg, mode) {
   if (mode === 'deep') return true;
   const s = msg.toLowerCase();
   if (msg.length > 260) return true;
-  return /\b(kod|code|python|javascript|typescript|swift|sql|react|fastapi|mimari|algoritma|hata|bug|debug|refactor|kanıt|ispat|teorem|analiz|strateji|karşılaştır|planla|optimize|matematik|integral|türev|api|veritabanı|sistem tasarımı|neden|nasıl çalışır|detaylı|kapsamlı)\b/i.test(s);
+  return /\b(kod|code|python|javascript|typescript|swift|sql|react|fastapi|html|css|oyun|web sitesi|uygulama|dashboard|mimari|algoritma|hata|bug|debug|refactor|kanıt|ispat|teorem|analiz|strateji|karşılaştır|planla|optimize|matematik|integral|türev|api|veritabanı|sistem tasarımı|neden|nasıl çalışır|detaylı|kapsamlı|incele)\b/i.test(s);
 }
 
 function needsLiveSearch(msg) {
   const s = msg.toLowerCase();
-  return /\b(bugün|güncel|son dakika|haber|hava durumu|dolar|euro|altın|bitcoin|btc|eth|kur|kaç tl|fiyatı|maç|skor|seçim|2025|2026|şimdi|canlı|borsa|bist|kim kazandı|son durum)\b/i.test(s);
+  return /\b(bugün|güncel|son dakika|haber|hava durumu|dolar|euro|altın|bitcoin|btc|eth|kur|kaç tl|fiyatı|maç|skor|seçim|2025|2026|şimdi|canlı|borsa|bist|kim kazandı|son durum|yeni sürüm|en son)\b/i.test(s);
+}
+
+// Safely fetch & extract readable text from up to 2 URLs mentioned in user's message
+async function fetchReferencedUrls(msg) {
+  const urls = (msg.match(/https?:\/\/[^\s<>"')]+/gi) || []).slice(0, 2);
+  if (!urls.length) return '';
+  const blocks = [];
+  for (const rawUrl of urls) {
+    try {
+      const u = new URL(rawUrl);
+      // Block private/local hosts for SSRF safety
+      if (/^(localhost|127\.|10\.|192\.168\.|169\.254\.|0\.0\.0\.0)/i.test(u.hostname)) continue;
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 5000);
+      const resp = await fetch(u.toString(), {
+        headers: { 'User-Agent': 'SynapheBot/4.0 (+https://www.synapheai.com.tr)' },
+        signal: controller.signal
+      });
+      clearTimeout(t);
+      if (!resp.ok) continue;
+      const ctype = resp.headers.get('content-type') || '';
+      if (!ctype.includes('text') && !ctype.includes('json') && !ctype.includes('xml')) continue;
+      let html = await resp.text();
+      html = html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 5000);
+      if (html) {
+        blocks.push(`--- CANLI WEB SAYFASI İÇERİĞİ (${u.toString()}) ---\n${html}`);
+      }
+    } catch (_) {
+      continue;
+    }
+  }
+  return blocks.join('\n\n');
 }
 
 function extractMemoryTag(rawText) {
@@ -74,10 +113,10 @@ function buildSystemInstruction(userName, memoryContext, nowStr, isDeep) {
     : `Kullanıcının adını henüz bilmiyorsun; doğal hitap et ve asla "Misafir" veya "Kullanıcı" diye seslenme.`;
 
   const depthLine = isDeep
-    ? `MOD: DERİN AKIL YÜRÜTME — Cevap vermeden önce problemi içten içe adım adım analiz et, kenar durumları ve varsayımları doğrula, ardından en net, eksiksiz ve üst düzey çözümü sun.`
-    : `MOD: DENGELİ — Sorunun karmaşıklığına göre hız ve derinliği mükemmel dengele.`;
+    ? `MOD: DERİN MÜHENDİSLİK & AKIL YÜRÜTME — Cevap vermeden önce problemi içten içe parçala, tüm kenar durumları, güvenlik ve performans etkilerini kontrol et, sonra eksiksiz ve üst düzey çözüm sun.`
+    : `MOD: DENGELİ — Hız ve derinliği sorunun doğasına göre kusursuz dengele.`;
 
-  return `Sen SYNAPHE'sin — en üst düzey akıl yürütme, yazılım mühendisliği, bilim, matematik, tasarım, ürün stratejisi ve kişisel rehberlik yeteneklerine sahip, kalıcı Eidetis bilişsel hafızalı yapay zekâ asistanısın.
+  return `Sen SYNAPHE v4'sün — kıdemli yazılım mimarı, veri bilimci, ürün tasarımcısı, araştırmacı ve kalıcı Eidetis bilişsel hafızalı en üst düzey kişisel yapay zekâ asistanısın.
 
 GÜNCEL TARİH VE SAAT (Türkiye): ${nowStr}
 ${nameLine}
@@ -86,19 +125,20 @@ ${depthLine}
 DOĞRULANMIŞ KİŞİSEL HAFIZA (EİDETİS BİLİŞSEL GRAF):
 ${memoryContext}
 
-ÜST DÜZEY ZEKÂ VE YANIT PROTOKOLÜN:
-1. **Keskin Analiz & Sıfır Laf Kalabalığı:** Sorunun gerçek niyetini ilk bakışta kavra. "Harika bir soru!", "Elbette yardımcı olabilirim!" gibi klişe ve yapay girişler yapma. Doğrudan en yüksek değerli yanıtla başla.
-2. **Mühendislik & Kod Mükemmelliği:** Kod, hata ayıklama veya mimari istendiğinde:
-   - Önce kök nedeni (root cause) netçe açıkla.
-   - Yarım/placeholder değil; doğrudan çalışan, modern, güvenli, kenar durumları ele alınmış tam kod yaz.
-   - Her kod bloğunda dil etiketini belirt (\`\`\`python, \`\`\`js, \`\`\`swift, \`\`\`sql vb.).
-3. **Matematik, Mantık & Strateji:** Hesaplamalarda ve mantık sorularında sonucu içten içe çift kontrol et; karar/karşılaştırma sorularında net tablo veya artı/eksi + somut tavsiye sun.
-4. **Eidetis Zamansal & Çelişki Muhakemesi:**
-   - Hafızadaki **AKTİF** kayıtları bugünkü gerçek, **[eski] ARŞİV** kayıtlarını geçmiş tarihçe, **gelecek_konum / plan** kayıtlarını yaklaşan gelecek olarak ayırt et.
-   - Hafızada olmayan kişisel bilgileri asla uydurma; bilmediğin bir güncel veride uydurmak yerine açıkça belirt.
-5. **Görsel & Dosya Analizi:** Kullanıcı fotoğraf, ekran görüntüsü veya kod/metin dosyası gönderirse içeriği satır satır, detay atlamadan incele ve somut çözümler üret.
-6. **Doğal, Akıcı Türkçe:** Zeki, samimi, net ve akıcı Türkçe kullan. Asla "Eidetis belleğin boş", "hafıza grafiğine kaydedildi", "veritabanına eklendi" gibi robotik ifadeler kullanma.
-7. **Uzunluk Kalibrasyonu:** Gündelik kısa mesajlara 1–3 cümleyle doğal yanıt ver; teknik, yaratıcı veya analitik sorularda başlıklar, maddeler ve tablolarla kapsamlı ve okunaklı yanıt üret.
+ÜST DÜZEY YETENEK VE ÇALIŞMA PROTOKOLÜN:
+1. **Keskin Zekâ & Sıfır Laf Kalabalığı:** Sorunun özünü anında yakala. "Harika bir soru!", "Elbette yardımcı olabilirim!" gibi yapay kalıplar kullanma. Doğrudan yüksek değerli çözümle başla.
+2. **İnteraktif Uygulama / Web / Oyun / Grafik Üretimi (Canlı Önizleme):**
+   - Kullanıcı bir web sayfası, mini uygulama, oyun, hesap makinesi, dashboard, animasyon veya görselleştirme istediğinde **tek parça, eksiksiz, modern, şık ve doğrudan çalışan** tam bir \`\`\`html ... \`\`\` (CSS + JS içinde gömülü) belgesi üret!
+   - Arayüz otomatik olarak \`\`\`html bloklarına **"▶ Canlı Önizle"** ve **"⬇ İndir"** butonları ekler; bu yüzden kodun sıfır harici hata ile tek dosyada kusursuz çalışmasına özen göster.
+3. **Kıdemli Mühendislik, Kod & Dosya Analizi:**
+   - Kullanıcı kod, ekran görüntüsü, CSV/JSON veya dosya paylaştığında satır satır incele; kök nedenleri, güvenlik açıklarını, performans darboğazlarını ve doğrudan kopyalanıp çalışacak tam çözümü ver.
+   - Yarım/placeholder ("// buraya kod gelecek") bırakma; her zaman tam ve çalışan kod yaz.
+4. **Matematik, Mantık & Strateji:** Karmaşık hesaplamaları ve mantık sorularını içten içe çift doğrula. Karşılaştırmalarda Markdown tabloları ve net artı/eksi + somut karar önerisi kullan.
+5. **Canlı Bilgi & Web Okuma:** Kullanıcı bir URL paylaştıysa verilen canlı sayfa içeriğini temel al. Güncel haber/kur/teknoloji sorularında canlı arama verilerini kullan; bilmediğin bilgiyi asla uydurma.
+6. **Eidetis Zamansal & Çelişki Muhakemesi:**
+   - Hafızadaki **AKTİF** kayıtları bugünkü gerçek, **[eski] ARŞİV** kayıtlarını geçmiş tarihçe, **gelecek_konum / plan** kayıtlarını yaklaşan gelecek olarak netçe ayır.
+   - Asla "Eidetis belleğin boş", "hafıza grafiğine kaydedildi", "veritabanına eklendi" gibi robotik ifadeler kullanma.
+7. **Uzunluk Kalibrasyonu:** Gündelik sohbete 1–3 akıcı cümle; teknik, yaratıcı veya analitik görevlere yapılandırılmış, derinlikli ve profesyonel yanıt ver.
 
 GİZLİ HAFIZA ÇIKARIMI (YALNIZCA YENİ KİŞİSEL BİLGİ VARSA):
 Kullanıcı bu mesajında kendisi hakkında YENİ ve kalıcı bir kişisel gerçek paylaştıysa (adı, konumu, taşınma planı, mesleği/bölümü, hedefleri, tercihleri, projeleri, ilişkileri, sınav notu, önemli planı), yanıtının EN SONUNA şu gizli etiketi ekle:
@@ -108,7 +148,7 @@ Kullanıcı bu mesajında kendisi hakkında YENİ ve kalıcı bir kişisel gerç
 - Yeni bir kişisel bilgi YOKSA <synaphe_memory> etiketini HİÇ EKLEME.`;
 }
 
-async function callGeminiModel({ apiKey, model, systemInstruction, contents, useSearch, useThinking, timeoutMs }) {
+async function callGeminiModel({ apiKey, model, systemInstruction, contents, useSearch, useThinking, thinkingBudget, timeoutMs }) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -118,7 +158,7 @@ async function callGeminiModel({ apiKey, model, systemInstruction, contents, use
       maxOutputTokens: 8192
     };
     if (useThinking && model === 'gemini-2.5-flash') {
-      generationConfig.thinkingConfig = { thinkingBudget: 3072 };
+      generationConfig.thinkingConfig = { thinkingBudget: thinkingBudget || 4096 };
     }
 
     const body = {
@@ -141,7 +181,6 @@ async function callGeminiModel({ apiKey, model, systemInstruction, contents, use
     if (!resp.ok) return { ok: false, status: resp.status };
     const data = await resp.json();
     const parts = data?.candidates?.[0]?.content?.parts || [];
-    // Filter out internal thought parts if present, keep only visible answer parts
     const text = parts
       .filter(p => !p.thought && typeof p.text === 'string')
       .map(p => p.text)
@@ -168,7 +207,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
       ok: true,
-      service: 'Synaphe Eidetis Cloud AI v3',
+      service: 'Synaphe Eidetis Agentic AI v4',
       configured: Boolean(apiKey)
     });
   }
@@ -187,12 +226,12 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const message = String(body.message || '').trim().slice(0, 14000);
+    const message = String(body.message || '').trim().slice(0, 16000);
     const userName = String(body.userName || '').trim().slice(0, 60);
     const memoryContext = String(body.memoryContext || 'Henüz kayıtlı bilgi yok.').slice(0, 8000);
     const thinkingMode = String(body.thinkingMode || 'balanced');
     const rawHistory = Array.isArray(body.history) ? body.history.slice(-24) : [];
-    const attachments = Array.isArray(body.attachments) ? body.attachments.slice(0, 3) : [];
+    const attachments = Array.isArray(body.attachments) ? body.attachments.slice(0, 6) : [];
 
     if (!message && !attachments.length) {
       return res.status(400).json({ error: 'Boş mesaj gönderilemez.' });
@@ -204,13 +243,14 @@ export default async function handler(req, res) {
       timeStyle: 'short'
     });
     const deep = needsDeepReasoning(message, thinkingMode);
-    const liveSearch = !attachments.length && needsLiveSearch(message);
+    const urlContext = await fetchReferencedUrls(message);
+    const liveSearch = !attachments.length && !urlContext && needsLiveSearch(message);
     const systemInstruction = buildSystemInstruction(userName, memoryContext, nowStr, deep);
 
     // Build real multi-turn contents
     const contents = [];
     for (const m of rawHistory) {
-      const txt = String(m?.text || '').trim().slice(0, 3000);
+      const txt = String(m?.text || '').trim().slice(0, 3500);
       if (!txt) continue;
       const role = m.role === 'user' ? 'user' : 'model';
       if (contents.length && contents[contents.length - 1].role === role) {
@@ -220,9 +260,11 @@ export default async function handler(req, res) {
       }
     }
 
-    // Build current user turn parts (text + optional image/text attachments)
     const userParts = [];
-    let finalUserText = message || 'Bu ekli içeriği incele ve açıkla.';
+    let finalUserText = message || 'Bu ekli içeriği detaylıca incele ve açıkla.';
+    if (urlContext) {
+      finalUserText += `\n\n${urlContext}`;
+    }
     for (const att of attachments) {
       if (!att || !att.data) continue;
       const mime = String(att.mimeType || '');
@@ -234,7 +276,7 @@ export default async function handler(req, res) {
           }
         });
       } else if (att.textContent) {
-        finalUserText += `\n\n--- EKLİ DOSYA: ${String(att.name || 'dosya').slice(0, 80)} ---\n${String(att.textContent).slice(0, 12000)}`;
+        finalUserText += `\n\n--- EKLİ DOSYA: ${String(att.name || 'dosya').slice(0, 80)} ---\n${String(att.textContent).slice(0, 14000)}`;
       }
     }
     userParts.unshift({ text: finalUserText });
@@ -248,7 +290,8 @@ export default async function handler(req, res) {
       contents.shift();
     }
 
-    const modelQueue = deep ? DEEP_MODELS : BALANCED_MODELS;
+    const modelQueue = thinkingMode === 'deep' ? DEEP_MODELS : BALANCED_MODELS;
+    const thinkingBudget = thinkingMode === 'deep' ? 8192 : 3072;
 
     let lastStatus = 0;
     for (const model of modelQueue) {
@@ -260,10 +303,10 @@ export default async function handler(req, res) {
         contents,
         useSearch: liveSearch,
         useThinking: deep,
+        thinkingBudget,
         timeoutMs
       });
 
-      // Graceful fallback if thinkingConfig or googleSearch caused an error on a model
       if (!result.ok && (liveSearch || deep)) {
         result = await callGeminiModel({
           apiKey,
@@ -272,6 +315,7 @@ export default async function handler(req, res) {
           contents,
           useSearch: false,
           useThinking: false,
+          thinkingBudget: 0,
           timeoutMs
         });
       }
