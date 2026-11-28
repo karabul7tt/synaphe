@@ -556,13 +556,13 @@
           <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px; padding:34px 24px;">
             <div style="color:#ffffff; height:44px; display:flex; align-items:center; justify-content:center;"><svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2.02.6-2.66 1.35-.57.65-1.07 1.71-.93 2.74 1.01.08 2.06-.52 2.58-1.24z"/></svg></div>
             <h3 style="margin:0; justify-content:center; font-size:20px;">macOS</h3>
-            <a href="/download/macos" class="btn btn-gold" style="width:100%;">İndir</a>
+            <button type="button" id="macInstallBtn" onclick="triggerNativeAppInstall('macos')" class="btn btn-gold" style="width:100%;">Yükle</button>
           </div>
 
           <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px; padding:34px 24px;">
             <div style="color:#38bdf8; height:44px; display:flex; align-items:center; justify-content:center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.55 10.35 4.5v7.1H3V5.55zm8.2-1.18L21 3v8.6h-9.8V4.37zM3 12.4h7.35v7.1L3 18.45V12.4zm8.2 0H21V21l-9.8-1.37V12.4z"/></svg></div>
             <h3 style="margin:0; justify-content:center; font-size:20px;">Windows</h3>
-            <a href="/download/windows" class="btn btn-gold" style="width:100%;">İndir</a>
+            <button type="button" id="winInstallBtn" onclick="triggerNativeAppInstall('windows')" class="btn btn-gold" style="width:100%;">Yükle</button>
           </div>
 
           <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px; padding:34px 24px;">
@@ -580,16 +580,17 @@
       </div>
     </section>
 
-    <!-- MOBILE / APPLE / ANDROID INSTALL GUIDE SHEET -->
+    <!-- UNIVERSAL ZERO-WARNING INSTALL MODAL (MACOS, WINDOWS, ANDROID, IOS) -->
     <div id="installGuideModal" onclick="if(event.target===this) this.style.display='none'" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.78); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:20px;">
-      <div style="background:#0d1018; border:1px solid var(--gold-border); border-radius:22px; max-width:390px; width:100%; padding:26px; text-align:center; box-shadow:0 28px 70px rgba(0,0,0,0.9);">
+      <div style="background:#0d1018; border:1px solid var(--gold-border); border-radius:22px; max-width:400px; width:100%; padding:26px; text-align:center; box-shadow:0 28px 70px rgba(0,0,0,0.9);">
         <img src="/static/icon-192.png" alt="Synaphe" style="width:64px; height:64px; border-radius:18px; border:1px solid var(--gold-border); margin-bottom:14px;">
         <h3 id="installSheetTitle" style="font-size:19px; color:#fff; margin-bottom:14px;">Synaphe</h3>
         <div id="installSheetSteps" style="text-align:left; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:14px; padding:14px 16px; font-size:13.5px; color:#e4e4e7; line-height:1.75; margin-bottom:18px;"></div>
         <div style="display:flex; gap:10px; justify-content:center;">
-          <a href="/app" class="btn btn-gold" style="flex:1;">Aç</a>
+          <a href="/app" class="btn btn-gold" style="flex:1;">Synaphe'yi Aç</a>
           <button type="button" class="btn btn-glass" onclick="document.getElementById('installGuideModal').style.display='none'">Kapat</button>
         </div>
+        <div id="installSheetAlt" style="margin-top:12px; font-size:11.5px; color:var(--text-faint);"></div>
       </div>
     </div>
 
@@ -601,8 +602,10 @@
           const choice = await p.userChoice;
           window._synapheInstallPrompt = null;
           if (choice && choice.outcome === 'accepted') {
-            const btn = document.getElementById('androidInstallBtn');
-            if (btn) btn.textContent = '✓ Yüklendi';
+            ['macInstallBtn', 'winInstallBtn', 'androidInstallBtn'].forEach(id => {
+              const b = document.getElementById(id);
+              if (b) b.textContent = '✓ Yüklendi';
+            });
             return;
           }
         }
@@ -613,7 +616,22 @@
         const modal = document.getElementById('installGuideModal');
         const title = document.getElementById('installSheetTitle');
         const steps = document.getElementById('installSheetSteps');
-        if (platform === 'ios') {
+        const alt = document.getElementById('installSheetAlt');
+        alt.innerHTML = '';
+
+        if (platform === 'macos') {
+          title.textContent = "macOS Kurulum (Uyarısız)";
+          steps.innerHTML =
+            "<strong>1.</strong> Safari üst menüden <strong>Dosya → Dock'a Ekle</strong> (veya <strong>Paylaş ⎋ → Dock'a Ekle</strong>) seç.<br>" +
+            "<strong>2.</strong> <strong>Ekle</strong>'ye bas — Apple imzalı <strong>Synaphe</strong> kelebek ikonuyla Dock'a ve Uygulamalar'a kurulur.";
+          alt.innerHTML = 'Alternatif: <a href="/download/macos" style="color:var(--gold); text-decoration:none;">Synaphe-macOS.zip indir</a>';
+        } else if (platform === 'windows') {
+          title.textContent = "Windows Kurulum (Uyarısız)";
+          steps.innerHTML =
+            "<strong>1.</strong> Edge veya Chrome adres çubuğunun sağındaki <strong>Uygulamayı Yükle (⊕)</strong> simgesine tıkla.<br>" +
+            "<strong>2.</strong> <strong>Yükle</strong>'ye bas — Masaüstü ve Başlat Menüsüne kelebek ikonuyla kurulur.";
+          alt.innerHTML = 'Alternatif: <a href="/download/windows" style="color:var(--gold); text-decoration:none;">Synaphe-Windows.zip indir</a>';
+        } else if (platform === 'ios') {
           title.textContent = "iOS Kurulum";
           steps.innerHTML =
             "<strong>1.</strong> Safari'de alt çubuktaki <strong>Paylaş (⎋)</strong> simgesine dokun.<br>" +
@@ -937,8 +955,10 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       window._synapheInstallPrompt = e;
-      const btn = document.getElementById('androidInstallBtn');
-      if (btn) btn.textContent = 'Şimdi Yükle (Tek Tık)';
+      ['macInstallBtn', 'winInstallBtn', 'androidInstallBtn'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.textContent = 'Şimdi Yükle';
+      });
     });
   </script>
 </body>

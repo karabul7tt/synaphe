@@ -899,8 +899,10 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       window._synapheInstallPrompt = e;
-      const btn = document.getElementById('androidInstallBtn');
-      if (btn) btn.textContent = 'Şimdi Yükle (Tek Tık)';
+      ['macInstallBtn', 'winInstallBtn', 'androidInstallBtn'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.textContent = 'Şimdi Yükle';
+      });
     });
   </script>
 </body>
