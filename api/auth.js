@@ -184,7 +184,8 @@ async function verifyAppleIdToken(idToken, expectedClientId, userHint = null) {
     if (payload.iss !== 'https://appleid.apple.com') {
       return { error: 'Geçersiz Apple yayıncısı (iss).' };
     }
-    if (expectedClientId && payload.aud !== expectedClientId) {
+    const allowedAppleAudiences = [expectedClientId, 'ai.synaphe.web', 'tr.com.synapheai.desktop'].filter(Boolean);
+    if (allowedAppleAudiences.length && !allowedAppleAudiences.includes(payload.aud)) {
       return { error: 'Apple Client ID uyuşmuyor.' };
     }
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
