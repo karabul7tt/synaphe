@@ -1,9 +1,23 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" }
+    { "source": "/download/macos", "destination": "/static/Synaphe-macOS.zip" },
+    { "source": "/download/windows", "destination": "/static/Synaphe-Windows.zip" }
   ],
   "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Service-Worker-Allowed", "value": "/" }
+      ]
+    },
+    {
+      "source": "/static/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    },
     {
       "source": "/static/(.*)",
       "headers": [

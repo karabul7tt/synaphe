@@ -8,6 +8,11 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="48x48" href="/static/favicon-48x48.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Synaphe">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#06070b">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async defer></script>
@@ -606,7 +611,14 @@
         </div>
       </div>
 
-      <div class="sb-foot">
+      <div class="sb-foot" style="display:flex; flex-direction:column; gap:6px;">
+        <button class="profile-btn" id="installAppBtn" onclick="installSynapheApp()" style="border:1px solid var(--gold-border); background:var(--gold-dim); color:var(--gold);">
+          <span style="display:inline-flex; align-items:center; gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Uygulamayı Yükle</span>
+          </span>
+          <span style="font-size:10.5px; opacity:0.85;">App</span>
+        </button>
         <button class="profile-btn" onclick="openAuthModal()">
           <span style="display:inline-flex; align-items:center; gap:9px; min-width:0;">
             <span id="sidebarAvatarSlot"><span class="dot-live" style="margin-right:0;"></span></span>
@@ -1610,6 +1622,36 @@
 
     renderAll();
     loadAuthConfig();
+
+    // Real PWA Service Worker + Native Install Prompt on /app
+    let deferredInstallPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+      });
+    }
+    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandaloneApp) {
+      const ib = document.getElementById('installAppBtn');
+      if (ib) ib.style.display = 'none';
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+    });
+    async function installSynapheApp() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        if (choice && choice.outcome === 'accepted') {
+          const ib = document.getElementById('installAppBtn');
+          if (ib) ib.style.display = 'none';
+        }
+        return;
+      }
+      window.location.href = '/indir';
+    }
   </script>
 </body>
 </html>

@@ -37,7 +37,11 @@
   <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
   <link rel="manifest" href="/static/manifest.json">
-  <meta name="theme-color" content="#050608">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Synaphe">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#06070b">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -543,41 +547,63 @@
 
     <section class="sub-hero">
       <div class="wrap">
-        <div class="kicker"><span class="kicker-line"></span><span>KURULUM &amp; İNDİR</span></div>
-        <h1 class="h2" style="font-size:clamp(36px, 5.5vw, 60px); margin-bottom:20px;">
-          Yerel cihazında çalıştır veya<br><span style="color:var(--gold);">webden hemen başla.</span>
-        </h1>
-        <p class="sec-lead">
-          Synaphe'yi doğrudan tarayıcıda kullanabilir, macOS paketini indirebilir ya da GitHub deposundan Python + FastAPI + Ollama ile kendi bilgisayarında ayağa kaldırabilirsin.
-        </p>
-
-        <div class="grid-3" style="margin-bottom:32px;">
-          <div class="card">
-            <div style="color:var(--gold); margin-bottom:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
-            <h3>Web Stüdyosu (Kurulumsuz)</h3>
-            <p style="margin-bottom:20px;">Hiçbir şey indirmeden tarayıcıda bilişsel hafıza sohbetini ve canlı grafı hemen kullan.</p>
-            <a href="/app" class="btn btn-gold" style="width:100%;">Web'de Kullan</a>
-          </div>
-
-          <div class="card">
-            <div style="color:#fff; margin-bottom:12px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2.02.6-2.66 1.35-.57.65-1.07 1.71-.93 2.74 1.01.08 2.06-.52 2.58-1.24z"/></svg></div>
-            <h3>macOS Paketi</h3>
-            <p style="margin-bottom:20px;">Hazır macOS uygulama arşivini indirip tek tıkla başlat.</p>
-            <a href="/download/macos" class="btn btn-glass" style="width:100%;">Synaphe-macOS.zip İndir</a>
-          </div>
-
-          <div class="card">
-            <div style="color:#fff; margin-bottom:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
-            <h3>Kaynak Kod (GitHub)</h3>
-            <p style="margin-bottom:20px;">Python, FastAPI, MCP sunucusu ve Telegram köprüsü ile tam yerel kurulum.</p>
-            <a href="https://github.com/karabul7tt/synaphe" target="_blank" rel="noopener" class="btn btn-glass" style="width:100%;">GitHub Deposu</a>
+        <div class="kicker"><span class="kicker-line"></span><span>UYGULAMAYI İNDİR • MAC, WINDOWS, APPLE &amp; ANDROID</span></div>
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
+          <img src="/static/icon-192.png" alt="Synaphe Uygulama İkonu" style="width:76px; height:76px; border-radius:20px; border:1px solid var(--gold-border); box-shadow:0 12px 34px rgba(251,191,36,0.28);">
+          <div>
+            <h1 class="h2" style="font-size:clamp(34px, 5vw, 56px); margin-bottom:6px;">
+              Synaphe'yi <span style="color:var(--gold);">her cihazına kur.</span>
+            </h1>
+            <p style="color:var(--text-soft); font-size:15px;">Altın kelebek ikonuyla macOS, Windows, iPhone/iPad ve Android'de gerçek uygulama deneyimi.</p>
           </div>
         </div>
 
-        <div class="grid-2">
+        <div class="grid-4" style="margin-bottom:32px;">
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="color:#fff; margin-bottom:12px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 1.01-2.85-.9.04-2.02.6-2.66 1.35-.57.65-1.07 1.71-.93 2.74 1.01.08 2.06-.52 2.58-1.24z"/></svg></div>
+              <span class="card-num">MACOS UYGULAMASI</span>
+              <h3>Synaphe for Mac</h3>
+              <p style="margin-bottom:20px;">Hazır <code>Synaphe.app</code> paketi ve altın kelebek ikonu. Çift tıkla, doğrudan uygulama penceresinde başlasın.</p>
+            </div>
+            <a href="/download/macos" class="btn btn-gold" style="width:100%;">macOS İndir (.zip)</a>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="color:#38bdf8; margin-bottom:12px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.55 10.35 4.5v7.1H3V5.55zm8.2-1.18L21 3v8.6h-9.8V4.37zM3 12.4h7.35v7.1L3 18.45V12.4zm8.2 0H21V21l-9.8-1.37V12.4z"/></svg></div>
+              <span class="card-num">WINDOWS 10 / 11</span>
+              <h3>Synaphe for Windows</h3>
+              <p style="margin-bottom:20px;"><code>Synaphe_Kur.bat</code> ile Masaüstü ve Başlat Menüsüne kelebek ikonuyla tek tıkla kurulur.</p>
+            </div>
+            <a href="/download/windows" class="btn btn-gold" style="width:100%;">Windows İndir (.zip)</a>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="color:#34d399; margin-bottom:12px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341a.999.999 0 1 1 0-1.998.999.999 0 0 1 0 1.998zm-11.046 0a.999.999 0 1 1 0-1.998.999.999 0 0 1 0 1.998zm11.405-6.02 1.997-3.46a.416.416 0 0 0-.152-.567.416.416 0 0 0-.568.152l-2.022 3.503C15.61 8.244 13.86 7.85 12 7.85s-3.61.394-5.137 1.099L4.84 5.446a.416.416 0 0 0-.568-.152.416.416 0 0 0-.152.567l1.997 3.46C2.688 11.186.343 14.658 0 18.761h24c-.344-4.103-2.688-7.575-6.118-9.44z"/></svg></div>
+              <span class="card-num">ANDROID UYGULAMASI</span>
+              <h3>Synaphe for Android</h3>
+              <p style="margin-bottom:20px;">Play Store beklemeden tek dokunuşla Android ana ekranına kelebek ikonuyla tam ekran uygulama olarak kurulur.</p>
+            </div>
+            <button type="button" id="androidInstallBtn" onclick="triggerNativeAppInstall('android')" class="btn btn-glass" style="width:100%; border-color:rgba(52,211,153,0.4); color:#34d399;">Android'e Yükle</button>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="color:var(--gold); margin-bottom:12px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+              <span class="card-num">APPLE IPHONE &amp; IPAD</span>
+              <h3>Synaphe for iOS</h3>
+              <p style="margin-bottom:20px;">Safari'de "Ana Ekrana Ekle" ile kelebek ikonuyla adres çubuksuz, tam ekran iPhone/iPad uygulaması olarak kurulur.</p>
+            </div>
+            <button type="button" onclick="openInstallSheet('ios')" class="btn btn-glass" style="width:100%; border-color:var(--gold-border); color:var(--gold);">iPhone / iPad'e Ekle</button>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:24px;">
           <div class="card">
-            <span class="card-num">YEREL SUNUCU &amp; OLLAMA KURULUMU</span>
-            <h3>Terminal Başlatma</h3>
+            <span class="card-num">GELİŞTİRİCİ • YEREL PYTHON &amp; OLLAMA</span>
+            <h3>Yerel Sunucu Başlatma</h3>
             <div class="code-wrap">
               <pre class="code-block">pip install -r requirements.txt
 ollama pull llama3.2
@@ -594,7 +620,7 @@ python3 -m uvicorn server:app --port 8000</pre>
   "mcpServers": {
     "synaphe": {
       "command": "python3",
-      "args": ["/path/to/Synaphe/mcp_server.py"]
+      "args": ["/path/to/cognitive_memory/mcp_server.py"]
     }
   }
 }</pre>
@@ -604,6 +630,60 @@ python3 -m uvicorn server:app --port 8000</pre>
         </div>
       </div>
     </section>
+
+    <!-- MOBILE / APPLE / ANDROID INSTALL GUIDE SHEET -->
+    <div id="installGuideModal" onclick="if(event.target===this) this.style.display='none'" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.78); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:20px;">
+      <div style="background:#0d1018; border:1px solid var(--gold-border); border-radius:22px; max-width:420px; width:100%; padding:26px; text-align:center; box-shadow:0 28px 70px rgba(0,0,0,0.9);">
+        <img src="/static/icon-192.png" alt="Synaphe" style="width:68px; height:68px; border-radius:18px; border:1px solid var(--gold-border); margin-bottom:14px; box-shadow:0 10px 28px rgba(251,191,36,0.3);">
+        <h3 id="installSheetTitle" style="font-size:20px; color:#fff; margin-bottom:8px;">Synaphe'yi Ana Ekrana Ekle</h3>
+        <p id="installSheetDesc" style="font-size:13.5px; color:var(--text-soft); line-height:1.6; margin-bottom:18px;"></p>
+        <div id="installSheetSteps" style="text-align:left; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:14px; padding:14px 16px; font-size:13px; color:#e4e4e7; line-height:1.75; margin-bottom:18px;"></div>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <a href="/app" class="btn btn-gold" style="flex:1;">Uygulamayı Aç</a>
+          <button type="button" class="btn btn-glass" onclick="document.getElementById('installGuideModal').style.display='none'">Kapat</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function triggerNativeAppInstall(platform) {
+        if (window._synapheInstallPrompt) {
+          const p = window._synapheInstallPrompt;
+          p.prompt();
+          const choice = await p.userChoice;
+          window._synapheInstallPrompt = null;
+          if (choice && choice.outcome === 'accepted') {
+            const btn = document.getElementById('androidInstallBtn');
+            if (btn) btn.textContent = '✓ Synaphe Yüklendi';
+            return;
+          }
+        }
+        openInstallSheet(platform);
+      }
+
+      function openInstallSheet(platform) {
+        const modal = document.getElementById('installGuideModal');
+        const title = document.getElementById('installSheetTitle');
+        const desc = document.getElementById('installSheetDesc');
+        const steps = document.getElementById('installSheetSteps');
+        if (platform === 'ios') {
+          title.textContent = "iPhone / iPad'e Synaphe Kur";
+          desc.textContent = "Synaphe, altın kelebek ikonuyla ana ekranına tam ekran uygulama olarak eklenir.";
+          steps.innerHTML =
+            "<strong>1.</strong> Bu sayfayı Apple <strong>Safari</strong> ile aç.<br>" +
+            "<strong>2.</strong> Alt çubuktaki <strong>Paylaş (⎋)</strong> simgesine dokun.<br>" +
+            "<strong>3.</strong> <strong>&ldquo;Ana Ekrana Ekle&rdquo;</strong> seçeneğine dokun ve <strong>Ekle</strong>'ye bas.";
+        } else {
+          title.textContent = "Android'e Synaphe Kur";
+          desc.textContent = "Chrome veya Samsung Internet üzerinden tek dokunuşla gerçek uygulama olarak yükleyebilirsin.";
+          steps.innerHTML =
+            "<strong>1.</strong> Bu sayfayı Android <strong>Chrome</strong> ile aç.<br>" +
+            "<strong>2.</strong> Sağ üstteki <strong>⋮ (Üç Nokta)</strong> menüsüne dokun.<br>" +
+            "<strong>3.</strong> <strong>&ldquo;Uygulamayı yükle&rdquo;</strong> veya <strong>&ldquo;Ana ekrana ekle&rdquo;</strong>ye dokun.";
+        }
+        modal.style.display = 'flex';
+      }
+    </script>
 
     <footer class="footer">
       <div class="wrap">
@@ -903,6 +983,20 @@ python3 -m uvicorn server:app --port 8000</pre>
       }
       requestAnimationFrame(draw);
     })();
+
+    // Register Service Worker + Capture Native App Install Prompt (Android / Chrome / Edge)
+    window._synapheInstallPrompt = null;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+      });
+    }
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      window._synapheInstallPrompt = e;
+      const btn = document.getElementById('androidInstallBtn');
+      if (btn) btn.textContent = 'Şimdi Yükle (Tek Tık)';
+    });
   </script>
 </body>
 </html>
