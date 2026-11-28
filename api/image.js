@@ -7,9 +7,9 @@
 
 async function enhancePromptToEnglish(apiKey, rawPrompt) {
   if (!apiKey) return rawPrompt;
-  for (const m of ['gemini-3.8-flash', 'gemini-3-flash-preview', 'gemini-2.5-flash-lite']) {
+  for (const m of ['gemini-2.5-flash-lite', 'gemini-3.8-flash', 'gemini-3-flash-preview']) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 3500);
+    const timer = setTimeout(() => controller.abort(), 4000);
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(apiKey)}`;
       const resp = await fetch(url, {
@@ -19,10 +19,10 @@ async function enhancePromptToEnglish(apiKey, rawPrompt) {
           contents: [{
             role: 'user',
             parts: [{
-              text: `Translate and enhance this image request into a vivid, cinematic, ultra-detailed English image-generation prompt (under 40 words, no quotes, no commentary): ${rawPrompt}`
+              text: `Translate and enhance this image request into a vivid, cinematic, ultra-detailed English image-generation prompt (15 to 40 words, no quotes, no commentary): ${rawPrompt}`
             }]
           }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 100 }
+          generationConfig: { temperature: 0.4, maxOutputTokens: 512 }
         }),
         signal: controller.signal
       });
@@ -35,7 +35,7 @@ async function enhancePromptToEnglish(apiKey, rawPrompt) {
         .join(' ')
         .trim()
         .replace(/^["']|["']$/g, '');
-      if (text) return text;
+      if (text && text.split(/\s+/).length >= 4) return text;
     } catch (_) {
       clearTimeout(timer);
       continue;
