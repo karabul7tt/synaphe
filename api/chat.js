@@ -106,7 +106,15 @@ function extractGroundingSources(data) {
   return sources;
 }
 
-function buildSystemInstruction(userName, memoryContext, nowStr, isDeep) {
+const PERSONA_PROMPTS = {
+  general: '',
+  architect: 'UZMAN ROLÜN: Kıdemli Yazılım Mimarı & Full-Stack Mühendis. Temiz mimari, tasarım desenleri, performans, güvenlik ve üretime hazır eksiksiz kod önceliğindir.',
+  academic: 'UZMAN ROLÜN: Akademik Araştırmacı & Bilim İnsanı. Titiz metodoloji, formel terminoloji, eleştirel değerlendirme ve yapılandırılmış akademik üslup kullan.',
+  english: 'UZMAN ROLÜN: Kişisel İngilizce Koçu. Kullanıcının İngilizce cümlelerini nazikçe düzelt, daha doğal (native) alternatifler öner ve gerektiğinde Türkçe kısa açıklamalarla pratik yaptır.',
+  strategist: 'UZMAN ROLÜN: Ürün & İş Stratejisti. Karar çerçeveleri, pazar/rekabet analizi, risk-ödül tabloları ve somut adım adım eylem planları sun.'
+};
+
+function buildSystemInstruction(userName, memoryContext, nowStr, isDeep, persona = 'general', customInstructions = '') {
   const knownName = userName && userName !== 'Kullanıcı' && userName !== 'Misafir';
   const nameLine = knownName
     ? `Kullanıcının adı: ${userName}. Gerektiğinde doğal biçimde adıyla hitap et.`
@@ -116,11 +124,14 @@ function buildSystemInstruction(userName, memoryContext, nowStr, isDeep) {
     ? `MOD: DERİN MÜHENDİSLİK & AKIL YÜRÜTME — Cevap vermeden önce problemi içten içe parçala, tüm kenar durumları, güvenlik ve performans etkilerini kontrol et, sonra eksiksiz ve üst düzey çözüm sun.`
     : `MOD: DENGELİ — Hız ve derinliği sorunun doğasına göre kusursuz dengele.`;
 
-  return `Sen SYNAPHE v4'sün — kıdemli yazılım mimarı, veri bilimci, ürün tasarımcısı, araştırmacı ve kalıcı Eidetis bilişsel hafızalı en üst düzey kişisel yapay zekâ asistanısın.
+  const personaLine = PERSONA_PROMPTS[persona] ? `\n${PERSONA_PROMPTS[persona]}` : '';
+  const customLine = customInstructions ? `\nKULLANICININ ÖZEL TALİMATI (MUTLAKA UY):\n${customInstructions}` : '';
+
+  return `Sen SYNAPHE v6'sın — kıdemli yazılım mimarı, veri bilimci, ürün tasarımcısı, araştırmacı ve kalıcı Eidetis bilişsel hafızalı en üst düzey kişisel yapay zekâ asistanısın.
 
 GÜNCEL TARİH VE SAAT (Türkiye): ${nowStr}
 ${nameLine}
-${depthLine}
+${depthLine}${personaLine}${customLine}
 
 DOĞRULANMIŞ KİŞİSEL HAFIZA (EİDETİS BİLİŞSEL GRAF):
 ${memoryContext}
@@ -230,6 +241,8 @@ export default async function handler(req, res) {
     const userName = String(body.userName || '').trim().slice(0, 60);
     const memoryContext = String(body.memoryContext || 'Henüz kayıtlı bilgi yok.').slice(0, 8000);
     const thinkingMode = String(body.thinkingMode || 'balanced');
+    const persona = String(body.persona || 'general').trim();
+    const customInstructions = String(body.customInstructions || '').trim().slice(0, 1500);
     const rawHistory = Array.isArray(body.history) ? body.history.slice(-24) : [];
     const attachments = Array.isArray(body.attachments) ? body.attachments.slice(0, 6) : [];
 
@@ -245,7 +258,7 @@ export default async function handler(req, res) {
     const deep = needsDeepReasoning(message, thinkingMode);
     const urlContext = await fetchReferencedUrls(message);
     const liveSearch = !attachments.length && !urlContext && needsLiveSearch(message);
-    const systemInstruction = buildSystemInstruction(userName, memoryContext, nowStr, deep);
+    const systemInstruction = buildSystemInstruction(userName, memoryContext, nowStr, deep, persona, customInstructions);
 
     // Build real multi-turn contents
     const contents = [];
