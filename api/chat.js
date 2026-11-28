@@ -8,8 +8,6 @@
 //   - Self-contained Live HTML Artifact generation + Eidetis AGM Memory Graph
 
 const BALANCED_MODELS = [
-  'gemini-3.8-flash',
-  'gemini-3.7-flash',
   'gemini-3-flash-preview',
   'gemini-2.5-flash',
   'gemini-2.5-flash-lite'
@@ -17,10 +15,8 @@ const BALANCED_MODELS = [
 
 const DEEP_MODELS = [
   'gemini-3.1-pro-preview',
-  'gemini-3.8-flash',
-  'gemini-3.7-flash',
-  'gemini-3-flash-preview',
   'gemini-2.5-pro',
+  'gemini-3-flash-preview',
   'gemini-2.5-flash'
 ];
 
@@ -345,20 +341,29 @@ export default async function handler(req, res) {
         if (liveSearch) reqBody.tools = [{ googleSearch: {} }];
 
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-        let resp = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(reqBody)
-        }).catch(() => null);
+        const fetchWithTimeout = async (payload) => {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), 14000);
+          try {
+            const r = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              signal: ctrl.signal
+            });
+            clearTimeout(t);
+            return r;
+          } catch (_) {
+            clearTimeout(t);
+            return null;
+          }
+        };
+        let resp = await fetchWithTimeout(reqBody);
 
         if ((!resp || !resp.ok) && (liveSearch || deep)) {
           delete reqBody.tools;
           delete reqBody.generationConfig.thinkingConfig;
-          resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(reqBody)
-          }).catch(() => null);
+          resp = await fetchWithTimeout(reqBody);
         }
 
         if (!resp || !resp.ok || !resp.body) continue;

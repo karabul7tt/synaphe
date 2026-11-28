@@ -1451,7 +1451,25 @@ _buf.getvalue()
             if (resolvedAny) traces.push('↻ Hafıza güncellendi');
             else if (savedAny) traces.push('✦ Hafızaya eklendi');
           }
-          return { text: data.reply, traces, sources: Array.isArray(data.sources) ? data.sources : [] };
+          if (data.usedDeep) traces.unshift('✦ Derin Düşünme');
+          let imageUrl = '';
+          let fallbackUrl = '';
+          if (data.imagePrompt) {
+            try {
+              const imgRes = await fetch('/api/image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: data.imagePrompt, alreadyEnglish: true })
+              });
+              const imgData = await imgRes.json();
+              if (imgRes.ok && imgData.imageUrl) {
+                imageUrl = imgData.imageUrl;
+                fallbackUrl = imgData.fallbackUrl || '';
+                traces.push('✦ Otomatik Görsel');
+              }
+            } catch (_) {}
+          }
+          return { text: data.reply, imageUrl, fallbackUrl, traces, sources: Array.isArray(data.sources) ? data.sources : [] };
         }
       } catch (_) {}
 
@@ -1543,8 +1561,8 @@ _buf.getvalue()
           }
           let imgHtml = '';
           if (m.imageUrl) {
-            const fbAttr = m.fallbackUrl ? ` data-fb="${escapeHtml(m.fallbackUrl)}" onerror="if(this.dataset.fb && !this.dataset.tried){this.dataset.tried='1';this.src=this.dataset.fb;}else{this.style.opacity='0.4';}"` : '';
-            imgHtml = `<div class="gen-img-wrap"><img src="${escapeHtml(m.imageUrl)}" alt="Synaphe Görseli" loading="eager"${fbAttr} onload="this.style.opacity='1';" style="opacity:0.92; transition:opacity 0.35s ease; min-height:220px; background:rgba(255,255,255,0.03);"><a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener noreferrer" download="synaphe_image.png" class="tb-btn" style="align-self:flex-start; text-decoration:none;">Görseli Aç / İndir</a></div>`;
+            const fbAttr = m.fallbackUrl ? ` data-fb="${escapeHtml(m.fallbackUrl)}" onerror="if(this.dataset.fb && !this.dataset.tried){this.dataset.tried='1';this.src=this.dataset.fb;}else{const st=this.parentElement.querySelector('.img-status-lbl');if(st)st.textContent='Görsel yüklenemedi — alttaki bağlantıdan açabilirsin.';}"` : '';
+            imgHtml = `<div class="gen-img-wrap"><div class="img-status-lbl" style="font-size:12px;color:var(--gold);padding:6px 2px;">Görsel işleniyor...</div><img src="${escapeHtml(m.imageUrl)}" alt="Synaphe Görseli" loading="eager"${fbAttr} onload="this.style.opacity='1';const st=this.parentElement.querySelector('.img-status-lbl');if(st)st.remove();" style="opacity:0.25; transition:opacity 0.4s ease; min-height:240px; width:100%; max-width:460px; border-radius:14px; background:rgba(255,255,255,0.04);"><a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener noreferrer" download="synaphe_image.png" class="tb-btn" style="align-self:flex-start; text-decoration:none;">Görseli Aç / İndir</a></div>`;
           }
           el.innerHTML = `<div class="bubble"><div class="ai-meta"><span class="ai-meta-left"><img src="/static/synaphe-butterfly.png" alt=""><span>Synaphe</span></span><div style="display:inline-flex; gap:6px;"><button type="button" class="msg-copy-btn" onclick="regenerateFromIndex(${idx})">↻ Yenile</button><button type="button" class="msg-copy-btn" onclick="speakText(this.dataset.raw)">Dinle</button><button type="button" class="msg-copy-btn" onclick="copyMessageText(this)">Kopyala</button></div></div><div class="msg-body">${renderMarkdown(m.text)}</div>${imgHtml}${sourcesHtml}${traceHtml}</div>`;
           el.querySelectorAll('.msg-copy-btn').forEach(b => { b.dataset.raw = m.text; });
@@ -1736,7 +1754,7 @@ _buf.getvalue()
 
     function isImageGenPrompt(text) {
       if (typeof imageGenMode !== 'undefined' && imageGenMode) return true;
-      return /\b(görsel oluştur|görsel üret|görsel çiz|görsel yap|resim çiz|resim oluştur|resim üret|resim yap|fotoğraf oluştur|fotoğraf üret|logo çiz|logo tasarla|afiş oluştur|illüstrasyon çiz|çizer misin|görselini oluştur|resmini çiz|generate an image|create an image|draw me)\b/i.test(text);
+      return /\b(çiz|çizer misin|çizsene|görsel oluştur|görsel üret|görsel çiz|görsel yap|görselini|resim çiz|resim oluştur|resim üret|resim yap|resmini|fotoğraf oluştur|fotoğraf üret|fotoğrafını|logo çiz|logo tasarla|afiş oluştur|illüstrasyon|generate an image|create an image|draw me)\b/i.test(text);
     }
 
     async function handleSend() {
@@ -1893,7 +1911,7 @@ _buf.getvalue()
         // 3. Fallback / Local Server Flow
         const reply = await generateReply(text, sendAtts);
         liveEl.remove();
-        sess.messages.push({ role: 'ai', text: reply.text, traces: reply.traces, sources: reply.sources || [] });
+        sess.messages.push({ role: 'ai', text: reply.text, imageUrl: reply.imageUrl || '', fallbackUrl: reply.fallbackUrl || '', traces: reply.traces, sources: reply.sources || [] });
         persist(); renderAll();
         if (voiceOutputEnabled) speakText(reply.text);
       } catch (err) {
